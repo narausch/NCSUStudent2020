@@ -1,0 +1,32 @@
+{
+  "name": "flow-diff-viewer",
+  "version": "0.1.0",
+  "description": "Visualizes the difference between two flow graphs on GitHub.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx jest",
+    "build": "webpack",
+    "watch": "webpack -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.ncsu.edu/engr-csc-sdc/2020SpringTeam19.git"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.1.1",
+    "@types/react": "^16.9.19",
+    "@types/react-dom": "^16.9.5",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.1.0",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.5",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  },
+  "dependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
