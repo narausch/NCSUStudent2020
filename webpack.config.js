@@ -6,14 +6,19 @@ module.exports = {
   // Set debugging source maps to be "inline" for
   // simplicity and ease of use
   devtool: "inline-source-map",
+  mode: process.env.NODE_ENV,
 
   // The application entry point
-  entry: "./src/index.tsx",
+  entry: {
+    contentscript: './src/contentscript/contentscript.ts',
+    background: './src/background/background.ts',
+  },
 
   // Where to compile the bundle
   // By default the output directory is `dist`
   output: {
-    filename: "bundle.js"
+    path: __dirname + '/dist',
+    filename: '[name].js',
   },
 
   // Supported file loaders

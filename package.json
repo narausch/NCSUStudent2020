@@ -4,18 +4,23 @@
   "description": "Visualizes the difference between two flow graphs on GitHub.",
   "main": "index.js",
   "scripts": {
-    "test": "npx jest",
-    "build": "webpack",
-    "watch": "webpack -w"
+    "clean": "rm -rf dist && mkdir dist && mkdir dist/assets && cp public/manifest.json dist && cp public/assets/* dist/assets",
+    "prebuild": "npm run clean",
+    "build": "NODE_ENV=production webpack --config webpack.config.js",
+    "prewatch": "npm run clean",
+    "watch": "NODE_ENV=development webpack --config webpack.config.js -w",
+    "test": "npx jest"
   },
   "repository": {
     "type": "git",
     "url": "https://github.ncsu.edu/engr-csc-sdc/2020SpringTeam19.git"
   },
   "devDependencies": {
+    "@types/chrome": "0.0.93",
     "@types/jest": "^25.1.1",
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
+    "eslint": "^6.8.0",
     "jest": "^25.1.0",
     "ts-jest": "^25.1.0",
     "ts-loader": "^6.2.1",
