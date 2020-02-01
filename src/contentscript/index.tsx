@@ -1,3 +1,3 @@
- /// <reference path="App.tsx" />
+/// <reference path="App.tsx" />
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'));
