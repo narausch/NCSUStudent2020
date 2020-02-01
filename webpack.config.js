@@ -17,7 +17,7 @@ module.exports = {
   // Where to compile the bundle
   // By default the output directory is `dist`
   output: {
-    path: __dirname + '/dist',
+    path: __dirname + '/dist/js',
     filename: '[name].js',
   },
 
