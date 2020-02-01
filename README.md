@@ -9,6 +9,6 @@ In order to setup the development environment run:
 
 ## Build / Watch
 
-Run `npm build` to build the project.
+Run `npm run build` to build the project.
 
-Run `npm watch` to watch the files and build when something has been modified.
+Run `npm run watch` to watch the files and build when something has been modified.
