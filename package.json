@@ -1,43 +1,47 @@
 {
-  "name": "flow-diff-viewer",
-  "version": "0.1.0",
-  "description": "Visualizes the difference between two flow graphs on GitHub.",
-  "main": "index.js",
-  "scripts": {
-    "clean": "rm -rf dist && mkdir dist && mkdir dist/assets && cp public/manifest.json dist && cp public/assets/* dist/assets",
-    "prebuild": "npm run clean",
-    "build": "NODE_ENV=production webpack --config webpack.config.js",
-    "prewatch": "npm run clean",
-    "watch": "NODE_ENV=development webpack --config webpack.config.js -w",
-    "test": "npx jest"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.ncsu.edu/engr-csc-sdc/2020SpringTeam19.git"
-  },
-  "devDependencies": {
-    "@types/chrome": "0.0.93",
-    "@types/jest": "^25.1.1",
-    "@types/react": "^16.9.19",
-    "@types/react-dom": "^16.9.5",
-    "@typescript-eslint/eslint-plugin": "^2.18.0",
-    "@typescript-eslint/parser": "^2.18.0",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.10.0",
-    "eslint-plugin-prettier": "^3.1.2",
-    "eslint-plugin-react": "^7.18.1",
-    "jest": "^25.1.0",
-    "prettier": "^1.19.1",
-    "ts-jest": "^25.1.0",
-    "ts-loader": "^6.2.1",
-    "typescript": "^3.7.5",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10"
-  },
-  "dependencies": {
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0"
-  },
-  "author": "",
-  "license": "ISC"
+    "name": "flow-diff-viewer",
+    "version": "0.1.0",
+    "description": "Visualizes the difference between two flow graphs on GitHub.",
+    "main": "index.js",
+    "scripts": {
+        "clean": "rm -rf dist && mkdir dist && mkdir dist/assets && cp public/manifest.json dist && cp public/assets/* dist/assets",
+        "prebuild": "npm run clean",
+        "build": "NODE_ENV=production webpack --config webpack.config.js",
+        "prewatch": "npm run clean",
+        "watch": "NODE_ENV=development webpack --config webpack.config.js -w",
+        "test": "jest",
+        "coverage": "jest --coverage",
+        "test:watch": "jest --watch"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.ncsu.edu/engr-csc-sdc/2020SpringTeam19.git"
+    },
+    "devDependencies": {
+        "@testing-library/jest-dom": "^5.1.1",
+        "@testing-library/react": "^9.4.0",
+        "@types/chrome": "0.0.93",
+        "@types/jest": "^25.1.1",
+        "@types/react": "^16.9.19",
+        "@types/react-dom": "^16.9.5",
+        "@typescript-eslint/eslint-plugin": "^2.18.0",
+        "@typescript-eslint/parser": "^2.18.0",
+        "eslint": "^6.8.0",
+        "eslint-config-prettier": "^6.10.0",
+        "eslint-plugin-prettier": "^3.1.2",
+        "eslint-plugin-react": "^7.18.1",
+        "jest": "^25.1.0",
+        "prettier": "^1.19.1",
+        "ts-jest": "^25.1.0",
+        "ts-loader": "^6.2.1",
+        "typescript": "^3.7.5",
+        "webpack": "^4.41.5",
+        "webpack-cli": "^3.3.10"
+    },
+    "dependencies": {
+        "react": "^16.12.0",
+        "react-dom": "^16.12.0"
+    },
+    "author": "",
+    "license": "ISC"
 }
