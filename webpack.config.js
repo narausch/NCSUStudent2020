@@ -10,7 +10,7 @@ module.exports = {
 
     // The application entry point
     entry: {
-        contentscript: './src/contentscript/contentscript.ts',
+        contentscript: './src/contentscript/contentscript.tsx',
         background: './src/background/background.ts',
     },
 
@@ -27,6 +27,10 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 loader: 'ts-loader',
+            },
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader'],
             },
         ],
     },
