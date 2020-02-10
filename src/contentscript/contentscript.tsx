@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import ExtensionHeader from './ExtensionHeader';
 import DiffButton from './DiffButton';
+import DiffView from './DiffView';
 
 /**
  * Checks if the current URL is a target page.
@@ -57,7 +58,24 @@ function renderDiffButtons(): void {
     for (const fileHeader of fileHeaders) {
         if (fileHeader.getAttribute('data-file-type') === '.json') {
             ++cnt;
-            ReactDOM.render(<DiffButton />, getOrCreateElementWithClassName(fileHeader, 'fdv-diff-btn-container'));
+
+            // check if the view already exists
+            const parent = fileHeader.parentElement;
+            const elems = parent.getElementsByClassName('fdv-diff-view-container');
+            if (elems.length > 0) continue;
+
+            const viewContainer = getOrCreateElementWithClassName(parent, 'fdv-diff-view-container');
+
+            // render the view container
+            ReactDOM.render(<DiffView />, viewContainer, () => {
+                const viewElem = viewContainer.getElementsByClassName('fdv-view')[0];
+
+                // render the button
+                ReactDOM.render(
+                    <DiffButton parent={parent} view={viewElem} />,
+                    getOrCreateElementWithClassName(fileHeader, 'fdv-diff-btn-container'),
+                );
+            });
         }
     }
     if (cnt > 0) renderExtensionHeader(cnt);
