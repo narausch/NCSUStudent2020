@@ -20,3 +20,7 @@
 .fdv-hidden {
     display: none;
 }
+
+.fdv-debug-msg p {
+    margin: 0px 0px 0px 0px;
+}
