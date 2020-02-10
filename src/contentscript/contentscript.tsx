@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import './main.css';
+import ExtensionHeader from './ExtensionHeader';
 import DiffButton from './DiffButton';
 
 /**
@@ -15,40 +15,58 @@ function isTargetPage(): boolean {
 }
 
 /**
- * Injects the extension header.
+ * Finds the first element with the specific class name inside the given parent element.
+ * If the element does not exist, append a new element to the parent element.
+ *
+ * @param parent parent element to check
+ * @param className class name to find or create
+ *
+ * @return element with the specific class name
  */
-function injectExtensionHeader(): void {
-    const elem = document.createElement('div');
-    const parent = document.getElementById('js-flash-container');
-    if (parent) {
-        parent.append(elem);
-        ReactDOM.render(<div className="fdv-header">Flow Diff Viewer is working!</div>, elem);
-    }
+function getOrCreateElementByClassName(parent: Element, className: string): Element {
+    const elems = parent.getElementsByClassName(className);
+    if (elems.length > 0) return elems[0];
+
+    const newElem = document.createElement('div');
+    newElem.setAttribute('class', className);
+    parent.append(newElem);
+    return newElem;
 }
 
 /**
- * Injects buttons for JSON files.
+ * Renders the extension header.
  */
-function injectDiffButtons(): void {
-    // TODO: listen to the changes on the page and refresh buttons
+function renderExtensionHeader(fileCount: number): void {
+    const elem = document.getElementById('js-flash-container');
+    if (!elem) return;
+
+    ReactDOM.render(
+        <ExtensionHeader fileCount={fileCount} />,
+        getOrCreateElementByClassName(elem, 'fdv-header-container'),
+    );
+}
+
+/**
+ * Renders DiffButtons for JSON files.
+ */
+function renderDiffButtons(): void {
     const fileHeaders = document.getElementsByClassName('file-header');
+    let cnt = 0;
     for (const fileHeader of fileHeaders) {
         if (fileHeader.getAttribute('data-file-type') === '.json') {
-            const elem = document.createElement('div');
-            fileHeader.append(elem);
-            ReactDOM.render(<DiffButton />, elem);
+            ++cnt;
+            ReactDOM.render(<DiffButton />, getOrCreateElementByClassName(fileHeader, 'fdv-diff-btn-container'));
         }
     }
+    if (cnt > 0) renderExtensionHeader(cnt);
 }
 
 /**
- * Main logic
+ * Refreshes the DiffButtons.
  */
-function main(): void {
-    if (isTargetPage()) {
-        injectExtensionHeader();
-        injectDiffButtons();
-    }
+function refreshDiffButtons(): void {
+    if (isTargetPage()) renderDiffButtons();
 }
 
-main();
+// TODO: listen to the URL changes
+setInterval(refreshDiffButtons, 1000);
