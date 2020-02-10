@@ -5,3 +5,22 @@
     font-size: 20px;
     text-align: center;
 }
+
+.fdv-header-info {
+    padding: 7px 0px 7px 20px;
+    color: #28a745;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.fdv-view {
+    padding: 20px 20px 20px 20px;
+}
+
+.fdv-hidden {
+    display: none;
+}
+
+.fdv-debug-msg p {
+    margin: 0px 0px 0px 0px;
+}
