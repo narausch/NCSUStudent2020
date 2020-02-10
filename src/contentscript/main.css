@@ -12,3 +12,11 @@
     font-size: 14px;
     font-weight: 600;
 }
+
+.fdv-view {
+    padding: 20px 20px 20px 20px;
+}
+
+.fdv-hidden {
+    display: none;
+}
