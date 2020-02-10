@@ -16,14 +16,14 @@ function isTargetPage(): boolean {
 
 /**
  * Finds the first element with the specific class name inside the given parent element.
- * If the element does not exist, append a new element to the parent element.
+ * If the element does not exist, appends a new element to the parent element.
  *
  * @param parent parent element to check
  * @param className class name to find or create
  *
  * @return element with the specific class name
  */
-function getOrCreateElementByClassName(parent: Element, className: string): Element {
+function getOrCreateElementWithClassName(parent: Element, className: string): Element {
     const elems = parent.getElementsByClassName(className);
     if (elems.length > 0) return elems[0];
 
@@ -35,6 +35,8 @@ function getOrCreateElementByClassName(parent: Element, className: string): Elem
 
 /**
  * Renders the extension header.
+ *
+ * @param fileCount number of target files
  */
 function renderExtensionHeader(fileCount: number): void {
     const elem = document.getElementById('js-flash-container');
@@ -42,7 +44,7 @@ function renderExtensionHeader(fileCount: number): void {
 
     ReactDOM.render(
         <ExtensionHeader fileCount={fileCount} />,
-        getOrCreateElementByClassName(elem, 'fdv-header-container'),
+        getOrCreateElementWithClassName(elem, 'fdv-header-container'),
     );
 }
 
@@ -55,7 +57,7 @@ function renderDiffButtons(): void {
     for (const fileHeader of fileHeaders) {
         if (fileHeader.getAttribute('data-file-type') === '.json') {
             ++cnt;
-            ReactDOM.render(<DiffButton />, getOrCreateElementByClassName(fileHeader, 'fdv-diff-btn-container'));
+            ReactDOM.render(<DiffButton />, getOrCreateElementWithClassName(fileHeader, 'fdv-diff-btn-container'));
         }
     }
     if (cnt > 0) renderExtensionHeader(cnt);
