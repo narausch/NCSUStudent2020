@@ -3,9 +3,6 @@ import * as ReactDOM from 'react-dom';
 import ExtensionHeader from './ExtensionHeader';
 import DiffButton from './DiffButton';
 
-/** Stores the current URL. */
-let currentURL = '';
-
 /**
  * Checks if the given URL is a target page.
  *
@@ -97,9 +94,7 @@ function renderDiffButtons(): void {
  * Refreshes the DiffButtons if the current URL has changed.
  */
 function refreshDiffButtons(): void {
-    if (currentURL === window.location.href) return;
-    currentURL = window.location.href;
-    if (isTargetPage(currentURL)) renderDiffButtons();
+    if (isTargetPage(window.location.href)) renderDiffButtons();
 }
 
 // TODO: listen to the URL changes
