@@ -43,7 +43,9 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
      * Renders the React component.
      */
     render(): React.ReactNode {
-        const listMessages = this.state.debugMessages.map((line, index) => <p key={index}>{line}</p>);
+        const listMessages = this.state.debugMessages.map((line, index) => (
+            <p key={index}>{line}</p>
+        ));
         return (
             <div className="fdv-view">
                 <h3>Flow Diff</h3>
