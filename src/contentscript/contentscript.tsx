@@ -80,7 +80,12 @@ function renderDiffButtons(): void {
 
             // render the button
             ReactDOM.render(
-                <DiffButton parent={fileHeader.parentElement} shaBase={sha[0]} shaCompare={sha[1]} path={path} />,
+                <DiffButton
+                    parent={fileHeader.parentElement}
+                    shaBase={sha[0]}
+                    shaCompare={sha[1]}
+                    path={path}
+                />,
                 getOrCreateElementWithClassName(fileHeader, 'fdv-diff-btn-container'),
             );
 

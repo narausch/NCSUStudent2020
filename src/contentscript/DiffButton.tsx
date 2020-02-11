@@ -70,7 +70,11 @@ class DiffButton extends React.Component<DiffButtonProps, DiffButtonState> {
                 newElem.setAttribute('class', 'fdv-view-container');
                 this.props.parent.append(newElem);
                 ReactDOM.render(
-                    <DiffView shaBase={this.props.shaBase} shaCompare={this.props.shaCompare} path={this.props.path} />,
+                    <DiffView
+                        shaBase={this.props.shaBase}
+                        shaCompare={this.props.shaCompare}
+                        path={this.props.path}
+                    />,
                     newElem,
                 );
             } else {
