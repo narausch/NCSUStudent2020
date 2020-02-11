@@ -1,12 +1,12 @@
 import * as React from 'react';
+import FileInfo from './io/FileInfo';
 
 /**
  * Defines the props for the DiffView.
  */
 interface DiffViewProps {
-    shaBase: string;
-    shaCompare: string;
-    path: string;
+    base: FileInfo;
+    compare: FileInfo;
 }
 
 /**
@@ -70,9 +70,8 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
      */
     computeDiff(): void {
         this.logDebugMessage('Downloading files...');
-        this.logDebugMessage('Base SHA-1: ' + this.props.shaBase);
-        this.logDebugMessage('Compare SHA-1: ' + this.props.shaCompare);
-        this.logDebugMessage('Path: ' + this.props.path);
+        this.logDebugMessage('Base: ' + this.props.base.getUrl());
+        this.logDebugMessage('Compare: ' + this.props.compare.getUrl());
     }
 }
 
