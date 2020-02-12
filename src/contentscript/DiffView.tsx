@@ -1,5 +1,6 @@
 import * as React from 'react';
 import FileInfo from './io/FileInfo';
+import Downloader from './io/Downloader';
 
 /**
  * Defines the props for the DiffView.
@@ -70,8 +71,30 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
      */
     computeDiff(): void {
         this.logDebugMessage('Downloading files...');
-        this.logDebugMessage('Base: ' + this.props.base.getUrl());
-        this.logDebugMessage('Compare: ' + this.props.compare.getUrl());
+
+        // download and parse the base file
+        new Downloader(this.props.base)
+            .download()
+            .then(content => {
+                if (content) {
+                    this.logDebugMessage('Base (first 1000 chars): ' + content.slice(0, 1000));
+                }
+            })
+            .catch(err => {
+                this.logDebugMessage(`Base File Download Error: ${err}`);
+            });
+
+        // download and parse the file to compare
+        new Downloader(this.props.compare)
+            .download()
+            .then(content => {
+                if (content) {
+                    this.logDebugMessage('Compare (first 1000 chars): ' + content.slice(0, 1000));
+                }
+            })
+            .catch(err => {
+                this.logDebugMessage(`Compare File Download Error: ${err}`);
+            });
     }
 }
 
