@@ -2,7 +2,7 @@
     "name": "Flow Diff Viewer",
     "version": "0.1.0",
     "description": "Visualizes the difference between two flow graphs on GitHub.",
-    "permissions": ["storage"],
+    "permissions": ["storage", "<all_urls>"],
     "background": {
         "scripts": ["js/background.js"],
         "persistent": false
