@@ -13,5 +13,11 @@ pipeline {
       }
     }
 
+    stage('Report') {
+      steps {
+        cobertura(coberturaReportFile: 'coverage/cobertura-coverage.xml', lineCoverageTargets: '70')
+      }
+    }
+
   }
 }
