@@ -26,4 +26,6 @@ module.exports = {
     moduleNameMapper: {
         '\\.(css|less|scss)$': 'identity-obj-proxy',
     },
+
+    coverageReporters: ['text', 'cobertura'],
 };
