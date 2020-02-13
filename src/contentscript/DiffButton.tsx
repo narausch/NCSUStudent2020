@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import DiffView from './DiffView';
+import FileInfo from './io/FileInfo';
 
 /**
  * Defines the props for the DiffButton.
@@ -9,14 +10,11 @@ interface DiffButtonProps {
     /** Parent element. */
     parent: Element;
 
-    /** SHA-1 for the base commit. */
-    shaBase: string;
+    /** Base file. */
+    base: FileInfo;
 
-    /** SHA-1 for the commit to compare. */
-    shaCompare: string;
-
-    /** File path. */
-    path: string;
+    /** File to compare. */
+    compare: FileInfo;
 }
 
 /**
@@ -70,7 +68,7 @@ class DiffButton extends React.Component<DiffButtonProps, DiffButtonState> {
                 newElem.setAttribute('class', 'fdv-view-container');
                 this.props.parent.append(newElem);
                 ReactDOM.render(
-                    <DiffView shaBase={this.props.shaBase} shaCompare={this.props.shaCompare} path={this.props.path} />,
+                    <DiffView base={this.props.base} compare={this.props.compare} />,
                     newElem,
                 );
             } else {

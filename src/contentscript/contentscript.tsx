@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import ExtensionHeader from './ExtensionHeader';
 import DiffButton from './DiffButton';
+import FileInfo from './io/FileInfo';
 
 /**
  * Checks if the given URL is a target page.
@@ -9,9 +10,21 @@ import DiffButton from './DiffButton';
  * @param url URL to check
  * @return true if the current URL is a target.
  */
-function isTargetPage(url: string): boolean {
-    const regexp = /^https:[/][/][^\/]+[/][^/]+[/][^/]+[/]compare[/]?.*$/;
+export function isTargetPage(url: string): boolean {
+    const regexp = /^https:[/][/][^/]+[/][^/]+[/][^/]+[/]compare[/]?.*$/;
     return regexp.test(url);
+}
+
+/**
+ * Extracts repository information from the given URL.
+ *
+ * @param url URL to check
+ * @return tuple of the domain, owner, and repo.
+ */
+export function extractRepoFromUrl(url: string): [string, string, string] {
+    const regexp = /^https:[/][/]([^/]+)[/]([^/]+)[/]([^/]+)/;
+    const result = regexp.exec(url);
+    return result && result.length == 4 ? [result[1], result[2], result[3]] : null;
 }
 
 /**
@@ -20,8 +33,9 @@ function isTargetPage(url: string): boolean {
  * @param url Permanent-link URL
  * @return pair of the SHA-1 for the base commit and the SHA-1 for the commit to compare
  */
-function extractSHAFromUrl(url: string): [string, string] {
-    const result = /\/[^:./]+:([^:./]+)[.][.][.][^:./]+:([^:./]+)$/.exec(url);
+export function extractSHAFromUrl(url: string): [string, string] {
+    const regexp = /^https:[/][/][^/]+[/][^/]+[/][^/]+[/]compare[/][^:./]+:([^:./]+)[.][.][.][^:./]+:([^:./]+)$/;
+    const result = regexp.exec(url);
     return result && result.length == 3 ? [result[1], result[2]] : null;
 }
 
@@ -63,6 +77,13 @@ function renderExtensionHeader(fileCount: number): void {
  * Renders DiffButtons for JSON files.
  */
 function renderDiffButtons(): void {
+    // check if the extension header already exists
+    if (document.querySelector('.fdv-header-container')) return;
+
+    // extract repo information
+    const repoInfo = extractRepoFromUrl(window.location.href);
+    if (!repoInfo) return; // unexpected URL
+
     // extract SHA-1 information
     const permLink = document.querySelector<HTMLAnchorElement>('.js-permalink-shortcut');
     if (!permLink) return; // unexpected HTML
@@ -78,9 +99,21 @@ function renderDiffButtons(): void {
             const path = fileHeader.getAttribute('data-path');
             if (!path) continue; // unexpected HTML
 
+            const isDeleted = fileHeader.getAttribute('data-file-deleted') === 'true';
+
+            // create FileInfo instances
+            const baseFile = new FileInfo(repoInfo[0], repoInfo[1], repoInfo[2], sha[0], path);
+            const compareFile = isDeleted
+                ? null
+                : new FileInfo(repoInfo[0], repoInfo[1], repoInfo[2], sha[1], path);
+
             // render the button
             ReactDOM.render(
-                <DiffButton parent={fileHeader.parentElement} shaBase={sha[0]} shaCompare={sha[1]} path={path} />,
+                <DiffButton
+                    parent={fileHeader.parentElement}
+                    base={baseFile}
+                    compare={compareFile}
+                />,
                 getOrCreateElementWithClassName(fileHeader, 'fdv-diff-btn-container'),
             );
 

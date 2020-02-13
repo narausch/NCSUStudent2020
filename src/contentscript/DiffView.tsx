@@ -1,12 +1,13 @@
 import * as React from 'react';
+import FileInfo from './io/FileInfo';
+import Downloader from './io/Downloader';
 
 /**
  * Defines the props for the DiffView.
  */
 interface DiffViewProps {
-    shaBase: string;
-    shaCompare: string;
-    path: string;
+    base: FileInfo;
+    compare: FileInfo;
 }
 
 /**
@@ -43,7 +44,9 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
      * Renders the React component.
      */
     render(): React.ReactNode {
-        const listMessages = this.state.debugMessages.map((line, index) => <p key={index}>{line}</p>);
+        const listMessages = this.state.debugMessages.map((line, index) => (
+            <p key={index}>{line}</p>
+        ));
         return (
             <div className="fdv-view">
                 <h3>Flow Diff</h3>
@@ -68,9 +71,30 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
      */
     computeDiff(): void {
         this.logDebugMessage('Downloading files...');
-        this.logDebugMessage('Base SHA-1: ' + this.props.shaBase);
-        this.logDebugMessage('Compare SHA-1: ' + this.props.shaCompare);
-        this.logDebugMessage('Path: ' + this.props.path);
+
+        // download and parse the base file
+        new Downloader(this.props.base)
+            .download()
+            .then(content => {
+                if (content) {
+                    this.logDebugMessage('Base (first 1000 chars): ' + content.slice(0, 1000));
+                }
+            })
+            .catch(err => {
+                this.logDebugMessage(`Base File Download Error: ${err}`);
+            });
+
+        // download and parse the file to compare
+        new Downloader(this.props.compare)
+            .download()
+            .then(content => {
+                if (content) {
+                    this.logDebugMessage('Compare (first 1000 chars): ' + content.slice(0, 1000));
+                }
+            })
+            .catch(err => {
+                this.logDebugMessage(`Compare File Download Error: ${err}`);
+            });
     }
 }
 

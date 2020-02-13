@@ -17,7 +17,9 @@ class ExtensionHeader extends React.Component<ExtensionHeaderProps, {}> {
         return (
             <div className="fdv-header">
                 <span>Flow Diff Viewer is working!</span>
-                <span className="fdv-header-info"> Detected {this.props.fileCount} JSON file(s)</span>
+                <span className="fdv-header-info">
+                    Detected {this.props.fileCount} JSON file(s)
+                </span>
             </div>
         );
     }
