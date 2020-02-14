@@ -18,7 +18,7 @@ interface DiffButtonProps {
 }
 
 /**
- * Defines the props for the DiffButton.
+ * Defines the state for the DiffButton.
  */
 interface DiffButtonState {
     /** True if the diff view is shown. */
