@@ -28,4 +28,8 @@ module.exports = {
     },
 
     coverageReporters: ['text', 'cobertura'],
+
+    reporters: ['default', 'jest-junit'],
+
+    collectCoverageFrom: ['src/contentscript/**/*.ts'],
 };

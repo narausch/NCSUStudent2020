@@ -1,6 +1,7 @@
 import * as React from 'react';
 import FileInfo from './io/FileInfo';
 import Downloader from './io/Downloader';
+import { Graph } from './graph/Graph';
 
 /**
  * Defines the props for the DiffView.
@@ -11,11 +12,19 @@ interface DiffViewProps {
 }
 
 /**
- * Defines the props for the DiffView.
+ * Defines the state for the DiffView.
  */
 interface DiffViewState {
     /** Debug information. */
     debugMessages: string[];
+
+    // for debugging
+    baseStatus: string;
+    compareStatus: string;
+    baseFileLoaded: number;
+    baseFileTotal: number;
+    compareFileLoaded: number;
+    compareFileTotal: number;
 }
 
 /**
@@ -30,14 +39,23 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
     constructor(props: DiffViewProps) {
         super(props);
         this.state = {
-            debugMessages: ['Initializing...'],
+            debugMessages: [],
+            baseStatus: 'Downloading...',
+            compareStatus: 'Downloading...',
+            baseFileLoaded: null,
+            baseFileTotal: null,
+            compareFileLoaded: null,
+            compareFileTotal: null,
         };
 
         this.logDebugMessage = this.logDebugMessage.bind(this);
         this.computeDiff = this.computeDiff.bind(this);
+        this.handleBaseUpdateProgress = this.handleBaseUpdateProgress.bind(this);
+        this.handleCompareUpdateProgress = this.handleCompareUpdateProgress.bind(this);
+        this.setStatusMessage = this.setStatusMessage.bind(this);
 
         // schedule the main logic
-        setTimeout(this.computeDiff, 500);
+        setTimeout(this.computeDiff, 0);
     }
 
     /**
@@ -47,9 +65,22 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
         const listMessages = this.state.debugMessages.map((line, index) => (
             <p key={index}>{line}</p>
         ));
+
+        // TODO: replace with ProgressBar
         return (
             <div className="fdv-view">
                 <h3>Flow Diff</h3>
+
+                <div className="fdv-debug-msg">
+                    <p>
+                        Base [{this.state.baseFileLoaded || 0}/{this.state.baseFileTotal || 0}{' '}
+                        bytes]: {this.state.baseStatus}
+                    </p>
+                    <p>
+                        Compare [{this.state.compareFileLoaded || 0}/
+                        {this.state.compareFileTotal || 0} bytes]: {this.state.compareStatus}
+                    </p>
+                </div>
                 <div className="fdv-debug-msg">{listMessages}</div>
             </div>
         );
@@ -67,33 +98,72 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
     }
 
     /**
+     * Handles download progress for the base file.
+     *
+     * @param loaded loaded bytes
+     * @param total total bytes
+     */
+    handleBaseUpdateProgress(loaded: number, total: number): void {
+        this.setState({ baseFileLoaded: loaded, baseFileTotal: total });
+    }
+
+    /**
+     * Handles download progress for the file to compare.
+     *
+     * @param loaded loaded bytes
+     * @param total total bytes
+     */
+    handleCompareUpdateProgress(loaded: number, total: number): void {
+        this.setState({ compareFileLoaded: loaded, compareFileTotal: total });
+    }
+
+    /**
+     * Sets a status message.
+     *
+     * @param isBase true is the message is for the base file
+     * @param message message
+     */
+    setStatusMessage(isBase: boolean, message: string): void {
+        if (isBase) {
+            this.setState({ baseStatus: message });
+        } else {
+            this.setState({ compareStatus: message });
+        }
+    }
+
+    /**
+     * Downloads and parses one file.
+     *
+     * @param isBase true if the target is the base file
+     */
+    downloadAndParse(isBase: boolean): Promise<Graph> {
+        return new Downloader(isBase ? this.props.base : this.props.compare)
+            .download(isBase ? this.handleBaseUpdateProgress : this.handleCompareUpdateProgress)
+            .then(content => {
+                this.setStatusMessage(isBase, 'Parsing...');
+                const g = content ? new Graph(content) : null;
+                this.setStatusMessage(isBase, g ? 'OK' : 'None');
+                return g;
+            })
+            .catch(err => {
+                this.setStatusMessage(isBase, `${err}`);
+                throw err;
+            });
+    }
+
+    /**
      * Computes the difference.
      */
     computeDiff(): void {
-        this.logDebugMessage('Downloading files...');
-
-        // download and parse the base file
-        new Downloader(this.props.base)
-            .download()
-            .then(content => {
-                if (content) {
-                    this.logDebugMessage('Base (first 1000 chars): ' + content.slice(0, 1000));
-                }
+        // TODO: refactor common code
+        Promise.all([this.downloadAndParse(true), this.downloadAndParse(false)])
+            .then(([graphBase, graphCompare]) => {
+                // TODO: compare two graphs
+                this.logDebugMessage('Comparing...');
             })
             .catch(err => {
-                this.logDebugMessage(`Base File Download Error: ${err}`);
-            });
-
-        // download and parse the file to compare
-        new Downloader(this.props.compare)
-            .download()
-            .then(content => {
-                if (content) {
-                    this.logDebugMessage('Compare (first 1000 chars): ' + content.slice(0, 1000));
-                }
-            })
-            .catch(err => {
-                this.logDebugMessage(`Compare File Download Error: ${err}`);
+                // TODO: handle errors
+                this.logDebugMessage('Failed to compare graphs.');
             });
     }
 }
