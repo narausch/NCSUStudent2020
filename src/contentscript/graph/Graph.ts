@@ -18,7 +18,7 @@ export class Graph {
         ) {
             throw new TypeError('JSON file is not formatted correctly');
         }
-        this.nodes = json.nodes;
+        this.nodes = new Map(json);
         this.connections = json.connections;
     }
 }
