@@ -4,7 +4,7 @@ export class Graph {
     and GraphConnection
     */
 
-    public nodes: Map<string, any>; // TODO: Switch to GraphNode type
+    public nodes: any; // TODO: Switch to GraphNode type
     public connections: Array<any>; // TODO: Switch to GraphConnection type
 
     constructor(jsonString: string) {
@@ -18,7 +18,13 @@ export class Graph {
         ) {
             throw new TypeError('JSON file is not formatted correctly');
         }
-        this.nodes = new Map(json);
+
+        const map = new Map<string, any>();
+        Object.keys(json.nodes).forEach(key => {
+            map[key] = json.nodes[key];
+        });
+
+        this.nodes = map;
         this.connections = json.connections;
     }
 }
