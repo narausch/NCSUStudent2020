@@ -1,12 +1,14 @@
+import { GraphNode } from './GraphNode';
+import { GraphConnection } from './GraphConnection';
+
 export class Graph {
-    /* Currently only uses the json nodes and connections
-    when we want to add the parameters we will want to use GraphNode
-    and GraphConnection
-    */
+    public nodes: Array<GraphNode>;
+    public connections: Array<GraphConnection>;
 
-    public nodes: any; // TODO: Switch to GraphNode type
-    public connections: Array<any>; // TODO: Switch to GraphConnection type
-
+    /**
+     * Constructs a graph object from a json string.
+     * @param jsonString The json string for the graph to construct.
+     */
     constructor(jsonString: string) {
         const json = JSON.parse(jsonString);
         if (
@@ -19,12 +21,16 @@ export class Graph {
             throw new TypeError('JSON file is not formatted correctly');
         }
 
-        const map = new Map<string, any>();
+        this.nodes = new Array<GraphNode>();
+
         Object.keys(json.nodes).forEach(key => {
-            map[key] = json.nodes[key];
+            this.nodes.push(new GraphNode(key, json.nodes[key]));
         });
 
-        this.nodes = map;
-        this.connections = json.connections;
+        this.connections = new Array<GraphConnection>();
+        json.connections.forEach(element => {
+            const connection = new GraphConnection(element);
+            this.connections.push(connection);
+        });
     }
 }
