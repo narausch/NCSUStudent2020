@@ -11,11 +11,11 @@ pipeline {
       steps {
         sh 'npm run coverage'
       }
-    }
-
-    stage('Report') {
-      steps {
-        cobertura(coberturaReportFile: 'coverage/cobertura-coverage.xml', lineCoverageTargets: '70')
+      post {
+        always {
+          cobertura(coberturaReportFile: 'output/coverage/cobertura-coverage.xml', enableNewApi: true, lineCoverageTargets: '70')
+          junit 'output/junit.xml'
+        }
       }
     }
 
