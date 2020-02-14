@@ -2,8 +2,7 @@ import FileInfo from '../../contentscript/io/FileInfo';
 import Downloader from '../../contentscript/io/Downloader';
 require('./DownloaderMock'); // rewrite global functions
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare function setSendMessageResult(success: boolean, text: string): any;
+declare function setSendMessageResult(success: boolean, text: string): void;
 
 // test data
 const f0 = new FileInfo(
