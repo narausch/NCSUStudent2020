@@ -28,4 +28,6 @@ module.exports = {
     },
 
     coverageReporters: ['text', 'cobertura'],
+
+    collectCoverageFrom: ['src/contentscript/**/*.ts']
 };
