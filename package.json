@@ -10,12 +10,22 @@
         "prewatch": "npm run clean",
         "watch": "NODE_ENV=development webpack --config webpack.config.js -w",
         "test": "jest",
-        "coverage": "jest --coverage --coverageDirectory=output/coverage/cobertura-coverage.xml",
+        "coverage": "jest --coverage",
         "test:watch": "jest --watch"
     },
     "repository": {
         "type": "git",
         "url": "https://github.ncsu.edu/engr-csc-sdc/2020SpringTeam19.git"
+    },
+    "jest-junit": {
+        "suiteName": "jest tests",
+        "outputDirectory": "coverage/",
+        "outputName": "junit.xml",
+        "uniqueOutputName": "false",
+        "classNameTemplate": "{classname}-{title}",
+        "titleTemplate": "{classname}-{title}",
+        "ancestorSeparator": " › ",
+        "usePathForSuiteName": "true"
     },
     "devDependencies": {
         "@testing-library/jest-dom": "^5.1.1",
