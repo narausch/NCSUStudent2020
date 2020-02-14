@@ -10,7 +10,7 @@
         "prewatch": "npm run clean",
         "watch": "NODE_ENV=development webpack --config webpack.config.js -w",
         "test": "jest",
-        "coverage": "jest --coverage",
+        "coverage": "jest --coverage --coverageDirectory=output/coverage/cobertura-coverage.xml",
         "test:watch": "jest --watch"
     },
     "repository": {
