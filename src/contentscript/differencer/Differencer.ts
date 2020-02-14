@@ -1,47 +1,78 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// import { Graph } from '../graph/Graph';
-// import { GraphNode } from '../graph/GraphNode';
-// import { GraphConnection } from '../graph/GraphConnection';
-
 export default class Differencer {
-    private a1: Map<string, any>;
-    private a2: Map<string, any>;
-    private addedNodes: Set<string>;
-    private removedNodes: Set<string>;
-    private changedNodes: Set<string> = new Set();
+    private a1: {
+        id: string;
+        info: string;
+    }[];
+    private a2: {
+        id: string;
+        info: string;
+    }[];
+    private addedNodes: {
+        id: string;
+        info: string;
+    }[];
+    private removedNodes: {
+        id: string;
+        info: string;
+    }[];
+    private changedNodes: {
+        id: string;
+        info: string;
+    }[] = [];
 
     /**
      * Constructs a Differencer.
      *
      * @param
      */
-    constructor(a1: Map<string, any>, a2: Map<string, any>) {
+    constructor(
+        a1: {
+            id: string;
+            info: string;
+        }[],
+        a2: {
+            id: string;
+            info: string;
+        }[],
+    ) {
         this.a1 = a1;
         this.a2 = a2;
         this.computeDifference();
     }
 
     computeDifference(): void {
-        this.addedNodes = new Set([...this.a2.keys()].filter(x => !this.a1.has(x)));
-        this.removedNodes = new Set([...this.a1.keys()].filter(x => !this.a2.has(x)));
-        for (const [key, val] of this.a1) {
-            const testVal = this.a2.get(key);
-            //change this line to find differences in all fields
-            if (testVal !== val || (testVal === undefined && !this.a2.has(key))) {
-                this.changedNodes.add(val);
-            }
+        //copy of a2 with intersection of a1 removed
+        this.addedNodes = this.a2.filter(item => !this.a1.some(v => item.id === v.id));
+
+        //copy of a1 with intersection of a2 removed
+        this.removedNodes = this.a1.filter(item => !this.a2.some(v => item.id === v.id));
+
+        //copy of a2 with non-intersection of a1 removed
+        const same = this.a2.filter(item => this.a1.some(v => item.id === v.id));
+        for (const entry of same) {
+            const itemx = this.a1.find(v => v.id == entry.id);
+            if (JSON.stringify(entry) != JSON.stringify(itemx)) this.changedNodes.push(entry);
         }
     }
 
-    getAddedNodes(): Set<string> {
+    getAddedNodes(): {
+        id: string;
+        info: string;
+    }[] {
         return this.addedNodes;
     }
 
-    getRemovedNodes(): Set<string> {
+    getRemovedNodes(): {
+        id: string;
+        info: string;
+    }[] {
         return this.removedNodes;
     }
 
-    getChangedNodes(): Set<string> {
+    getChangedNodes(): {
+        id: string;
+        info: string;
+    }[] {
         return this.changedNodes;
     }
 }
