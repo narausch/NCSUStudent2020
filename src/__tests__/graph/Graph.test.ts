@@ -1,6 +1,5 @@
 import { Graph } from '../../contentscript/graph/Graph';
 import fs from 'fs';
-import { GraphConnection } from '../../contentscript/graph/GraphConnection';
 
 describe('Graph tests', () => {
     test('Constructor', async () => {
@@ -25,19 +24,5 @@ describe('Graph tests', () => {
 
         expect(result).toBe('JSON file is not formatted correctly');
         expect(graph).toBe(null);
-    });
-    test('Constructor broken', async () => {
-        const jsonString = '{"sourcePort": {"node": "test-id"}, "taetPort": {"node":"test-id2"}}';
-
-        let connection: GraphConnection = null;
-        let result = '';
-        try {
-            connection = new GraphConnection(JSON.parse(jsonString));
-        } catch (err) {
-            result = (err as Error).message;
-        }
-
-        expect(result).toBe('JSON file is not formatted correctly');
-        expect(connection).toBe(null);
     });
 });
