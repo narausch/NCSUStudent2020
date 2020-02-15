@@ -1,0 +1,84 @@
+{
+    "creationTimeStamp": null,
+    "modifiedTimeStamp": null,
+    "createdBy": null,
+    "modifiedBy": null,
+    "version": 1,
+    "id": null,
+    "name": "Flow.cpf",
+    "description": null,
+    "properties": {},
+    "links": [],
+    "nodes": {
+        "id-1580757613615-1182": {
+            "nodeType": "table",
+            "version": 1,
+            "id": "id-1580757613615-1182",
+            "name": "BASEBALL",
+            "description": null,
+            "tableReference": {
+                "referenceType": "parameter",
+                "parameterId": "id-1580757613615-1182"
+            }
+        },
+        "id-1580757734423-1690": {
+            "nodeType": "transformation",
+            "version": 1,
+            "id": "id-1580757734423-1690",
+            "name": "User Written Code",
+            "description": null
+        },
+        "id-1580757742856-1869": {
+            "nodeType": "outputTable",
+            "version": 1,
+            "id": "id-1580757742856-1869",
+            "name": "Table Definition",
+            "description": null,
+            "tableReference": {
+                "referenceType": "parameter",
+                "parameterId": "id-1580757742856-1869"
+            },
+            "outputTableArguments": {
+                "promote": false,
+                "replace": false,
+                "arguments": {}
+            }
+        }
+    },
+    "parameters": {
+        "id-1580757613615-1182": {
+            "parameterType": "tableStructure",
+            "version": 1,
+            "id": "id-1580757613615-1182",
+            "name": "BASEBALL",
+            "parameterUsage": "INPUT",
+            "defaultValue": null
+        }
+    },
+    "connections": [
+        {
+            "sourcePort": {
+                "node": "id-1580757613615-1182",
+                "portName": "outTable",
+                "index": 0
+            },
+            "targetPort": {
+                "node": "id-1580757734423-1690",
+                "portName": "inTables",
+                "index": 0
+            }
+        },
+        {
+            "sourcePort": {
+                "node": "id-1580757613615-1182",
+                "portName": "outTables",
+                "index": 0
+            },
+            "targetPort": {
+                "node": "id-1580757742856-2891",
+                "portName": "inTables",
+                "index": 0
+            }
+        }
+    ]
+}
