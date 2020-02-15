@@ -11,7 +11,7 @@ export class Graph {
      */
     constructor(jsonString: string) {
         // Error case when the file is not a json string
-        var json: any;
+        let json: any;
         try {
             json = JSON.parse(jsonString);
         } catch (e) {
