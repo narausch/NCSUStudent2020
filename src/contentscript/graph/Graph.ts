@@ -41,15 +41,18 @@ export class Graph {
             let sourcePort = false;
             let targetPort = false;
             // Compare current port id with all node ids
-            //TODO: Break the for loop if there is a match
-            this.nodes.forEach(nodeElement => {
-                if (nodeElement.id == element.sourcePort.node) {
+            for (let x = 0; x < this.nodes.length; x++) {
+                if (this.nodes[x].id == element.sourcePort.node) {
                     sourcePort = true;
                 }
-                if (nodeElement.id == element.targetPort.node) {
+                if (this.nodes[x].id == element.targetPort.node) {
                     targetPort = true;
                 }
-            });
+                // If they are both true, done
+                if (sourcePort && targetPort) {
+                    break;
+                }
+            }
 
             if (!sourcePort) {
                 throw new Error('Not valid source port');
