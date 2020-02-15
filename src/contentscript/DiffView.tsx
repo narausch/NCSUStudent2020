@@ -2,6 +2,8 @@ import * as React from 'react';
 import FileInfo from './io/FileInfo';
 import Downloader from './io/Downloader';
 import { Graph } from './graph/Graph';
+import Differencer from './differencer/Differencer';
+import { GraphNode } from './graph/GraphNode';
 
 /**
  * Defines the props for the DiffView.
@@ -158,8 +160,28 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
         // TODO: refactor common code
         Promise.all([this.downloadAndParse(true), this.downloadAndParse(false)])
             .then(([graphBase, graphCompare]) => {
-                // TODO: compare two graphs
                 this.logDebugMessage('Comparing...');
+
+                let graphBaseNodeList: {
+                    id: string;
+                    info: string;
+                }[];
+                let graphCompareNodeList: {
+                    id: string;
+                    info: string;
+                }[];
+                graphBase.nodes.forEach(node => {
+                    graphBaseNodeList.push({ id: node.id, info: JSON.stringify(node.data) });
+                });
+                graphCompare.nodes.forEach(node => {
+                    graphCompareNodeList.push({ id: node.id, info: JSON.stringify(node.data) });
+                });
+                const differencer = new Differencer(graphBaseNodeList, graphCompareNodeList);
+
+                // TODO: Consider outputting as a list of strings
+                this.logDebugMessage(differencer.getAddedNodes().toString());
+                this.logDebugMessage(differencer.getRemovedNodes().toString());
+                this.logDebugMessage(differencer.getChangedNodes().toString());
             })
             .catch(err => {
                 // TODO: handle errors
