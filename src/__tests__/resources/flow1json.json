@@ -1,0 +1,1074 @@
+  {
+    "creationTimeStamp": null,
+    "modifiedTimeStamp": null,
+    "createdBy": null,
+    "modifiedBy": null,
+    "version": 1,
+    "id": null,
+    "name": "Flow.cpf",
+    "description": null,
+    "properties": {},
+    "links": [],
+    "nodes": {
+      "id-1580757613615-1182": {
+        "nodeType": "table",
+        "version": 1,
+        "id": "id-1580757613615-1182",
+        "name": "BASEBALL",
+        "description": null,
+        "tableReference": {
+          "referenceType": "parameter",
+          "parameterId": "id-1580757613615-1182"
+        }
+      },
+      "id-1580757630994-1285": {
+        "nodeType": "transformation",
+        "version": 1,
+        "id": "id-1580757630994-1285",
+        "name": "User Written Code",
+        "description": null,
+        "portMappings": [
+          {
+            "mappingType": "tableStructure",
+            "portName": "outTables",
+            "portIndex": 0,
+            "tableStructure": {
+              "columnDefinitions": [
+                {
+                  "name": "Name",
+                  "label": "Player's Name",
+                  "index": 0,
+                  "type": "Char",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "Team",
+                  "label": "Team at the End of 1986",
+                  "index": 1,
+                  "type": "Char",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "nAtBat",
+                  "label": "Times at Bat in 1986",
+                  "index": 2,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "nHits",
+                  "label": "Hits in 1986",
+                  "index": 3,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "nHome",
+                  "label": "Home Runs in 1986",
+                  "index": 4,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "nRuns",
+                  "label": "Runs in 1986",
+                  "index": 5,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "nRBI",
+                  "label": "RBIs in 1986",
+                  "index": 6,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "nBB",
+                  "label": "Walks in 1986",
+                  "index": 7,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "YrMajor",
+                  "label": "Years in the Major Leagues",
+                  "index": 8,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "CrAtBat",
+                  "label": "Career Times at Bat",
+                  "index": 9,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "CrHits",
+                  "label": "Career Hits",
+                  "index": 10,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "CrHome",
+                  "label": "Career Home Runs",
+                  "index": 11,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "CrRuns",
+                  "label": "Career Runs",
+                  "index": 12,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "CrRbi",
+                  "label": "Career RBIs",
+                  "index": 13,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "CrBB",
+                  "label": "Career Walks",
+                  "index": 14,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "League",
+                  "label": "League at the End of 1986",
+                  "index": 15,
+                  "type": "Char",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "Division",
+                  "label": "Division at the End of 1986",
+                  "index": 16,
+                  "type": "Char",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "Position",
+                  "label": "Position(s) in 1986",
+                  "index": 17,
+                  "type": "Char",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "nOuts",
+                  "label": "Put Outs in 1986",
+                  "index": 18,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "nAssts",
+                  "label": "Assists in 1986",
+                  "index": 19,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "nError",
+                  "label": "Errors in 1986",
+                  "index": 20,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "Salary",
+                  "label": "1987 Salary in $ Thousands",
+                  "index": 21,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "Div",
+                  "label": "League and Division",
+                  "index": 22,
+                  "type": "Char",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "logSalary",
+                  "label": "Log Salary",
+                  "index": 23,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                }
+              ]
+            }
+          }
+        ],
+        "transformationUri": "/dataFlows/transformations/a7190700-f59c-4a94-afe2-214ce639fcde",
+        "arguments": {
+          "codeOptions": {
+            "code": ""
+          }
+        }
+      },
+      "id-1580757653150-1412": {
+        "nodeType": "transformation",
+        "version": 1,
+        "id": "id-1580757653150-1412",
+        "name": "Query",
+        "description": null,
+        "portMappings": [],
+        "transformationUri": "/dataFlows/transformations/c072ab75-0a02-4aa1-acf3-63fe9c17a711",
+        "arguments": {
+          "queryOption": {},
+          "codeOptions": {
+            "code": ""
+          }
+        }
+      },
+      "id-1580757661618-1461": {
+        "nodeType": "table",
+        "version": 1,
+        "id": "id-1580757661618-1461",
+        "name": "CARS",
+        "description": null,
+        "tableReference": {
+          "referenceType": "parameter",
+          "parameterId": "id-1580757661618-1461"
+        }
+      },
+      "id-1580757734423-1690": {
+        "nodeType": "transformation",
+        "version": 1,
+        "id": "id-1580757734423-1690",
+        "name": "User Written Code",
+        "description": null,
+        "portMappings": [
+          {
+            "mappingType": "tableStructure",
+            "portName": "outTables",
+            "portIndex": 0,
+            "tableStructure": {
+              "columnDefinitions": [
+                {
+                  "name": "Name",
+                  "label": "Player's Name",
+                  "index": 0,
+                  "type": "Char",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "Team",
+                  "label": "Team at the End of 1986",
+                  "index": 1,
+                  "type": "Char",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "nAtBat",
+                  "label": "Times at Bat in 1986",
+                  "index": 2,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "nHits",
+                  "label": "Hits in 1986",
+                  "index": 3,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "nHome",
+                  "label": "Home Runs in 1986",
+                  "index": 4,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "nRuns",
+                  "label": "Runs in 1986",
+                  "index": 5,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "nRBI",
+                  "label": "RBIs in 1986",
+                  "index": 6,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "nBB",
+                  "label": "Walks in 1986",
+                  "index": 7,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "YrMajor",
+                  "label": "Years in the Major Leagues",
+                  "index": 8,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "CrAtBat",
+                  "label": "Career Times at Bat",
+                  "index": 9,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "CrHits",
+                  "label": "Career Hits",
+                  "index": 10,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "CrHome",
+                  "label": "Career Home Runs",
+                  "index": 11,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "CrRuns",
+                  "label": "Career Runs",
+                  "index": 12,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "CrRbi",
+                  "label": "Career RBIs",
+                  "index": 13,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "CrBB",
+                  "label": "Career Walks",
+                  "index": 14,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "League",
+                  "label": "League at the End of 1986",
+                  "index": 15,
+                  "type": "Char",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "Division",
+                  "label": "Division at the End of 1986",
+                  "index": 16,
+                  "type": "Char",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "Position",
+                  "label": "Position(s) in 1986",
+                  "index": 17,
+                  "type": "Char",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "nOuts",
+                  "label": "Put Outs in 1986",
+                  "index": 18,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "nAssts",
+                  "label": "Assists in 1986",
+                  "index": 19,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "nError",
+                  "label": "Errors in 1986",
+                  "index": 20,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "Salary",
+                  "label": "1987 Salary in $ Thousands",
+                  "index": 21,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "Div",
+                  "label": "League and Division",
+                  "index": 22,
+                  "type": "Char",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "logSalary",
+                  "label": "Log Salary",
+                  "index": 23,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                }
+              ]
+            }
+          }
+        ],
+        "transformationUri": "/dataFlows/transformations/a7190700-f59c-4a94-afe2-214ce639fcde",
+        "arguments": {
+          "codeOptions": {
+            "code": ""
+          }
+        }
+      },
+      "id-1580757742856-1869": {
+        "nodeType": "outputTable",
+        "version": 1,
+        "id": "id-1580757742856-1869",
+        "name": "Table Definition",
+        "description": null,
+        "tableReference": {
+          "referenceType": "parameter",
+          "parameterId": "id-1580757742856-1869"
+        },
+        "outputTableArguments": {
+          "promote": false,
+          "replace": false,
+          "arguments": {}
+        }
+      }
+    },
+    "parameters": {
+      "id-1580757613615-1182": {
+        "parameterType": "tableStructure",
+        "version": 1,
+        "id": "id-1580757613615-1182",
+        "name": "BASEBALL",
+        "parameterUsage": "INPUT",
+        "defaultValue": null,
+        "columns": {
+          "logSalary": {
+            "name": "logSalary",
+            "label": "Log Salary",
+            "index": 23,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "nOuts": {
+            "name": "nOuts",
+            "label": "Put Outs in 1986",
+            "index": 18,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "CrAtBat": {
+            "name": "CrAtBat",
+            "label": "Career Times at Bat",
+            "index": 9,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "Salary": {
+            "name": "Salary",
+            "label": "1987 Salary in $ Thousands",
+            "index": 21,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "League": {
+            "name": "League",
+            "label": "League at the End of 1986",
+            "index": 15,
+            "type": "Char",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "nRuns": {
+            "name": "nRuns",
+            "label": "Runs in 1986",
+            "index": 5,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "Position": {
+            "name": "Position",
+            "label": "Position(s) in 1986",
+            "index": 17,
+            "type": "Char",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "nAtBat": {
+            "name": "nAtBat",
+            "label": "Times at Bat in 1986",
+            "index": 2,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "nError": {
+            "name": "nError",
+            "label": "Errors in 1986",
+            "index": 20,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "nAssts": {
+            "name": "nAssts",
+            "label": "Assists in 1986",
+            "index": 19,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "CrBB": {
+            "name": "CrBB",
+            "label": "Career Walks",
+            "index": 14,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "CrRbi": {
+            "name": "CrRbi",
+            "label": "Career RBIs",
+            "index": 13,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "nBB": {
+            "name": "nBB",
+            "label": "Walks in 1986",
+            "index": 7,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "Name": {
+            "name": "Name",
+            "label": "Player's Name",
+            "index": 0,
+            "type": "Char",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "Div": {
+            "name": "Div",
+            "label": "League and Division",
+            "index": 22,
+            "type": "Char",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "CrHits": {
+            "name": "CrHits",
+            "label": "Career Hits",
+            "index": 10,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "CrHome": {
+            "name": "CrHome",
+            "label": "Career Home Runs",
+            "index": 11,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "CrRuns": {
+            "name": "CrRuns",
+            "label": "Career Runs",
+            "index": 12,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "nRBI": {
+            "name": "nRBI",
+            "label": "RBIs in 1986",
+            "index": 6,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "Division": {
+            "name": "Division",
+            "label": "Division at the End of 1986",
+            "index": 16,
+            "type": "Char",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "Team": {
+            "name": "Team",
+            "label": "Team at the End of 1986",
+            "index": 1,
+            "type": "Char",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "YrMajor": {
+            "name": "YrMajor",
+            "label": "Years in the Major Leagues",
+            "index": 8,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "nHome": {
+            "name": "nHome",
+            "label": "Home Runs in 1986",
+            "index": 4,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "nHits": {
+            "name": "nHits",
+            "label": "Hits in 1986",
+            "index": 3,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          }
+        }
+      },
+      "id-1580757661618-1461": {
+        "parameterType": "tableStructure",
+        "version": 1,
+        "id": "id-1580757661618-1461",
+        "name": "CARS",
+        "parameterUsage": "INPUT",
+        "defaultValue": null,
+        "columns": {
+          "MSRP": {
+            "name": "MSRP",
+            "label": "",
+            "index": 5,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "Origin": {
+            "name": "Origin",
+            "label": "",
+            "index": 3,
+            "type": "Char",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "MPG_Highway": {
+            "name": "MPG_Highway",
+            "label": "MPG (Highway)",
+            "index": 11,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "Invoice": {
+            "name": "Invoice",
+            "label": "",
+            "index": 6,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "EngineSize": {
+            "name": "EngineSize",
+            "label": "Engine Size (L)",
+            "index": 7,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "Wheelbase": {
+            "name": "Wheelbase",
+            "label": "Wheelbase (IN)",
+            "index": 13,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "MPG_City": {
+            "name": "MPG_City",
+            "label": "MPG (City)",
+            "index": 10,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "Make": {
+            "name": "Make",
+            "label": "",
+            "index": 0,
+            "type": "Char",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "Weight": {
+            "name": "Weight",
+            "label": "Weight (LBS)",
+            "index": 12,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "Type": {
+            "name": "Type",
+            "label": "",
+            "index": 2,
+            "type": "Char",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "Length": {
+            "name": "Length",
+            "label": "Length (IN)",
+            "index": 14,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "Horsepower": {
+            "name": "Horsepower",
+            "label": "",
+            "index": 9,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "Model": {
+            "name": "Model",
+            "label": "",
+            "index": 1,
+            "type": "Char",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "DriveTrain": {
+            "name": "DriveTrain",
+            "label": "",
+            "index": 4,
+            "type": "Char",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "Cylinders": {
+            "name": "Cylinders",
+            "label": "",
+            "index": 8,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          }
+        }
+      },
+      "id-1580757742856-1869": {
+        "parameterType": "table",
+        "version": 1,
+        "id": "id-1580757742856-1869",
+        "name": "Table Definition",
+        "parameterUsage": "OUTPUT",
+        "defaultValue": {
+          "table": {
+            "name": "Test",
+            "version": 1
+          },
+          "source": {
+            "id": "work",
+            "name": "WORK",
+            "providerId": "Compute",
+            "parentId": "bd09bfc3-b23c-4200-9145-cc22d4de5b70",
+            "hasTables": true,
+            "hasEngines": false,
+            "attributes": {
+              "physicalName": "/opt/sas/viya/config/var/tmp/compsrv/default/6c95eafd-bcbf-48c1-8c11-297922d8ce7a/SAS_workA45D000029B8_rifraz-dataflow.dmmdev.sashq-d.openstack.sas.com",
+              "flags": 34848,
+              "options": "",
+              "concatenationCount": 0,
+              "engineName": "V9",
+              "version": 2,
+              "fileFormat": "7"
+            },
+            "version": 1,
+            "links": [
+              {
+                "method": "GET",
+                "rel": "children",
+                "href": "/dataSources/providers/Compute/sources/work/children?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "uri": "/dataSources/providers/Compute/sources/work/children?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "type": "application/vnd.sas.collection",
+                "itemType": "application/vnd.sas.data.source"
+              },
+              {
+                "method": "GET",
+                "rel": "self",
+                "href": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work",
+                "uri": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work",
+                "type": "application/vnd.sas.data.source"
+              },
+              {
+                "method": "GET",
+                "rel": "alternate",
+                "href": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work",
+                "uri": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work",
+                "type": "application/vnd.sas.data.source.summary"
+              },
+              {
+                "method": "GET",
+                "rel": "up",
+                "href": "/dataSources/providers/Compute/sources",
+                "uri": "/dataSources/providers/Compute/sources",
+                "type": "application/vnd.sas.collection",
+                "itemType": "application/vnd.sas.data.source"
+              },
+              {
+                "method": "GET",
+                "rel": "parent",
+                "href": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "uri": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "type": "application/vnd.sas.data.source"
+              },
+              {
+                "method": "GET",
+                "rel": "tables",
+                "href": "/dataTables/dataSources/Compute~fs~bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work/tables?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "uri": "/dataTables/dataSources/Compute~fs~bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work/tables?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "type": "application/vnd.sas.collection",
+                "itemType": "application/vnd.sas.data.table"
+              },
+              {
+                "method": "GET",
+                "rel": "session",
+                "href": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work/sessions/6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "uri": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work/sessions/6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "type": "application/vnd.sas.data.session"
+              },
+              {
+                "method": "GET",
+                "rel": "sessionScoped",
+                "href": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "uri": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "type": "application/vnd.sas.data.source"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "connections": [
+      {
+        "sourcePort": {
+          "node": "id-1580757613615-1182",
+          "portName": "outTable",
+          "index": 0
+        },
+        "targetPort": {
+          "node": "id-1580757630994-1285",
+          "portName": "inTables",
+          "index": 0
+        }
+      },
+      {
+        "sourcePort": {
+          "node": "id-1580757630994-1285",
+          "portName": "outTables",
+          "index": 0
+        },
+        "targetPort": {
+          "node": "id-1580757653150-1412",
+          "portName": "inTables",
+          "index": 0
+        }
+      },
+      {
+        "sourcePort": {
+          "node": "id-1580757661618-1461",
+          "portName": "outTable",
+          "index": 0
+        },
+        "targetPort": {
+          "node": "id-1580757653150-1412",
+          "portName": "inTables",
+          "index": 1
+        }
+      },
+      {
+        "sourcePort": {
+          "node": "id-1580757653150-1412",
+          "portName": "outTable",
+          "index": 0
+        },
+        "targetPort": {
+          "node": "id-1580757734423-1690",
+          "portName": "inTables",
+          "index": 0
+        }
+      },
+      {
+        "sourcePort": {
+          "node": "id-1580757734423-1690",
+          "portName": "outTables",
+          "index": 0
+        },
+        "targetPort": {
+          "node": "id-1580757742856-1869",
+          "portName": "inTable",
+          "index": 0
+        }
+      }
+    ]
+  }
