@@ -14,7 +14,7 @@
         "nodeType": "table",
         "version": 1,
         "id": "id-1580757613615-1182",
-        "name": "BASEBALL",
+        "name": "BASKETBALL",
         "description": null,
         "tableReference": {
           "referenceType": "parameter",
@@ -527,22 +527,6 @@
           }
         }
       },
-      "id-1580757742856-1869": {
-        "nodeType": "outputTable",
-        "version": 1,
-        "id": "id-1580757742856-1869",
-        "name": "Table Definition",
-        "description": null,
-        "tableReference": {
-          "referenceType": "parameter",
-          "parameterId": "id-1580757742856-1869"
-        },
-        "outputTableArguments": {
-          "promote": false,
-          "replace": false,
-          "arguments": {}
-        }
-      },
       "id-1580758076675-2114": {
         "nodeType": "table",
         "version": 1,
@@ -979,7 +963,7 @@
         "parameterType": "tableStructure",
         "version": 1,
         "id": "id-1580757613615-1182",
-        "name": "BASEBALL",
+        "name": "BASKETBALL",
         "parameterUsage": "INPUT",
         "defaultValue": null,
         "columns": {
@@ -1346,98 +1330,6 @@
           }
         }
       },
-      "id-1580757742856-1869": {
-        "parameterType": "table",
-        "version": 1,
-        "id": "id-1580757742856-1869",
-        "name": "Table Definition",
-        "parameterUsage": "OUTPUT",
-        "defaultValue": {
-          "table": {
-            "name": "Test",
-            "version": 1
-          },
-          "source": {
-            "id": "work",
-            "name": "WORK",
-            "providerId": "Compute",
-            "parentId": "bd09bfc3-b23c-4200-9145-cc22d4de5b70",
-            "hasTables": true,
-            "hasEngines": false,
-            "attributes": {
-              "physicalName": "/opt/sas/viya/config/var/tmp/compsrv/default/6c95eafd-bcbf-48c1-8c11-297922d8ce7a/SAS_workA45D000029B8_rifraz-dataflow.dmmdev.sashq-d.openstack.sas.com",
-              "flags": 34848,
-              "options": "",
-              "concatenationCount": 0,
-              "engineName": "V9",
-              "version": 2,
-              "fileFormat": "7"
-            },
-            "version": 1,
-            "links": [
-              {
-                "method": "GET",
-                "rel": "children",
-                "href": "/dataSources/providers/Compute/sources/work/children?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
-                "uri": "/dataSources/providers/Compute/sources/work/children?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
-                "type": "application/vnd.sas.collection",
-                "itemType": "application/vnd.sas.data.source"
-              },
-              {
-                "method": "GET",
-                "rel": "self",
-                "href": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work",
-                "uri": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work",
-                "type": "application/vnd.sas.data.source"
-              },
-              {
-                "method": "GET",
-                "rel": "alternate",
-                "href": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work",
-                "uri": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work",
-                "type": "application/vnd.sas.data.source.summary"
-              },
-              {
-                "method": "GET",
-                "rel": "up",
-                "href": "/dataSources/providers/Compute/sources",
-                "uri": "/dataSources/providers/Compute/sources",
-                "type": "application/vnd.sas.collection",
-                "itemType": "application/vnd.sas.data.source"
-              },
-              {
-                "method": "GET",
-                "rel": "parent",
-                "href": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
-                "uri": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
-                "type": "application/vnd.sas.data.source"
-              },
-              {
-                "method": "GET",
-                "rel": "tables",
-                "href": "/dataTables/dataSources/Compute~fs~bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work/tables?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
-                "uri": "/dataTables/dataSources/Compute~fs~bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work/tables?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
-                "type": "application/vnd.sas.collection",
-                "itemType": "application/vnd.sas.data.table"
-              },
-              {
-                "method": "GET",
-                "rel": "session",
-                "href": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work/sessions/6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
-                "uri": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work/sessions/6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
-                "type": "application/vnd.sas.data.session"
-              },
-              {
-                "method": "GET",
-                "rel": "sessionScoped",
-                "href": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
-                "uri": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
-                "type": "application/vnd.sas.data.source"
-              }
-            ]
-          }
-        }
-      },
       "id-1580758076675-2114": {
         "parameterType": "tableStructure",
         "version": 1,
@@ -1724,18 +1616,6 @@
         "targetPort": {
           "node": "id-1580757734423-1690",
           "portName": "inTables",
-          "index": 0
-        }
-      },
-      {
-        "sourcePort": {
-          "node": "id-1580757734423-1690",
-          "portName": "outTables",
-          "index": 0
-        },
-        "targetPort": {
-          "node": "id-1580757742856-1869",
-          "portName": "inTable",
           "index": 0
         }
       },
