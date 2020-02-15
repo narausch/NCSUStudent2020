@@ -542,6 +542,436 @@
           "replace": false,
           "arguments": {}
         }
+      },
+      "id-1580758076675-2114": {
+        "nodeType": "table",
+        "version": 1,
+        "id": "id-1580758076675-2114",
+        "name": "CLASS",
+        "description": null,
+        "tableReference": {
+          "referenceType": "parameter",
+          "parameterId": "id-1580758076675-2114"
+        }
+      },
+      "id-1580758086438-2191": {
+        "nodeType": "transformation",
+        "version": 1,
+        "id": "id-1580758086438-2191",
+        "name": "User Written Code",
+        "description": null,
+        "portMappings": [
+          {
+            "mappingType": "tableStructure",
+            "portName": "outTables",
+            "portIndex": 0,
+            "tableStructure": {
+              "columnDefinitions": [
+                {
+                  "name": "Name",
+                  "label": "",
+                  "index": 0,
+                  "type": "Char",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "Sex",
+                  "label": "",
+                  "index": 1,
+                  "type": "Char",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "Age",
+                  "label": "",
+                  "index": 2,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "Height",
+                  "label": "",
+                  "index": 3,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "Weight",
+                  "label": "",
+                  "index": 4,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                }
+              ]
+            }
+          }
+        ],
+        "transformationUri": "/dataFlows/transformations/a7190700-f59c-4a94-afe2-214ce639fcde",
+        "arguments": {
+          "codeOptions": {
+            "code": ""
+          }
+        }
+      },
+      "id-1580758128233-2369": {
+        "nodeType": "transformation",
+        "version": 1,
+        "id": "id-1580758128233-2369",
+        "name": "Linear Regression",
+        "description": null,
+        "portMappings": [
+          {
+            "mappingType": "tableStructure",
+            "portName": "outputDSName",
+            "portIndex": 0,
+            "tableStructure": {
+              "columnDefinitions": [
+                {
+                  "name": "Name",
+                  "label": "",
+                  "index": 0,
+                  "type": "Char",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "Sex",
+                  "label": "",
+                  "index": 1,
+                  "type": "Char",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "Age",
+                  "label": "",
+                  "index": 2,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "Height",
+                  "label": "",
+                  "index": 3,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                },
+                {
+                  "name": "Weight",
+                  "label": "",
+                  "index": 4,
+                  "type": "Numeric",
+                  "rawLength": 0,
+                  "formattedLength": 0,
+                  "version": 2
+                }
+              ]
+            }
+          }
+        ],
+        "transformationUri": "/dataFlows/transformations/c14edb8c-033f-4d97-9674-94cfe7c15d08",
+        "arguments": {
+          "dataset": {
+            "librarytable": "dataflow://fa3ca1bf-0ad0-450e-bc8f-33bbcb1e2504/id-1580758128233-2369/dataset.0"
+          },
+          "dependentVariable": "",
+          "continuousVariables": "",
+          "classVariables": "",
+          "freqVariable": "",
+          "byVariables": "",
+          "partitionVariable": "",
+          "copyVariables": "",
+          "testDataChoice": "0",
+          "validationDataChoice": "0",
+          "testDataFraction": "",
+          "validationDataFraction": "",
+          "useRandomSeed": "0",
+          "randomSeed": "",
+          "partitionDataCombo": [
+            {
+              "value": "partitionDataFractionChoice",
+              "displayValue": "Specify a sample proportion",
+              "keys": [
+                "partitionDataFractionChoice",
+                null,
+                "Specify a sample proportion"
+              ],
+              "label": "Specify a sample proportion",
+              "baseid": "{\"value\":\"partitionDataFractionChoice\",\"label\":\"Specify a sample proportion\"}",
+              "id": "{\"value\":\"partitionDataFractionChoice\",\"label\":\"Specify a sample proportion\"}1"
+            }
+          ],
+          "useTrainingLevel": "0",
+          "mainEffectsChoice": "1",
+          "standardModel": "mainEffectsChoice",
+          "mainNwayEffectsChoice": "0",
+          "customModelChoice": "0",
+          "modelBuilder": {
+            "modelSummaryValues": {
+              "randomEffectsSetCount": 0,
+              "repeatedEffectsSetCount": 0,
+              "zeroInflatedEffectsSetCount": 0,
+              "zeroInflatedEffectsCount": 0,
+              "fixedEffectsCount": 0,
+              "fixedContinuousMainEffectsCount": 0,
+              "fixedClassificationMainEffectsCount": 0,
+              "fixedInterceptValue": "True",
+              "fixedModelsetInvalidStateCount": 0,
+              "randomModelsetInvalidStateCount": 0,
+              "repeatedModelsetInvalidStateCount": 0,
+              "meansModelsetInvalidStateCount": 0,
+              "zeroInflatedModelsetInvalidStateCount": 0
+            },
+            "mixedEffectsModels": [
+              {
+                "emtype": "FIXED",
+                "intercept": "True",
+                "modelEffects": []
+              }
+            ]
+          },
+          "nway": 2,
+          "statisticsCombo": [
+            {
+              "value": "defaultStatsChoice",
+              "displayValue": "Default statistics",
+              "keys": [
+                "defaultStatsChoice",
+                null,
+                "Default statistics"
+              ],
+              "label": "Default statistics",
+              "baseid": "{\"value\":\"defaultStatsChoice\",\"label\":\"Default statistics\"}",
+              "id": "{\"value\":\"defaultStatsChoice\",\"label\":\"Default statistics\"}1"
+            }
+          ],
+          "stb": "0",
+          "cl": "0",
+          "confidence": [
+            {
+              "value": "confidence95",
+              "displayValue": "95%",
+              "keys": [
+                "confidence95",
+                null,
+                "95%"
+              ],
+              "label": "95%",
+              "baseid": "{\"value\":\"confidence95\",\"label\":\"95%\"}",
+              "id": "{\"value\":\"confidence95\",\"label\":\"95%\"}1"
+            }
+          ],
+          "confidenceValue": 95,
+          "tol": "0",
+          "vif": "0",
+          "outputDS": "0",
+          "outputDSName": {
+            "value": "",
+            "cbSelected": true
+          },
+          "predicted": "1",
+          "lcl": "0",
+          "clm": "0",
+          "residual": "0",
+          "student": "0",
+          "rstudent": "0",
+          "stdr": "0",
+          "stdp": "0",
+          "stdi": "0",
+          "cookd": "0",
+          "covratio": "0",
+          "dffits": "0",
+          "h": "0",
+          "press": "0",
+          "role": "0",
+          "includeAllVars": "0",
+          "includeVars": "includeNoVars",
+          "includeSelectedVars": "0",
+          "includeNoVars": "1",
+          "scoreCode": "0",
+          "selectionMethod": [
+            {
+              "value": "noneSelectionChoice",
+              "displayValue": "None",
+              "keys": [
+                "noneSelectionChoice",
+                null,
+                "None"
+              ],
+              "label": "None",
+              "baseid": "{\"value\":\"noneSelectionChoice\",\"label\":\"None\"}",
+              "id": "{\"value\":\"noneSelectionChoice\",\"label\":\"None\"}1"
+            }
+          ],
+          "noCvSelectMethod": [
+            {
+              "value": "sbcChoice",
+              "displayValue": "Schwarz Bayesian information criterion (Default)",
+              "keys": [
+                "sbcChoice",
+                null,
+                "Schwarz Bayesian information criterion (Default)"
+              ],
+              "label": "Schwarz Bayesian information criterion (Default)",
+              "baseid": "{\"value\":\"sbcChoice\",\"label\":\"Schwarz Bayesian information criterion (Default)\"}",
+              "id": "{\"value\":\"sbcChoice\",\"label\":\"Schwarz Bayesian information criterion (Default)\"}1"
+            }
+          ],
+          "noCvStopMethod": [
+            {
+              "value": "sbcChoice",
+              "displayValue": "Schwarz Bayesian information criterion (Default)",
+              "keys": [
+                "sbcChoice",
+                null,
+                "Schwarz Bayesian information criterion (Default)"
+              ],
+              "label": "Schwarz Bayesian information criterion (Default)",
+              "baseid": "{\"value\":\"sbcChoice\",\"label\":\"Schwarz Bayesian information criterion (Default)\"}",
+              "id": "{\"value\":\"sbcChoice\",\"label\":\"Schwarz Bayesian information criterion (Default)\"}1"
+            }
+          ],
+          "noCvChooseMethod": [
+            {
+              "value": "sbcChoice",
+              "displayValue": "Schwarz Bayesian information criterion (Default)",
+              "keys": [
+                "sbcChoice",
+                null,
+                "Schwarz Bayesian information criterion (Default)"
+              ],
+              "label": "Schwarz Bayesian information criterion (Default)",
+              "baseid": "{\"value\":\"sbcChoice\",\"label\":\"Schwarz Bayesian information criterion (Default)\"}",
+              "id": "{\"value\":\"sbcChoice\",\"label\":\"Schwarz Bayesian information criterion (Default)\"}1"
+            }
+          ],
+          "cvSelectMethod": [
+            {
+              "value": "sbcChoice",
+              "displayValue": "Schwarz Bayesian information criterion (Default)",
+              "keys": [
+                "sbcChoice",
+                null,
+                "Schwarz Bayesian information criterion (Default)"
+              ],
+              "label": "Schwarz Bayesian information criterion (Default)",
+              "baseid": "{\"value\":\"sbcChoice\",\"label\":\"Schwarz Bayesian information criterion (Default)\"}",
+              "id": "{\"value\":\"sbcChoice\",\"label\":\"Schwarz Bayesian information criterion (Default)\"}1"
+            }
+          ],
+          "cvStopMethod": [
+            {
+              "value": "sbcChoice",
+              "displayValue": "Schwarz Bayesian information criterion (Default)",
+              "keys": [
+                "sbcChoice",
+                null,
+                "Schwarz Bayesian information criterion (Default)"
+              ],
+              "label": "Schwarz Bayesian information criterion (Default)",
+              "baseid": "{\"value\":\"sbcChoice\",\"label\":\"Schwarz Bayesian information criterion (Default)\"}",
+              "id": "{\"value\":\"sbcChoice\",\"label\":\"Schwarz Bayesian information criterion (Default)\"}1"
+            }
+          ],
+          "cvChooseMethod": [
+            {
+              "value": "sbcChoice",
+              "displayValue": "Schwarz Bayesian information criterion (Default)",
+              "keys": [
+                "sbcChoice",
+                null,
+                "Schwarz Bayesian information criterion (Default)"
+              ],
+              "label": "Schwarz Bayesian information criterion (Default)",
+              "baseid": "{\"value\":\"sbcChoice\",\"label\":\"Schwarz Bayesian information criterion (Default)\"}",
+              "id": "{\"value\":\"sbcChoice\",\"label\":\"Schwarz Bayesian information criterion (Default)\"}1"
+            }
+          ],
+          "slEntry": 0.05,
+          "slStay": 0.05,
+          "splitClassCombo": [
+            {
+              "value": "entireEffectChoice",
+              "displayValue": "An entire effect",
+              "keys": [
+                "entireEffectChoice",
+                null,
+                "An entire effect"
+              ],
+              "label": "An entire effect",
+              "baseid": "{\"value\":\"entireEffectChoice\",\"label\":\"An entire effect\"}",
+              "id": "{\"value\":\"entireEffectChoice\",\"label\":\"An entire effect\"}1"
+            }
+          ],
+          "hierarchy": "0",
+          "detailsCombo": [
+            {
+              "value": "summaryDetailsChoice",
+              "displayValue": "Selection summary (default)",
+              "keys": [
+                "summaryDetailsChoice",
+                null,
+                "Selection summary (default)"
+              ],
+              "label": "Selection summary (default)",
+              "baseid": "{\"value\":\"summaryDetailsChoice\",\"label\":\"Selection summary (default)\"}",
+              "id": "{\"value\":\"summaryDetailsChoice\",\"label\":\"Selection summary (default)\"}1"
+            }
+          ],
+          "useIncludeList": "0",
+          "includeList": [],
+          "codeOptions": {
+            "code": ""
+          }
+        }
+      },
+      "id-1580758194667-2877": {
+        "nodeType": "outputTable",
+        "version": 1,
+        "id": "id-1580758194667-2877",
+        "name": "Table Definition",
+        "description": null,
+        "tableReference": {
+          "referenceType": "parameter",
+          "parameterId": "id-1580758194667-2877"
+        },
+        "outputTableArguments": {
+          "promote": false,
+          "replace": false,
+          "arguments": {}
+        }
+      },
+      "id-1580758205306-2973": {
+        "nodeType": "outputTable",
+        "version": 1,
+        "id": "id-1580758205306-2973",
+        "name": "Table Definition",
+        "description": null,
+        "tableReference": {
+          "referenceType": "parameter",
+          "parameterId": "id-1580758205306-2973"
+        },
+        "outputTableArguments": {
+          "promote": false,
+          "replace": false,
+          "arguments": {}
+        }
       }
     },
     "parameters": {
@@ -1007,6 +1437,245 @@
             ]
           }
         }
+      },
+      "id-1580758076675-2114": {
+        "parameterType": "tableStructure",
+        "version": 1,
+        "id": "id-1580758076675-2114",
+        "name": "CLASS",
+        "parameterUsage": "INPUT",
+        "defaultValue": null,
+        "columns": {
+          "Sex": {
+            "name": "Sex",
+            "label": "",
+            "index": 1,
+            "type": "Char",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "Height": {
+            "name": "Height",
+            "label": "",
+            "index": 3,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "Weight": {
+            "name": "Weight",
+            "label": "",
+            "index": 4,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "Age": {
+            "name": "Age",
+            "label": "",
+            "index": 2,
+            "type": "Numeric",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          },
+          "Name": {
+            "name": "Name",
+            "label": "",
+            "index": 0,
+            "type": "Char",
+            "rawLength": 0,
+            "formattedLength": 0,
+            "version": 2
+          }
+        }
+      },
+      "id-1580758194667-2877": {
+        "parameterType": "table",
+        "version": 1,
+        "id": "id-1580758194667-2877",
+        "name": "Table Definition",
+        "parameterUsage": "OUTPUT",
+        "defaultValue": {
+          "table": {
+            "name": "test3",
+            "version": 1
+          },
+          "source": {
+            "id": "work",
+            "name": "WORK",
+            "providerId": "Compute",
+            "parentId": "bd09bfc3-b23c-4200-9145-cc22d4de5b70",
+            "hasTables": true,
+            "hasEngines": false,
+            "attributes": {
+              "physicalName": "/opt/sas/viya/config/var/tmp/compsrv/default/6c95eafd-bcbf-48c1-8c11-297922d8ce7a/SAS_workA45D000029B8_rifraz-dataflow.dmmdev.sashq-d.openstack.sas.com",
+              "flags": 34848,
+              "options": "",
+              "concatenationCount": 0,
+              "engineName": "V9",
+              "version": 2,
+              "fileFormat": "7"
+            },
+            "version": 1,
+            "links": [
+              {
+                "method": "GET",
+                "rel": "children",
+                "href": "/dataSources/providers/Compute/sources/work/children?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "uri": "/dataSources/providers/Compute/sources/work/children?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "type": "application/vnd.sas.collection",
+                "itemType": "application/vnd.sas.data.source"
+              },
+              {
+                "method": "GET",
+                "rel": "self",
+                "href": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work",
+                "uri": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work",
+                "type": "application/vnd.sas.data.source"
+              },
+              {
+                "method": "GET",
+                "rel": "alternate",
+                "href": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work",
+                "uri": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work",
+                "type": "application/vnd.sas.data.source.summary"
+              },
+              {
+                "method": "GET",
+                "rel": "up",
+                "href": "/dataSources/providers/Compute/sources",
+                "uri": "/dataSources/providers/Compute/sources",
+                "type": "application/vnd.sas.collection",
+                "itemType": "application/vnd.sas.data.source"
+              },
+              {
+                "method": "GET",
+                "rel": "parent",
+                "href": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "uri": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "type": "application/vnd.sas.data.source"
+              },
+              {
+                "method": "GET",
+                "rel": "tables",
+                "href": "/dataTables/dataSources/Compute~fs~bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work/tables?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "uri": "/dataTables/dataSources/Compute~fs~bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work/tables?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "type": "application/vnd.sas.collection",
+                "itemType": "application/vnd.sas.data.table"
+              },
+              {
+                "method": "GET",
+                "rel": "session",
+                "href": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work/sessions/6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "uri": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work/sessions/6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "type": "application/vnd.sas.data.session"
+              },
+              {
+                "method": "GET",
+                "rel": "sessionScoped",
+                "href": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "uri": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "type": "application/vnd.sas.data.source"
+              }
+            ]
+          }
+        }
+      },
+      "id-1580758205306-2973": {
+        "parameterType": "table",
+        "version": 1,
+        "id": "id-1580758205306-2973",
+        "name": "Table Definition",
+        "parameterUsage": "OUTPUT",
+        "defaultValue": {
+          "table": {
+            "name": "test2",
+            "version": 1
+          },
+          "source": {
+            "id": "work",
+            "name": "WORK",
+            "providerId": "Compute",
+            "parentId": "bd09bfc3-b23c-4200-9145-cc22d4de5b70",
+            "hasTables": true,
+            "hasEngines": false,
+            "attributes": {
+              "physicalName": "/opt/sas/viya/config/var/tmp/compsrv/default/6c95eafd-bcbf-48c1-8c11-297922d8ce7a/SAS_workA45D000029B8_rifraz-dataflow.dmmdev.sashq-d.openstack.sas.com",
+              "flags": 34848,
+              "options": "",
+              "concatenationCount": 0,
+              "engineName": "V9",
+              "version": 2,
+              "fileFormat": "7"
+            },
+            "version": 1,
+            "links": [
+              {
+                "method": "GET",
+                "rel": "children",
+                "href": "/dataSources/providers/Compute/sources/work/children?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "uri": "/dataSources/providers/Compute/sources/work/children?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "type": "application/vnd.sas.collection",
+                "itemType": "application/vnd.sas.data.source"
+              },
+              {
+                "method": "GET",
+                "rel": "self",
+                "href": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work",
+                "uri": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work",
+                "type": "application/vnd.sas.data.source"
+              },
+              {
+                "method": "GET",
+                "rel": "alternate",
+                "href": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work",
+                "uri": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work",
+                "type": "application/vnd.sas.data.source.summary"
+              },
+              {
+                "method": "GET",
+                "rel": "up",
+                "href": "/dataSources/providers/Compute/sources",
+                "uri": "/dataSources/providers/Compute/sources",
+                "type": "application/vnd.sas.collection",
+                "itemType": "application/vnd.sas.data.source"
+              },
+              {
+                "method": "GET",
+                "rel": "parent",
+                "href": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "uri": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "type": "application/vnd.sas.data.source"
+              },
+              {
+                "method": "GET",
+                "rel": "tables",
+                "href": "/dataTables/dataSources/Compute~fs~bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work/tables?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "uri": "/dataTables/dataSources/Compute~fs~bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work/tables?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "type": "application/vnd.sas.collection",
+                "itemType": "application/vnd.sas.data.table"
+              },
+              {
+                "method": "GET",
+                "rel": "session",
+                "href": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work/sessions/6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "uri": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work/sessions/6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "type": "application/vnd.sas.data.session"
+              },
+              {
+                "method": "GET",
+                "rel": "sessionScoped",
+                "href": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "uri": "/dataSources/providers/Compute/sources/bd09bfc3-b23c-4200-9145-cc22d4de5b70~fs~work?sessionId=6c95eafd-bcbf-48c1-8c11-297922d8ce7a-ses0000",
+                "type": "application/vnd.sas.data.source"
+              }
+            ]
+          }
+        }
       }
     },
     "connections": [
@@ -1066,6 +1735,54 @@
         },
         "targetPort": {
           "node": "id-1580757742856-1869",
+          "portName": "inTable",
+          "index": 0
+        }
+      },
+      {
+        "sourcePort": {
+          "node": "id-1580758076675-2114",
+          "portName": "outTable",
+          "index": 0
+        },
+        "targetPort": {
+          "node": "id-1580758086438-2191",
+          "portName": "inTables",
+          "index": 0
+        }
+      },
+      {
+        "sourcePort": {
+          "node": "id-1580758086438-2191",
+          "portName": "outTables",
+          "index": 0
+        },
+        "targetPort": {
+          "node": "id-1580758128233-2369",
+          "portName": "dataset",
+          "index": 0
+        }
+      },
+      {
+        "sourcePort": {
+          "node": "id-1580758086438-2191",
+          "portName": "outTables",
+          "index": 0
+        },
+        "targetPort": {
+          "node": "id-1580758194667-2877",
+          "portName": "inTable",
+          "index": 0
+        }
+      },
+      {
+        "sourcePort": {
+          "node": "id-1580758128233-2369",
+          "portName": "outputDSName",
+          "index": 0
+        },
+        "targetPort": {
+          "node": "id-1580758205306-2973",
           "portName": "inTable",
           "index": 0
         }
