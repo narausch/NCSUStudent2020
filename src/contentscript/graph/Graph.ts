@@ -15,11 +15,7 @@ export class Graph {
         // TODO: The test cases fail
         var json: any;
         try {
-            const json = JSON.parse(jsonString, function(key, value) {
-                if (key == null || value == null) {
-                    throw new TypeError('Not a valid JSON string');
-                }
-            });
+            json = JSON.parse(jsonString);
         } catch (e) {
             throw new TypeError('Not a valid JSON string');
         }
