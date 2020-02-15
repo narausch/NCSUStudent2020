@@ -1,5 +1,6 @@
 import { GraphNode } from './GraphNode';
 import { GraphConnection } from './GraphConnection';
+import fs from 'fs';
 
 export class Graph {
     public nodes: Array<GraphNode>;
@@ -10,7 +11,19 @@ export class Graph {
      * @param jsonString The json string for the graph to construct.
      */
     constructor(jsonString: string) {
-        const json = JSON.parse(jsonString);
+        // Error case when the file is not a json string
+        // TODO: The test cases fail
+        var json: any;
+        try {
+            const json = JSON.parse(jsonString, function(key, value) {
+                if (key == null || value == null) {
+                    throw new TypeError('Not a valid JSON string');
+                }
+            });
+        } catch (e) {
+            throw new TypeError('Not a valid JSON string');
+        }
+
         if (
             !(
                 json.hasOwnProperty('nodes') &&
