@@ -11,6 +11,18 @@ describe('Graph Connection tests', () => {
         expect(graph.nodes.length).toBe(6);
         expect(graph.connections.length).toBe(5);
     });
+    test('Invalid JSON string', async () => {
+        let result = '';
+        try {
+            const jsonString = '{ "This is not a valid JSON string" }';
+            const graph = new Graph(jsonString);
+            fail;
+        } catch (err) {
+            result = (err as Error).message;
+        }
+
+        expect(result).toBe('Not a valid JSON string');
+    });
 
     test('Constructor broken object', async () => {
         const jsonString = '{ "notConnections": "test" }';
