@@ -1,6 +1,5 @@
 import { GraphNode } from './GraphNode';
 import { GraphConnection } from './GraphConnection';
-import fs from 'fs';
 
 export class Graph {
     public nodes: Array<GraphNode>;
@@ -12,7 +11,6 @@ export class Graph {
      */
     constructor(jsonString: string) {
         // Error case when the file is not a json string
-        // TODO: The test cases fail
         var json: any;
         try {
             json = JSON.parse(jsonString);
@@ -37,8 +35,30 @@ export class Graph {
         });
 
         this.connections = new Array<GraphConnection>();
+        // If the source port node or the dest port node is not in Node array
+        // It would be invalid
         json.connections.forEach(element => {
+            let sourcePort = false;
+            let targetPort = false;
+            // Compare current port id with all node ids
+            //TODO: Break the for loop if there is a match
+            this.nodes.forEach(nodeElement => {
+                if (nodeElement.id == element.sourcePort.node) {
+                    sourcePort = true;
+                }
+                if (nodeElement.id == element.targetPort.node) {
+                    targetPort = true;
+                }
+            });
+
+            if (!sourcePort) {
+                throw new Error('Not valid source port');
+            }
+            if (!targetPort) {
+                throw new Error('Not valid target port');
+            }
             const connection = new GraphConnection(element);
+
             this.connections.push(connection);
         });
     }
