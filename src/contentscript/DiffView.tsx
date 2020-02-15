@@ -192,8 +192,8 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
                 });
                 this.logDebugMessage('Changed nodes:\n');
                 differencer.getChangedNodes().forEach(node => {
-                    this.logDebugMessage('Changed node id: ' + node.id);
-                    this.logDebugMessage('Changed node info: ');
+                    this.logDebugMessage('--Changed node id: ' + node.id);
+                    this.logDebugMessage('--Changed node info: ');
                     this.logDebugMessage(node.info);
                 });
             })
