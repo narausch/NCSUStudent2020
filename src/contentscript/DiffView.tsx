@@ -118,7 +118,7 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
     }
 
     /**
-     * Handles download progress for the file to compare.
+     * Handles download progress for a file.
      *
      * @param baseFileLoaded base file loaded bytes
      * @param baseFileTotal base file total bytes
