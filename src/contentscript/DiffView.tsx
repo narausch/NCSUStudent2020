@@ -28,12 +28,12 @@ interface DiffViewState {
     refreshEnabled: boolean;
 
     // for debugging
-    baseStatus: string;
-    compareStatus: string;
-    baseFileLoaded: number;
-    baseFileTotal: number;
-    compareFileLoaded: number;
-    compareFileTotal: number;
+    baseStatus?: string;
+    compareStatus?: string;
+    baseFileLoaded?: number;
+    baseFileTotal?: number;
+    compareFileLoaded?: number;
+    compareFileTotal?: number;
 }
 
 /**
@@ -52,12 +52,6 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
             progress: 0,
             refreshEnabled: false,
             debugMessages: [],
-            baseStatus: 'Downloading...',
-            compareStatus: 'Downloading...',
-            baseFileLoaded: null,
-            baseFileTotal: null,
-            compareFileLoaded: null,
-            compareFileTotal: null,
         };
 
         this.logDebugMessage = this.logDebugMessage.bind(this);
