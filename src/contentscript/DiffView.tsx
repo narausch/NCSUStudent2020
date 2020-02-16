@@ -3,6 +3,7 @@ import FileInfo from './io/FileInfo';
 import Downloader from './io/Downloader';
 import { Graph } from './graph/Graph';
 import ProgressBar from './ProgressBar';
+import Differencer from './differencer/Differencer';
 
 /**
  * Defines the props for the DiffView.
@@ -224,14 +225,50 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
         this.setState({ refreshEnabled: true });
         Promise.all([this.downloadAndParse(true), this.downloadAndParse(false)])
             .then(([graphBase, graphCompare]) => {
-                // TODO: compare two graphs
                 this.logDebugMessage('Comparing...');
+
+                const graphBaseNodeList: {
+                    id: string;
+                    info: string;
+                }[] = [];
+                const graphCompareNodeList: {
+                    id: string;
+                    info: string;
+                }[] = [];
+                graphBase.nodes.forEach(node => {
+                    graphBaseNodeList.push({ id: node.id, info: JSON.stringify(node.data) });
+                });
+                graphCompare.nodes.forEach(node => {
+                    graphCompareNodeList.push({ id: node.id, info: JSON.stringify(node.data) });
+                });
+                const differencer = new Differencer(graphBaseNodeList, graphCompareNodeList);
+
+                // TODO: Consider outputting as a list of strings
+                this.logDebugMessage('Added nodes:\n');
+                differencer.getAddedNodes().forEach(node => {
+                    this.logDebugMessage('--Added node id: ' + node.id);
+                    this.logDebugMessage('--Added node info: ');
+                    this.logDebugMessage(node.info);
+                });
+                this.logDebugMessage('Removed nodes:\n');
+                differencer.getRemovedNodes().forEach(node => {
+                    this.logDebugMessage('--Removed node id: ' + node.id);
+                    this.logDebugMessage('--Removed node info: ');
+                    this.logDebugMessage(node.info);
+                });
+                this.logDebugMessage('Changed nodes:\n');
+                differencer.getChangedNodes().forEach(node => {
+                    this.logDebugMessage('--Changed node id: ' + node.id);
+                    this.logDebugMessage('--Changed node info: ');
+                    this.logDebugMessage(node.info);
+                });
 
                 // TODO: set { progressShown: false } to hide the progress bar
                 this.setState({ progress: 1 }); // Diff complete => 100% progress
             })
             .catch(err => {
                 // TODO: handle errors
+                console.log(err);
                 this.setState({ progress: 1, progressFailed: true }); // update progress bar
                 this.logDebugMessage('Failed to compare graphs.');
             });
