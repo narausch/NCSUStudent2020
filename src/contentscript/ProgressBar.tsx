@@ -18,13 +18,13 @@ interface ProgressBarProps {
 export default class ProgressBar extends React.Component<ProgressBarProps, {}> {
     render(): React.ReactNode {
         return (
-            <div className="fdv-progress-bar-container fdv-progress-bar">
+            <div className="fdv-progress-bar fdv-progress-bar-container">
                 <div
                     className={
-                        'fdv-progress-bar-inner fdv-progress-bar' +
+                        'fdv-progress-bar fdv-progress-bar-inner' +
                         (this.props.failed ? ' fdv-progress-bar-failed' : '')
                     }
-                    style={{ width: Math.floor(this.props.progress * 100) + '%' }}
+                    style={{ width: (this.props.progress * 100).toFixed(2) + '%' }}
                 ></div>
             </div>
         );
