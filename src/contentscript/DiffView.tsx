@@ -21,8 +21,8 @@ interface DiffViewState {
     debugMessages: string[];
 
     /** for progress bar */
-    progressFailed: boolean;
     progress: number; // real number [0, 1]
+    progressFailed: boolean;
 
     /** for refresh button */
     refreshEnabled: boolean;
@@ -40,6 +40,12 @@ interface DiffViewState {
  * Defines the component DiffView.
  */
 class DiffView extends React.Component<DiffViewProps, DiffViewState> {
+    // constants
+    private PROGRESS_START = 0.05; // just started
+    private PROGRESS_DOWNLOAD = 0.9; // downloaded
+    private PROGRESS_PARSE = 0.92; // parsed
+    private PROGRESS_COMPLETE = 1; // computed difference
+
     /**
      * Constructs the DiffView.
      *
@@ -48,8 +54,8 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
     constructor(props: DiffViewProps) {
         super(props);
         this.state = {
-            progressFailed: false,
             progress: 0,
+            progressFailed: false,
             refreshEnabled: false,
             debugMessages: [],
         };
@@ -137,12 +143,13 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
         const bft = baseFileTotal || this.state.baseFileTotal;
         const cfl = compareFileLoaded || this.state.compareFileLoaded;
         const cft = compareFileTotal || this.state.compareFileTotal;
+        const p = ((bfl + cfl) * (this.PROGRESS_DOWNLOAD - this.PROGRESS_START)) / (bft + cft);
         this.setState({
             baseFileLoaded: bfl,
             baseFileTotal: bft,
             compareFileLoaded: cfl,
             compareFileTotal: cft,
-            progress: ((bfl + cfl) * 0.9) / (bft + cft), // File download => 90% progress
+            progress: this.PROGRESS_START + p,
         });
     }
 
@@ -151,8 +158,8 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
      */
     handleRefresh(): void {
         this.setState({
+            progress: this.PROGRESS_START,
             progressFailed: false,
-            progress: 0,
             refreshEnabled: false,
             baseStatus: 'Downloading...',
             compareStatus: 'Downloading...',
@@ -163,7 +170,7 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
         }); // reset progress bar
         this.setState({ debugMessages: [] }); // reset debug messages
 
-        setTimeout(this.computeDiff, 500); // prevent from repeated refresh requests
+        setTimeout(this.computeDiff, 200); // prevent from repeated refresh requests
     }
 
     /**
@@ -203,7 +210,7 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
                 const g = content ? new Graph(content) : null;
                 this.setStatusMessage(isBase, g ? 'OK' : 'None');
 
-                this.setState({ progress: 0.92 }); // Parse complete => 92% progress
+                this.setState({ progress: this.PROGRESS_PARSE }); // Parse complete
                 return g;
             })
             .catch(err => {
@@ -257,8 +264,7 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
                     this.logDebugMessage(node.info);
                 });
 
-                // TODO: set { progressShown: false } to hide the progress bar
-                this.setState({ progress: 1 }); // Diff complete => 100% progress
+                this.setState({ progress: this.PROGRESS_COMPLETE }); // update progress bar
             })
             .catch(err => {
                 // TODO: handle errors
