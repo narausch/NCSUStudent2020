@@ -23,6 +23,9 @@ interface DiffViewState {
     progressFailed: boolean;
     progress: number; // real number [0, 1]
 
+    /** for refresh button */
+    refreshEnabled: boolean;
+
     // for debugging
     baseStatus: string;
     compareStatus: string;
@@ -46,6 +49,7 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
         this.state = {
             progressFailed: false,
             progress: 0,
+            refreshEnabled: false,
             debugMessages: [],
             baseStatus: 'Downloading...',
             compareStatus: 'Downloading...',
@@ -59,9 +63,11 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
         this.computeDiff = this.computeDiff.bind(this);
         this.setStatusMessage = this.setStatusMessage.bind(this);
         this.handleUpdateProgress = this.handleUpdateProgress.bind(this);
+        this.handleRefresh = this.handleRefresh.bind(this);
+        this.computeDiff = this.computeDiff.bind(this);
 
         // schedule the main logic
-        setTimeout(this.computeDiff, 0);
+        setTimeout(this.handleRefresh, 0);
     }
 
     /**
@@ -74,9 +80,21 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
         const bs = this.state.baseFileTotal ? this.state.baseFileTotal.toLocaleString() : '-';
         const cs = this.state.compareFileTotal ? this.state.compareFileTotal.toLocaleString() : '-';
 
+        // TODO: use icon for the Refresh button
         return (
             <div className="fdv-view">
-                <h4>Flow Diff</h4>
+                <div className="fdv-view-header">
+                    <h4>Flow Diff</h4>
+                    <span className="fdv-push">
+                        <button
+                            className="btn-sm"
+                            onClick={this.handleRefresh}
+                            disabled={!this.state.refreshEnabled}
+                        >
+                            Refresh
+                        </button>{' '}
+                    </span>
+                </div>
 
                 <ProgressBar progress={this.state.progress} failed={this.state.progressFailed} />
 
@@ -134,6 +152,25 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
     }
 
     /**
+     * Handles a refresh request for the diff view.
+     */
+    handleRefresh(): void {
+        this.setState({
+            progress: 0,
+            refreshEnabled: false,
+            baseStatus: 'Downloading...',
+            compareStatus: 'Downloading...',
+            baseFileLoaded: null,
+            baseFileTotal: null,
+            compareFileLoaded: null,
+            compareFileTotal: null,
+        }); // reset progress bar
+        this.setState({ debugMessages: [] }); // reset debug messages
+
+        setTimeout(this.computeDiff, 500); // prevent from repeated refresh requests
+    }
+
+    /**
      * Sets a status message.
      *
      * @param isBase true is the message is for the base file
@@ -160,10 +197,17 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
                     : (loaded, total): void => this.handleUpdateProgress(null, null, loaded, total),
             )
             .then(content => {
+                // update file size info
+                if (isBase) {
+                    this.setState({ baseFileTotal: content && content.length });
+                } else {
+                    this.setState({ compareFileTotal: content && content.length });
+                }
                 this.setStatusMessage(isBase, 'Parsing...');
                 const g = content ? new Graph(content) : null;
                 this.setStatusMessage(isBase, g ? 'OK' : 'None');
-                this.setState({ progress: 0.9 }); // Parse complete => 90% progress
+
+                this.setState({ progress: 0.92 }); // Parse complete => 92% progress
                 return g;
             })
             .catch(err => {
@@ -176,7 +220,7 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
      * Computes the difference.
      */
     computeDiff(): void {
-        this.setState({ progress: 0 }); // reset progress bar
+        this.setState({ refreshEnabled: true });
         Promise.all([this.downloadAndParse(true), this.downloadAndParse(false)])
             .then(([graphBase, graphCompare]) => {
                 // TODO: compare two graphs
