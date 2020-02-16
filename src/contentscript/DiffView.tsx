@@ -156,6 +156,7 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
      */
     handleRefresh(): void {
         this.setState({
+            progressFailed: false,
             progress: 0,
             refreshEnabled: false,
             baseStatus: 'Downloading...',
