@@ -1,0 +1,57 @@
+.fdv-header {
+    padding: 4px 0px 4px 0px;
+    color: #586069;
+    background-color: #fff5b1;
+    font-size: 20px;
+    text-align: center;
+}
+
+.fdv-header-info {
+    padding: 7px 0px 7px 20px;
+    color: #28a745;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.fdv-view {
+    padding: 20px 20px 20px 20px;
+}
+
+.fdv-hidden {
+    display: none;
+}
+
+.fdv-debug-msg p {
+    margin: 0px 0px 0px 0px;
+}
+
+.fdv-progress-bar {
+    border-radius: 16px !important;
+}
+
+.fdv-progress-bar-container {
+    margin: 6px 0px 6px 0px;
+    width: 100%;
+    height: 6px;
+    position: relative;
+    background-color: #f0f0f0;
+}
+
+.fdv-progress-bar-inner {
+    height: 100%;
+    position: absolute;
+    line-height: inherit;
+    background-color: #0366d6;
+}
+
+.fdv-progress-bar-failed {
+    background-color: #d73a49 !important;
+}
+
+.fdv-view-header {
+    display: flex;
+}
+
+.fdv-push {
+    margin-left: auto;
+}
