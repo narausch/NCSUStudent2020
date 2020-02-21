@@ -54,6 +54,7 @@
         "webpack-cli": "^3.3.10"
     },
     "dependencies": {
+        "gojs": "^2.1.9",
         "react": "^16.12.0",
         "react-dom": "^16.12.0",
         "react-gojs": "^4.5.0"
