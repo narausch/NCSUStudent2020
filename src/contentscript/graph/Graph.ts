@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { GraphNode } from './GraphNode';
 import { GraphConnection } from './GraphConnection';
 
@@ -9,7 +10,14 @@ export class Graph {
      * Constructs a graph object from a json string.
      * @param jsonString The json string for the graph to construct.
      */
-    constructor(jsonString: string) {
+    constructor(jsonString: string);
+    constructor(nodes: GraphNode[], connections: GraphConnection[]);
+    constructor(jsonStringOrNodes: string | GraphNode[], connections?: GraphConnection[]) {
+        if (typeof jsonStringOrNodes === 'string') this.stringConstructor(jsonStringOrNodes);
+        else this.listsConstructor(jsonStringOrNodes, connections);
+    }
+
+    stringConstructor(jsonString: string): void {
         // Error case when the file is not a json string
         let json: any;
         try {
@@ -64,5 +72,10 @@ export class Graph {
 
             this.connections.push(connection);
         });
+    }
+
+    listsConstructor(nodes: GraphNode[], connections: GraphConnection[]): void {
+        this.nodes = nodes;
+        this.connections = connections;
     }
 }
