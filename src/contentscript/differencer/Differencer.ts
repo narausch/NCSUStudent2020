@@ -55,13 +55,13 @@ export default class Differencer {
         if (baseGraph == null && compareGraph == null) throw new Error('No graphs to compare');
         //graph has been created
         if (baseGraph == null) {
-            this.addedNodes = baseGraph.nodes;
-            this.addedConns = baseGraph.connections;
+            this.addedNodes = compareGraph.nodes;
+            this.addedConns = compareGraph.connections;
         }
         //graph has been deleted
         if (compareGraph == null) {
-            this.removedNodes = compareGraph.nodes;
-            this.removedConns = compareGraph.connections;
+            this.removedNodes = baseGraph.nodes;
+            this.removedConns = baseGraph.connections;
         }
     }
 

@@ -36,6 +36,43 @@ describe('Differencer#smallInputChanges', () => {
     });
 });
 
+describe('Differencer#nullGraphs', () => {
+    test('null base graph', async () => {
+        const n1 = [
+            new GraphNode('a', 'FARM'),
+            new GraphNode('b', 'BOY'),
+            new GraphNode('c', 'CAT'),
+            new GraphNode('d', 'DOG'),
+        ];
+        const c1 = [
+            new GraphConnection('a', 'b'),
+            new GraphConnection('b', 'c'),
+            new GraphConnection('c', 'd'),
+        ];
+        
+        const diff: Differencer = new Differencer(null, new Graph(n1, c1));
+        expect(diff.getAddedNodes()).toStrictEqual(n1);
+        expect(diff.getAddedConns()).toStrictEqual(c1);
+    });
+
+    test('null compare graph', async () => {
+        const n1 = [
+            new GraphNode('a', 'FARM'),
+            new GraphNode('b', 'BOY'),
+            new GraphNode('c', 'CAT'),
+            new GraphNode('d', 'DOG'),
+        ];
+        const c1 = [
+            new GraphConnection('a', 'b'),
+            new GraphConnection('b', 'c'),
+            new GraphConnection('c', 'd'),
+        ];
+
+        const diff: Differencer = new Differencer(new Graph(n1, c1), null);
+        expect(diff.getRemovedNodes()).toStrictEqual(n1);
+        expect(diff.getRemovedConns()).toStrictEqual(c1);
+    });
+});
 // describe('Differencer#mediumInputChanges', () => {
 //     test('normal cases', async () => {
 //         // A base list of names
