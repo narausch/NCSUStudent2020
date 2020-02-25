@@ -31,4 +31,19 @@ describe('Graph tests', () => {
         expect(result).toBe('JSON file is not formatted correctly');
         expect(graph).toBe(null);
     });
+
+    test('Constructor non-JSON string', async () => {
+        const jsonString = '"notConnections": "test"';
+
+        let graph: Graph = null;
+        let result = '';
+        try {
+            graph = new Graph(jsonString);
+        } catch (err) {
+            result = (err as Error).message;
+        }
+
+        expect(result).toBe('Not a valid JSON string');
+        expect(graph).toBe(null);
+    });
 });
