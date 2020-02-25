@@ -76,4 +76,12 @@ export default class Differencer {
     getModifiedNodes(): GraphNode[] {
         return this.modifiedNodes;
     }
+
+    getAddedConns(): GraphConnection[] {
+        return this.addedConns;
+    }
+
+    getRemovedConns(): GraphConnection[] {
+        return this.removedConns;
+    }
 }

@@ -124,7 +124,7 @@ describe('Differencer#smallInputChanges', () => {
 //             new GraphNode('12', 'ARIEL'),
 //         ]);
 //         expect(diff2.getRemovedNodes()).toStrictEqual([]);
-//         expect(diff2.getChangedNodes()).toStrictEqual([]);
+//         expect(diff2.getModifiedNodes()).toStrictEqual([]);
 
 //         const diff3: Differencer = new Differencer(a1, a3);
 
@@ -136,14 +136,14 @@ describe('Differencer#smallInputChanges', () => {
 //             new GraphNode('5', 'GERRIT'),
 //             new GraphNode('0', 'EMILY'),
 //         ]);
-//         expect(diff3.getChangedNodes()).toStrictEqual([]);
+//         expect(diff3.getModifiedNodes()).toStrictEqual([]);
 
 //         const diff4: Differencer = new Differencer(a1, a4);
 
 //         // Strictly test the changed nodes functionality
 //         expect(diff4.getAddedNodes()).toStrictEqual([]);
 //         expect(diff4.getRemovedNodes()).toStrictEqual([]);
-//         expect(diff4.getChangedNodes()).toStrictEqual([
+//         expect(diff4.getModifiedNodes()).toStrictEqual([
 //             new GraphNode('1', 'JAMESTHONY'),
 //             new GraphNode('4', 'SALLYTHONY'),
 //             new GraphNode('5', 'GERRITTHONY'),
@@ -163,7 +163,7 @@ describe('Differencer#smallInputChanges', () => {
 //             new GraphNode('4', 'SALLY'),
 //             new GraphNode('8', 'KAT'),
 //         ]);
-//         expect(diff5.getChangedNodes()).toStrictEqual([
+//         expect(diff5.getModifiedNodes()).toStrictEqual([
 //             new GraphNode('2', ''),
 //             new GraphNode('5', 'GERRITHONY'),
 //             new GraphNode('7', 'TIMTHONY'),
