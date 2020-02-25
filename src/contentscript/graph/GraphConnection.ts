@@ -1,14 +1,14 @@
-import * as Flag from './Status';
+import { Status } from './Status';
 export class GraphConnection {
     public sourcePort: string;
     public targetPort: string;
-    public status: Flag.Status;
+    public status: Status;
 
     /**
      * Constructs a GraphConnection object
      * @param jsonConnection the connection in json format
      */
-    constructor(jsonConnection: any, status?: Flag.Status) {
+    constructor(jsonConnection: any, status?: Status) {
         if (
             !(
                 jsonConnection.hasOwnProperty('sourcePort') &&
