@@ -1,6 +1,8 @@
+import * as Flag from './Status';
 export class GraphConnection {
     public sourcePort: string;
     public targetPort: string;
+    public status: Flag.Status;
 
     /**
      * Constructs a GraphConnection object
@@ -18,5 +20,6 @@ export class GraphConnection {
 
         this.sourcePort = jsonConnection.sourcePort.node;
         this.targetPort = jsonConnection.targetPort.node;
+        this.status = Flag.Status.New;
     }
 }
