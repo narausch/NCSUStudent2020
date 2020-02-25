@@ -4,6 +4,7 @@ import Downloader from './io/Downloader';
 import { Graph } from './graph/Graph';
 import ProgressBar from './ProgressBar';
 import Differencer from './differencer/Differencer';
+import VisualDiff from './components/VisualDiff';
 
 /**
  * Defines the props for the DiffView.
@@ -26,6 +27,9 @@ interface DiffViewState {
 
     /** for refresh button */
     refreshEnabled: boolean;
+
+    /** for visual diff */
+    combinedGraph: Graph | null;
 
     // for debugging
     baseStatus?: string;
@@ -57,6 +61,7 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
             progress: 0,
             progressFailed: false,
             refreshEnabled: false,
+            combinedGraph: null,
             debugMessages: [],
         };
 
@@ -98,6 +103,8 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
                 </div>
 
                 <ProgressBar progress={this.state.progress} failed={this.state.progressFailed} />
+
+                <VisualDiff combinedGraph={this.state.combinedGraph} />
 
                 <div className="fdv-debug-msg">
                     <p>
@@ -161,6 +168,7 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
             progress: this.PROGRESS_START,
             progressFailed: false,
             refreshEnabled: false,
+            combinedGraph: null,
             baseStatus: 'Downloading...',
             compareStatus: 'Downloading...',
             baseFileLoaded: null,
@@ -231,25 +239,27 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
                 const differencer = new Differencer(graphBase, graphCompare);
 
                 // TODO: Consider outputting as a list of strings
-                this.logDebugMessage('Added nodes:\n');
-                differencer.getAddedNodes().forEach(node => {
-                    this.logDebugMessage('--Added node id: ' + node.id);
-                    this.logDebugMessage('--Added node info: ');
-                    this.logDebugMessage(node.data);
-                });
-                this.logDebugMessage('Removed nodes:\n');
-                differencer.getRemovedNodes().forEach(node => {
-                    this.logDebugMessage('--Removed node id: ' + node.id);
-                    this.logDebugMessage('--Removed node info: ');
-                    this.logDebugMessage(node.data);
-                });
-                this.logDebugMessage('Modified nodes:\n');
-                differencer.getModifiedNodes().forEach(node => {
-                    this.logDebugMessage('--Modified node id: ' + node.id);
-                    this.logDebugMessage('--Modified node info: ');
-                    this.logDebugMessage(node.data);
-                });
+                // this.logDebugMessage('Added nodes:\n');
+                // differencer.getAddedNodes().forEach(node => {
+                //     this.logDebugMessage('--Added node id: ' + node.id);
+                //     this.logDebugMessage('--Added node info: ');
+                //     this.logDebugMessage(node.data);
+                // });
+                // this.logDebugMessage('Removed nodes:\n');
+                // differencer.getRemovedNodes().forEach(node => {
+                //     this.logDebugMessage('--Removed node id: ' + node.id);
+                //     this.logDebugMessage('--Removed node info: ');
+                //     this.logDebugMessage(node.data);
+                // });
+                // this.logDebugMessage('Modified nodes:\n');
+                // differencer.getModifiedNodes().forEach(node => {
+                //     this.logDebugMessage('--Modified node id: ' + node.id);
+                //     this.logDebugMessage('--Modified node info: ');
+                //     this.logDebugMessage(node.data);
+                // });
 
+                // TODO: create combined graph
+                this.setState({ combinedGraph: graphCompare });
                 this.setState({ progress: this.PROGRESS_COMPLETE }); // update progress bar
             })
             .catch(err => {
