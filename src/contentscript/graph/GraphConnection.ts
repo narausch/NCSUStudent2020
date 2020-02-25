@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Status } from './Status';
 export class GraphConnection {
     public sourcePort: string;
     public targetPort: string;
+    public status: Status;
 
     /**
      * Constructs a GraphConnection object
