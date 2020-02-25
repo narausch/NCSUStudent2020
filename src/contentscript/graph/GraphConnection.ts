@@ -8,7 +8,7 @@ export class GraphConnection {
      * Constructs a GraphConnection object
      * @param jsonConnection the connection in json format
      */
-    constructor(jsonConnection: any) {
+    constructor(jsonConnection: any, status?: Flag.Status) {
         if (
             !(
                 jsonConnection.hasOwnProperty('sourcePort') &&
@@ -20,6 +20,6 @@ export class GraphConnection {
 
         this.sourcePort = jsonConnection.sourcePort.node;
         this.targetPort = jsonConnection.targetPort.node;
-        this.status = Flag.Status.New;
+        this.status = status;
     }
 }

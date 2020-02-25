@@ -10,9 +10,9 @@ export class GraphNode {
      * @param id The id of the graph node
      * @param data The data from the graph node
      */
-    constructor(id: string, data: any) {
+    constructor(id: string, data: any, status?: Flag.Status) {
         this.id = id;
         this.data = data;
-        this.status = Flag.Status.New;
+        this.status = status;
     }
 }
