@@ -1,12 +1,14 @@
+import { Status } from './Status';
 export class GraphConnection {
     public sourcePort: string;
     public targetPort: string;
+    public status: Status;
 
     /**
      * Constructs a GraphConnection object
      * @param jsonConnection the connection in json format
      */
-    constructor(jsonConnection: any) {
+    constructor(jsonConnection: any, status?: Status) {
         if (
             !(
                 jsonConnection.hasOwnProperty('sourcePort') &&
@@ -18,5 +20,6 @@ export class GraphConnection {
 
         this.sourcePort = jsonConnection.sourcePort.node;
         this.targetPort = jsonConnection.targetPort.node;
+        this.status = status;
     }
 }
