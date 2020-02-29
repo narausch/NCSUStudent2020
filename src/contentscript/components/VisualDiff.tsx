@@ -164,22 +164,6 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                         .on('end', dragended),
                 );
 
-            node.append('span').style('color', function(d) {
-                // If the flag is 1, it is added
-                if (d.flag === 1) {
-                    return 'green';
-                    // If the flag is 2, it is deleted
-                } else if (d.flag === 2) {
-                    return 'red';
-                    // If the flag is 3, it is modified
-                } else if (d.flag === 3) {
-                    return 'blue';
-                    // else, it is unmodified
-                } else {
-                    return 'red';
-                }
-            });
-
             node.append('circle')
                 .attr('r', 5)
                 .attr('fill', function(d) {
