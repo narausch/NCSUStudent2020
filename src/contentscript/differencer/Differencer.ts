@@ -11,8 +11,9 @@ export default class Differencer {
 
     private addedNodes: GraphNode[] = [];
     private removedNodes: GraphNode[] = [];
-    private unmodifiedNodes: GraphNode[] = [];
     private modifiedNodes: GraphNode[] = [];
+    private unmodifiedNodes: GraphNode[] = [];
+
     private addedConns: GraphConnection[] = [];
     private removedConns: GraphConnection[] = [];
     private unmodifiedConns: GraphConnection[] = [];
@@ -47,12 +48,12 @@ export default class Differencer {
             element.status = Status.Removed;
             nodes.push(element);
         });
-        this.unmodifiedNodes.forEach(element => {
-            element.status = Status.Unmodified;
-            nodes.push(element);
-        });
         this.modifiedNodes.forEach(element => {
             element.status = Status.Modified;
+            nodes.push(element);
+        });
+        this.unmodifiedNodes.forEach(element => {
+            element.status = Status.Unmodified;
             nodes.push(element);
         });
 
@@ -89,12 +90,16 @@ export default class Differencer {
         //copy of n1 minus anything in n2
         this.removedNodes = this.n1.filter(item => !this.n2.some(v => item.id === v.id));
 
-        //copy of a2 with non-intersection of a1 removed
-        const unmodifiedNodes = this.n2.filter(item => this.n1.some(v => item.id === v.id));
-        for (const entry of unmodifiedNodes) {
+        //intersection of n1 and n2
+        const sameIdNodes = this.n2.filter(item => this.n1.some(v => item.id === v.id));
+        for (const entry of sameIdNodes) {
             const itemx = this.n1.find(v => v.id == entry.id);
             if (JSON.stringify(entry) != JSON.stringify(itemx)) this.modifiedNodes.push(entry);
         }
+        //unmodified nodes are those that have the same id and are not modified
+        this.unmodifiedNodes = sameIdNodes.filter(
+            item => !this.modifiedNodes.some(v => item.id === v.id),
+        );
 
         //copy of c2 minus anything in c1
         this.addedConns = this.c2.filter(item => !this.c1.some(v => item === v));

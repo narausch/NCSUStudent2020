@@ -36,6 +36,10 @@ describe('Differencer#smallInputChanges', () => {
         expect(diff.getModifiedNodes()).toStrictEqual([
             new GraphNode('a', 'FOREST', Status.Modified),
         ]);
+        expect(diff.getUnmodifiedNodes()).toStrictEqual([
+            new GraphNode('c', 'CAT', Status.Unmodified),
+            new GraphNode('d', 'DOG', Status.Unmodified),
+        ]);
     });
 });
 
