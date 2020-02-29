@@ -7,13 +7,11 @@ import './VisualDiff.css';
 class D3Node implements d3.SimulationNodeDatum {
     public x: number;
     public y: number;
-    constructor(public id: string, public name: string) {}
-    // TODO: add color index
+    constructor(public id: string, public name: string, public flag: number) {}
 }
 
 class D3Link implements d3.SimulationLinkDatum<D3Node> {
-    constructor(public source: D3Node, public target: D3Node) {}
-    // TODO: add color index
+    constructor(public source: D3Node, public target: D3Node, public flag: number) {}
 }
 
 /**
@@ -86,13 +84,13 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             const nodes = [];
             const nodeMap = {}; // for looking up a node from the id
             for (const node of this.props.combinedGraph.nodes) {
-                const n = new D3Node(node.id, node.data['name']);
+                const n = new D3Node(node.id, node.data['name'], node.status);
                 nodeMap[node.id] = n;
                 nodes.push(n);
             }
             const links = [];
             for (const c of this.props.combinedGraph.connections) {
-                links.push(new D3Link(nodeMap[c.sourcePort], nodeMap[c.targetPort]));
+                links.push(new D3Link(nodeMap[c.sourcePort], nodeMap[c.targetPort], c.status));
             }
 
             // start simulation
@@ -134,6 +132,21 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 .append('line')
                 .attr('stroke', 'black')
                 .attr('stroke-width', 2);
+            link.append('span').style('color', function(d) {
+                // If the flag is 1, it is added
+                if (d.flag === 1) {
+                    return 'green';
+                    // If the flag is 2, it is deleted
+                } else if (d.flag === 2) {
+                    return 'red';
+                    // If the flag is 3, it is modified
+                } else if (d.flag === 3) {
+                    return 'blue';
+                    // else, it is unmodified
+                } else {
+                    return 'red';
+                }
+            });
 
             // define nodes
             const node = context
@@ -151,9 +164,39 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                         .on('end', dragended),
                 );
 
+            node.append('span').style('color', function(d) {
+                // If the flag is 1, it is added
+                if (d.flag === 1) {
+                    return 'green';
+                    // If the flag is 2, it is deleted
+                } else if (d.flag === 2) {
+                    return 'red';
+                    // If the flag is 3, it is modified
+                } else if (d.flag === 3) {
+                    return 'blue';
+                    // else, it is unmodified
+                } else {
+                    return 'red';
+                }
+            });
+
             node.append('circle')
                 .attr('r', 5)
-                .attr('fill', (d: D3Node) => '#333333');
+                .attr('fill', function(d) {
+                    // If the flag is 1, it is added
+                    if (d.flag === 1) {
+                        return 'green';
+                        // If the flag is 2, it is deleted
+                    } else if (d.flag === 2) {
+                        return 'red';
+                        // If the flag is 3, it is modified
+                    } else if (d.flag === 3) {
+                        return 'blue';
+                        // else, it is unmodified
+                    } else {
+                        return 'red';
+                    }
+                });
 
             node.append('text').text((d: D3Node) => d.name);
             node.append('title').text((d: D3Node) => d.name);
