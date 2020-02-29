@@ -40,6 +40,18 @@ describe('Differencer#smallInputChanges', () => {
             new GraphNode('c', 'CAT', Status.Unmodified),
             new GraphNode('d', 'DOG', Status.Unmodified),
         ]);
+
+        expect(diff.getAddedConns()).toStrictEqual([
+            new GraphConnection('a', 'c', Status.Added),
+            new GraphConnection('d', 'e', Status.Added),
+        ]);
+        expect(diff.getRemovedConns()).toStrictEqual([
+            new GraphConnection('a', 'b', Status.Removed),
+            new GraphConnection('b', 'c', Status.Removed),
+        ]);
+        expect(diff.getUnmodifiedConns()).toStrictEqual([
+            new GraphConnection('c', 'd', Status.Unmodified),
+        ]);
     });
 });
 

@@ -102,11 +102,23 @@ export default class Differencer {
         );
 
         //copy of c2 minus anything in c1
-        this.addedConns = this.c2.filter(item => !this.c1.some(v => item === v));
+        this.addedConns = this.c2.filter(
+            item =>
+                !this.c1.some(
+                    v => item.sourcePort === v.sourcePort && item.targetPort === v.targetPort,
+                ),
+        );
         //copy of c1 minus anything in c2
-        this.removedConns = this.c1.filter(item => !this.c2.some(v => item === v));
+        this.removedConns = this.c1.filter(
+            item =>
+                !this.c2.some(
+                    v => item.sourcePort === v.sourcePort && item.targetPort === v.targetPort,
+                ),
+        );
         //copy of a2 with non-intersection of a1 removed
-        this.unmodifiedConns = this.c2.filter(item => this.c1.some(v => item === v));
+        this.unmodifiedConns = this.c2.filter(item =>
+            this.c1.some(v => item.sourcePort === v.sourcePort && item.targetPort === v.targetPort),
+        );
     }
 
     private fullyDifferent(baseGraph: Graph | null, compareGraph: Graph | null): void {
