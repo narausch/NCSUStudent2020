@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import { Graph } from '../graph/Graph';
 
 import './VisualDiff.css';
+import { AssertionError } from 'assert';
 
 class D3Node implements d3.SimulationNodeDatum {
     public x: number;
@@ -83,11 +84,28 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             // construct D3Node and D3Link
             const nodes = [];
             const nodeMap = {}; // for looking up a node from the id
+            // Amount of nodes in the graph
+            // Make sure the node length is greater than 0
+            const nodeAmount = this.props.combinedGraph.nodes.length;
+            let interval: number;
+            if (nodeAmount > 0) {
+                interval = svgWidth / nodeAmount;
+            } else {
+                throw new TypeError('No nodes in the graph');
+            }
+            // The initial value of x and y
+            let x = 0;
+            const initHeight = svgHeight / 2;
             for (const node of this.props.combinedGraph.nodes) {
                 const n = new D3Node(node.id, node.data['name'], node.status);
+                // All nodes end up in one single line
+                n.x = x;
+                n.y = initHeight;
+                x += interval;
                 nodeMap[node.id] = n;
                 nodes.push(n);
             }
+
             const links = [];
             for (const c of this.props.combinedGraph.connections) {
                 links.push(new D3Link(nodeMap[c.sourcePort], nodeMap[c.targetPort], c.status));
