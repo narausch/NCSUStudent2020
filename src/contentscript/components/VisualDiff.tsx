@@ -54,7 +54,20 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
      *
      * @param prevProps previous props
      */
-    componentDidMount(): void {}
+    componentDidMount(): void {
+        // define an arrowhead
+        d3.select(this.ref)
+            .append('defs')
+            .append('marker')
+            .attr('id', 'arrowhead')
+            .attr('refX', 7)
+            .attr('refY', 2)
+            .attr('markerWidth', 6)
+            .attr('markerHeight', 4)
+            .attr('orient', 'auto')
+            .append('path')
+            .attr('d', 'M 0,0 V 4 L6,2 Z');
+    }
 
     /**
      * Performs tasks after updating the component.
@@ -62,6 +75,9 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
      * @param prevProps previous props
      */
     componentDidUpdate(prevProps: VisualDiffProps): void {
+        const svgWidth = this.props.width;
+        const svgHeight = this.props.height;
+
         // TODO: consider moving this logic to a controller
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const context: any = d3.select(this.ref);
@@ -87,7 +103,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                     'link',
                     d3.forceLink().id((d: D3Node) => d.id),
                 )
-                .force('charge', d3.forceManyBody().strength(-500))
+                .force('charge', d3.forceManyBody().strength(-300))
                 .force('center', d3.forceCenter(this.props.width / 2, this.props.height / 2));
 
             function dragstarted(d): void {
@@ -107,26 +123,26 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 d.fy = null;
             }
 
+            // define links
             const link = context
                 .append('g')
-                .attr('class', 'links')
+                .attr('class', 'fdv-links')
+                .attr('marker-end', 'url(#arrowhead)')
                 .selectAll('line')
                 .data(links)
                 .enter()
                 .append('line')
-                .attr('stroke', 'black');
+                .attr('stroke', 'black')
+                .attr('stroke-width', 2);
 
+            // define nodes
             const node = context
                 .append('g')
-                .attr('class', 'nodes')
-                .selectAll('circle')
+                .attr('class', 'fdv-nodes')
+                .selectAll('g')
                 .data(nodes)
                 .enter()
-                .append('g');
-
-            node.append('circle')
-                .attr('r', 5)
-                .attr('fill', (d: D3Node) => '#333333')
+                .append('g')
                 .call(
                     d3
                         .drag()
@@ -135,24 +151,36 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                         .on('end', dragended),
                 );
 
+            node.append('circle')
+                .attr('r', 5)
+                .attr('fill', (d: D3Node) => '#333333');
+
             node.append('text').text((d: D3Node) => d.name);
             node.append('title').text((d: D3Node) => d.name);
 
+            /**
+             * Defines tick actions.
+             */
             function ticked(): void {
+                node.attr('transform', (d: D3Node) => {
+                    // constraint the nodes to be within a box
+                    d.x = Math.max(10, Math.min(svgWidth - 10, d.x));
+                    d.y = Math.max(10, Math.min(svgHeight - 10, d.y));
+
+                    return 'translate(' + d.x + ',' + d.y + ')';
+                });
                 link.attr('x1', (d: D3Link) => d.source.x)
                     .attr('y1', (d: D3Link) => d.source.y)
                     .attr('x2', (d: D3Link) => d.target.x)
                     .attr('y2', (d: D3Link) => d.target.y);
-                node.attr('transform', function(d: D3Node) {
-                    return 'translate(' + d.x + ',' + d.y + ')';
-                });
             }
 
             simulation.nodes(nodes).on('tick', ticked);
             simulation.force('link').links(links);
         } else if (prevProps.combinedGraph != null && this.props.combinedGraph == null) {
-            // reset diagram
-            context.selectAll('*').remove();
+            // reset nodes and links
+            context.selectAll('.fdv-nodes').remove();
+            context.selectAll('.fdv-links').remove();
         }
     }
 
