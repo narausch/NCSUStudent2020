@@ -1,0 +1,17 @@
+.fdv-visual-diff {
+    height: 300px;
+    border: solid 1px black;
+    background-color: white;
+}
+
+.fdv-nodes {
+    cursor: pointer;
+}
+
+svg text {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}

@@ -42,7 +42,7 @@ module.exports = {
 
     // Update the threshold for the file size
     performance: {
-        maxEntrypointSize: 1024000,
-        maxAssetSize: 1024000,
+        maxEntrypointSize: 5120000,
+        maxAssetSize: 5120000,
     },
 };
