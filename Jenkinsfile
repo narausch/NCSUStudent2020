@@ -13,7 +13,7 @@ pipeline {
       }
       post {
         always {
-          cobertura(coberturaReportFile: 'coverage/cobertura-coverage.xml', enableNewApi: true, lineCoverageTargets: '80, 75, 70')
+          cobertura(coberturaReportFile: 'coverage/cobertura-coverage.xml', enableNewApi: true, lineCoverageTargets: '75, 65, 55')
           junit 'coverage/junit.xml'
         }
       }
