@@ -1,10 +1,20 @@
 import React from 'react';
-
-import * as go from 'gojs';
-import { ReactDiagram } from 'gojs-react';
+import * as d3 from 'd3';
 import { Graph } from '../graph/Graph';
 
 import './VisualDiff.css';
+
+class D3Node implements d3.SimulationNodeDatum {
+    public x: number;
+    public y: number;
+    constructor(public id: string, public name: string) {}
+    // TODO: add color index
+}
+
+class D3Link implements d3.SimulationLinkDatum<D3Node> {
+    constructor(public source: D3Node, public target: D3Node) {}
+    // TODO: add color index
+}
 
 /**
  * Defines the props for the VisualDiff.
@@ -12,22 +22,22 @@ import './VisualDiff.css';
 interface VisualDiffProps {
     /** Combined graph that contains diff information. */
     combinedGraph: Graph | null;
+    width: number;
+    height: number;
 }
 
 /**
  * Defines the state for the VisualDiff.
  */
-interface VisualDiffState {
-    nodeDataArray: Array<go.ObjectData>;
-    linkDataArray: Array<go.ObjectData>;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface VisualDiffState {}
 
 /**
  * Defines the component VisualDiff.
  */
 export default class VisualDiff extends React.Component<VisualDiffProps, VisualDiffState> {
-    /** Ref to keep a reference to the Diagram component, which provides access to the GoJS diagram via getDiagram(). */
-    private diagramRef: React.RefObject<ReactDiagram>;
+    /** Ref to the D3 container. */
+    private ref: SVGSVGElement;
 
     /**
      * Constructs the VisualDiff.
@@ -36,12 +46,15 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
      */
     constructor(props: VisualDiffProps) {
         super(props);
-        this.diagramRef = React.createRef();
-        this.state = {
-            nodeDataArray: [],
-            linkDataArray: [],
-        };
+        this.state = {};
     }
+
+    /**
+     * Performs tasks after mounting the component.
+     *
+     * @param prevProps previous props
+     */
+    componentDidMount(): void {}
 
     /**
      * Performs tasks after updating the component.
@@ -50,20 +63,96 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
      */
     componentDidUpdate(prevProps: VisualDiffProps): void {
         // TODO: consider moving this logic to a controller
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const context: any = d3.select(this.ref);
         if (prevProps.combinedGraph == null && this.props.combinedGraph != null) {
+            // construct D3Node and D3Link
             const nodes = [];
+            const nodeMap = {}; // for looking up a node from the id
             for (const node of this.props.combinedGraph.nodes) {
-                nodes.push({ key: node.id, text: node.data['name'] });
+                const n = new D3Node(node.id, node.data['name']);
+                nodeMap[node.id] = n;
+                nodes.push(n);
             }
             const links = [];
             for (const c of this.props.combinedGraph.connections) {
-                links.push({ from: c.sourcePort, to: c.targetPort });
+                links.push(new D3Link(nodeMap[c.sourcePort], nodeMap[c.targetPort]));
             }
-            this.setState({ nodeDataArray: nodes, linkDataArray: links });
+
+            // start simulation
+            // TODO: use a diffrent layout suitable for DAG
+            const simulation: any = d3
+                .forceSimulation()
+                .force(
+                    'link',
+                    d3.forceLink().id((d: D3Node) => d.id),
+                )
+                .force('charge', d3.forceManyBody().strength(-500))
+                .force('center', d3.forceCenter(this.props.width / 2, this.props.height / 2));
+
+            function dragstarted(d): void {
+                if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+
+            function dragged(d): void {
+                d.fx = d3.event.x;
+                d.fy = d3.event.y;
+            }
+
+            function dragended(d): void {
+                if (!d3.event.active) simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
+
+            const link = context
+                .append('g')
+                .attr('class', 'links')
+                .selectAll('line')
+                .data(links)
+                .enter()
+                .append('line')
+                .attr('stroke', 'black');
+
+            const node = context
+                .append('g')
+                .attr('class', 'nodes')
+                .selectAll('circle')
+                .data(nodes)
+                .enter()
+                .append('g');
+
+            node.append('circle')
+                .attr('r', 5)
+                .attr('fill', (d: D3Node) => '#333333')
+                .call(
+                    d3
+                        .drag()
+                        .on('start', dragstarted)
+                        .on('drag', dragged)
+                        .on('end', dragended),
+                );
+
+            node.append('text').text((d: D3Node) => d.name);
+            node.append('title').text((d: D3Node) => d.name);
+
+            function ticked(): void {
+                link.attr('x1', (d: D3Link) => d.source.x)
+                    .attr('y1', (d: D3Link) => d.source.y)
+                    .attr('x2', (d: D3Link) => d.target.x)
+                    .attr('y2', (d: D3Link) => d.target.y);
+                node.attr('transform', function(d: D3Node) {
+                    return 'translate(' + d.x + ',' + d.y + ')';
+                });
+            }
+
+            simulation.nodes(nodes).on('tick', ticked);
+            simulation.force('link').links(links);
         } else if (prevProps.combinedGraph != null && this.props.combinedGraph == null) {
             // reset diagram
-            this.diagramRef.current.getDiagram().clear();
-            this.setState({ nodeDataArray: [], linkDataArray: [] });
+            context.selectAll('*').remove();
         }
     }
 
@@ -72,70 +161,14 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
      */
     render(): React.ReactNode {
         return (
-            <div>
-                <ReactDiagram
-                    ref={this.diagramRef}
-                    divClassName="fdv-visual-diff"
-                    initDiagram={this.initDiagram}
-                    nodeDataArray={this.state.nodeDataArray}
-                    linkDataArray={this.state.linkDataArray}
-                    onModelChange={this.handleModelChange}
-                    skipsDiagramUpdate={false}
+            <div className="fdv-visual-diff">
+                <svg
+                    className=""
+                    ref={(ref: SVGSVGElement): SVGSVGElement => (this.ref = ref)}
+                    width={this.props.width}
+                    height={this.props.height}
                 />
             </div>
         );
-    }
-
-    /**
-     * Initializes the GoJS diagram.
-     *
-     * Partly taken from the official website.
-     * @see https://gojs.net/latest/intro/react.html
-     */
-    private initDiagram(): go.Diagram {
-        const $ = go.GraphObject.make;
-        const diagram = $(go.Diagram, {
-            isReadOnly: true,
-            layout: $(go.LayeredDigraphLayout),
-            initialContentAlignment: go.Spot.Center,
-            allowZoom: true,
-            allowSelect: true,
-            autoScale: go.Diagram.Uniform,
-            contentAlignment: go.Spot.Center,
-        });
-
-        // define a simple Node template
-        diagram.nodeTemplate = $(
-            go.Node,
-            'Auto', // the Shape will go around the TextBlock
-            new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(go.Point.stringify),
-            $(
-                go.Shape,
-                'RoundedRectangle',
-                { name: 'SHAPE', fill: 'white', strokeWidth: 1 },
-                // Shape.fill is bound to Node.data.color
-                new go.Binding('fill', 'color'),
-            ),
-            $(
-                go.TextBlock,
-                { margin: 8, editable: true }, // some room around the text
-                new go.Binding('text').makeTwoWay(),
-            ),
-        );
-        // TODO: define tooltips
-
-        diagram.linkTemplate = $(
-            go.Link,
-            { routing: go.Link.Normal, corner: 0 },
-            $(go.Shape, { strokeWidth: 2, stroke: 'black' }), // the link shape
-            $(go.Shape, { toArrow: 'Standard', stroke: null }), // arrow head
-        );
-
-        return diagram;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    private handleModelChange(changes: go.IncrementalData): void {
-        // do nothing
     }
 }

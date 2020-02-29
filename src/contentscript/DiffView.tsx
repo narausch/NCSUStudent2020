@@ -87,6 +87,7 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
         const cs = this.state.compareFileTotal ? this.state.compareFileTotal.toLocaleString() : '-';
 
         // TODO: use icon for the Refresh button
+        // TODO: avoid magic numbers for VisualDiff
         return (
             <div className="fdv-view">
                 <div className="fdv-view-header">
@@ -104,7 +105,7 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
 
                 <ProgressBar progress={this.state.progress} failed={this.state.progressFailed} />
 
-                <VisualDiff combinedGraph={this.state.combinedGraph} />
+                <VisualDiff combinedGraph={this.state.combinedGraph} width={938} height={300} />
 
                 <div className="fdv-debug-msg">
                     <p>
