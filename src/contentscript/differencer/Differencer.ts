@@ -1,6 +1,7 @@
 import { GraphNode } from '../graph/GraphNode';
 import { Graph } from '../graph/Graph';
 import { GraphConnection } from '../graph/GraphConnection';
+import { Status } from '../graph/Status';
 
 export default class Differencer {
     private n1: GraphNode[];
@@ -8,11 +9,15 @@ export default class Differencer {
     private c1: GraphConnection[];
     private c2: GraphConnection[];
 
-    private addedNodes: GraphNode[];
-    private removedNodes: GraphNode[];
+    private addedNodes: GraphNode[] = [];
+    private removedNodes: GraphNode[] = [];
+    private unmodifiedNodes: GraphNode[] = [];
     private modifiedNodes: GraphNode[] = [];
-    private addedConns: GraphConnection[];
-    private removedConns: GraphConnection[];
+    private addedConns: GraphConnection[] = [];
+    private removedConns: GraphConnection[] = [];
+    private unmodifiedConns: GraphConnection[] = [];
+
+    private differencerGraph: Graph;
 
     /**
      * Constructs a Differencer.
@@ -29,29 +34,77 @@ export default class Differencer {
             this.c2 = compareGraph.connections;
             this.computeDifference();
         }
+
+        //go through each list, set node flags, and add to master list
+        const nodes: GraphNode[] = [];
+        const conns: GraphConnection[] = [];
+
+        this.addedNodes.forEach(element => {
+            element.status = Status.Added;
+            nodes.push(element);
+        });
+        this.removedNodes.forEach(element => {
+            element.status = Status.Removed;
+            nodes.push(element);
+        });
+        this.unmodifiedNodes.forEach(element => {
+            element.status = Status.Unmodified;
+            nodes.push(element);
+        });
+        this.modifiedNodes.forEach(element => {
+            element.status = Status.Modified;
+            nodes.push(element);
+        });
+
+        this.addedConns.forEach(element => {
+            element.status = Status.Added;
+            conns.push(element);
+        });
+        this.removedConns.forEach(element => {
+            element.status = Status.Removed;
+            conns.push(element);
+        });
+        this.unmodifiedConns.forEach(element => {
+            element.status = Status.Unmodified;
+            conns.push(element);
+        });
+
+        //sets flags
+        this.addedNodes = nodes.filter(value => value.status == Status.Added);
+        this.removedNodes = nodes.filter(value => value.status == Status.Removed);
+        this.modifiedNodes = nodes.filter(value => value.status == Status.Modified);
+        this.unmodifiedNodes = nodes.filter(value => value.status == Status.Unmodified);
+
+        this.addedConns = conns.filter(value => value.status == Status.Added);
+        this.removedConns = conns.filter(value => value.status == Status.Removed);
+        this.unmodifiedConns = conns.filter(value => value.status == Status.Unmodified);
+
+        this.differencerGraph = new Graph(nodes, conns);
     }
 
-    computeDifference(): void {
-        //copy of n2 with intersection of n1 removed
+    private computeDifference(): void {
+        //copy of n2 minus anything in n1
         this.addedNodes = this.n2.filter(item => !this.n1.some(v => item.id === v.id));
 
-        //copy of n1 with intersection of n2 removed
+        //copy of n1 minus anything in n2
         this.removedNodes = this.n1.filter(item => !this.n2.some(v => item.id === v.id));
 
         //copy of a2 with non-intersection of a1 removed
-        const same = this.n2.filter(item => this.n1.some(v => item.id === v.id));
-        for (const entry of same) {
+        const unmodifiedNodes = this.n2.filter(item => this.n1.some(v => item.id === v.id));
+        for (const entry of unmodifiedNodes) {
             const itemx = this.n1.find(v => v.id == entry.id);
             if (JSON.stringify(entry) != JSON.stringify(itemx)) this.modifiedNodes.push(entry);
         }
 
-        //copy of c2 with intersection of c1 removed
+        //copy of c2 minus anything in c1
         this.addedConns = this.c2.filter(item => !this.c1.some(v => item === v));
-        //copy of c1 with intersection of c2 removed
+        //copy of c1 minus anything in c2
         this.removedConns = this.c1.filter(item => !this.c2.some(v => item === v));
+        //copy of a2 with non-intersection of a1 removed
+        this.unmodifiedConns = this.c2.filter(item => this.c1.some(v => item === v));
     }
 
-    fullyDifferent(baseGraph: Graph | null, compareGraph: Graph | null): void {
+    private fullyDifferent(baseGraph: Graph | null, compareGraph: Graph | null): void {
         if (baseGraph == null && compareGraph == null) throw new Error('No graphs to compare');
         //graph has been created
         if (baseGraph == null) {
@@ -65,23 +118,30 @@ export default class Differencer {
         }
     }
 
+    getDifferencerGraph(): Graph {
+        return this.differencerGraph;
+    }
+
     getAddedNodes(): GraphNode[] {
         return this.addedNodes;
     }
-
     getRemovedNodes(): GraphNode[] {
         return this.removedNodes;
     }
-
     getModifiedNodes(): GraphNode[] {
         return this.modifiedNodes;
+    }
+    getUnmodifiedNodes(): GraphNode[] {
+        return this.unmodifiedNodes;
     }
 
     getAddedConns(): GraphConnection[] {
         return this.addedConns;
     }
-
     getRemovedConns(): GraphConnection[] {
         return this.removedConns;
+    }
+    getUnmodifiedConns(): GraphConnection[] {
+        return this.unmodifiedConns;
     }
 }

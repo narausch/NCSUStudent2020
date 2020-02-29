@@ -10,8 +10,8 @@ export class GraphConnection {
      * @param jsonConnection the connection in json format
      */
     constructor(jsonConnection: any);
-    constructor(sourcePort: string, targetPort: string);
-    constructor(jsonConnectionOrsourcePort: string | any, targetPort?: string) {
+    constructor(sourcePort: string, targetPort: string, status?: Status);
+    constructor(jsonConnectionOrsourcePort: string | any, targetPort?: string, status?: Status) {
         let jsonConnection: any;
         if (!targetPort) {
             jsonConnection = jsonConnectionOrsourcePort;
@@ -29,5 +29,6 @@ export class GraphConnection {
             this.sourcePort = jsonConnectionOrsourcePort;
             this.targetPort = targetPort;
         }
+        this.status = status;
     }
 }

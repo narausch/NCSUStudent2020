@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { GraphNode } from './GraphNode';
 import { GraphConnection } from './GraphConnection';
+import { GraphNode } from './GraphNode';
 
 export class Graph {
     public nodes: Array<GraphNode>;
@@ -17,7 +17,7 @@ export class Graph {
         else this.listsConstructor(jsonStringOrNodes, connections);
     }
 
-    stringConstructor(jsonString: string): void {
+    private stringConstructor(jsonString: string): void {
         // Error case when the file is not a json string
         let json: any;
         try {
@@ -74,8 +74,16 @@ export class Graph {
         });
     }
 
-    listsConstructor(nodes: GraphNode[], connections: GraphConnection[]): void {
+    private listsConstructor(nodes: GraphNode[], connections: GraphConnection[]): void {
         this.nodes = nodes;
         this.connections = connections;
+    }
+
+    public getNodes(): Array<GraphNode> {
+        return this.nodes;
+    }
+
+    public getConnections(): Array<GraphConnection> {
+        return this.connections;
     }
 }

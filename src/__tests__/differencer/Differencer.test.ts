@@ -2,6 +2,7 @@ import Differencer from '../../contentscript/differencer/Differencer';
 import { GraphNode } from '../../contentscript/graph/GraphNode';
 import { Graph } from '../../contentscript/graph/Graph';
 import { GraphConnection } from '../../contentscript/graph/GraphConnection';
+import { Status } from '../../contentscript/graph/Status';
 
 describe('Differencer#smallInputChanges', () => {
     test('normal cases', async () => {
@@ -30,9 +31,11 @@ describe('Differencer#smallInputChanges', () => {
 
         const diff: Differencer = new Differencer(new Graph(n1, c1), new Graph(n2, c2));
 
-        expect(diff.getAddedNodes()).toStrictEqual([new GraphNode('e', 'EMU')]);
-        expect(diff.getRemovedNodes()).toStrictEqual([new GraphNode('b', 'BOY')]);
-        expect(diff.getModifiedNodes()).toStrictEqual([new GraphNode('a', 'FOREST')]);
+        expect(diff.getAddedNodes()).toStrictEqual([new GraphNode('e', 'EMU', Status.Added)]);
+        expect(diff.getRemovedNodes()).toStrictEqual([new GraphNode('b', 'BOY', Status.Removed)]);
+        expect(diff.getModifiedNodes()).toStrictEqual([
+            new GraphNode('a', 'FOREST', Status.Modified),
+        ]);
     });
 });
 
@@ -49,7 +52,7 @@ describe('Differencer#nullGraphs', () => {
             new GraphConnection('b', 'c'),
             new GraphConnection('c', 'd'),
         ];
-        
+
         const diff: Differencer = new Differencer(null, new Graph(n1, c1));
         expect(diff.getAddedNodes()).toStrictEqual(n1);
         expect(diff.getAddedConns()).toStrictEqual(c1);
