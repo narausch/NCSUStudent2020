@@ -239,28 +239,26 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
 
                 const differencer = new Differencer(graphBase, graphCompare);
 
-                // TODO: Consider outputting as a list of strings
-                // this.logDebugMessage('Added nodes:\n');
-                // differencer.getAddedNodes().forEach(node => {
-                //     this.logDebugMessage('--Added node id: ' + node.id);
-                //     this.logDebugMessage('--Added node info: ');
-                //     this.logDebugMessage(node.data);
-                // });
-                // this.logDebugMessage('Removed nodes:\n');
-                // differencer.getRemovedNodes().forEach(node => {
-                //     this.logDebugMessage('--Removed node id: ' + node.id);
-                //     this.logDebugMessage('--Removed node info: ');
-                //     this.logDebugMessage(node.data);
-                // });
-                // this.logDebugMessage('Modified nodes:\n');
-                // differencer.getModifiedNodes().forEach(node => {
-                //     this.logDebugMessage('--Modified node id: ' + node.id);
-                //     this.logDebugMessage('--Modified node info: ');
-                //     this.logDebugMessage(node.data);
-                // });
+                this.logDebugMessage('Added nodes:\n');
+                differencer.getAddedNodes().forEach(node => {
+                    this.logDebugMessage(`--Added node id: ${node.id} (${node.data['name']})`);
+                    this.logDebugMessage('--Added node info: ');
+                    this.logDebugMessage(JSON.stringify(node.data));
+                });
+                this.logDebugMessage('Removed nodes:\n');
+                differencer.getRemovedNodes().forEach(node => {
+                    this.logDebugMessage(`--Removed node id: ${node.id} (${node.data['name']})`);
+                    this.logDebugMessage('--Removed node info: ');
+                    this.logDebugMessage(JSON.stringify(node.data));
+                });
+                this.logDebugMessage('Modified nodes:\n');
+                differencer.getModifiedNodes().forEach(node => {
+                    this.logDebugMessage(`--Modified node id: ${node.id} (${node.data['name']})`);
+                    this.logDebugMessage('--Modified node info: ');
+                    this.logDebugMessage(JSON.stringify(node.data));
+                });
 
-                // TODO: create combined graph
-                this.setState({ combinedGraph: graphCompare });
+                this.setState({ combinedGraph: differencer.getDifferencerGraph() });
                 this.setState({ progress: this.PROGRESS_COMPLETE }); // update progress bar
             })
             .catch(err => {
