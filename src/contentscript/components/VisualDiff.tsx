@@ -67,6 +67,32 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             .attr('orient', 'auto')
             .append('path')
             .attr('d', 'M 0,0 V 4 L6,2 Z');
+
+        d3.select(this.ref)
+            .append('defs')
+            .append('marker')
+            .attr('id', 'arrowheadg')
+            .attr('refX', 7)
+            .attr('refY', 2)
+            .attr('markerWidth', 6)
+            .attr('markerHeight', 4)
+            .attr('orient', 'auto')
+            .append('path')
+            .attr('d', 'M 0,0 V 4 L6,2 Z')
+            .attr('fill', 'rgb(1, 245, 1)');
+
+        d3.select(this.ref)
+            .append('defs')
+            .append('marker')
+            .attr('id', 'arrowheadr')
+            .attr('refX', 7)
+            .attr('refY', 2)
+            .attr('markerWidth', 6)
+            .attr('markerHeight', 4)
+            .attr('orient', 'auto')
+            .append('path')
+            .attr('d', 'M 0,0 V 4 L6,2 Z')
+            .attr('fill', 'rgb(255, 43, 43)');
     }
 
     /**
@@ -124,16 +150,16 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             }
 
             // define links
+            //TODO update to change based off of link types
             const link = context
                 .append('g')
                 .attr('class', 'fdv-links')
-                .attr('marker-end', 'url(#arrowhead)')
+                .attr('class', 'added-link')
+                .attr('marker-end', 'url(#arrowheadg)')
                 .selectAll('line')
                 .data(links)
                 .enter()
-                .append('line')
-                .attr('stroke', 'black')
-                .attr('stroke-width', 2);
+                .append('line');
 
             // define nodes
             const node = context
@@ -151,11 +177,20 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                         .on('end', dragended),
                 );
 
-            node.append('circle')
-                .attr('r', 5)
-                .attr('fill', (d: D3Node) => '#333333');
+            //TODO change class based off node
+            node.append('rect')
+                .attr('x', -75)
+                .attr('y', -25)
+                .attr('rx', 20)
+                .attr('ry', 20)
+                .attr('width', 150)
+                .attr('height', 50)
+                .attr('class', 'added');
 
-            node.append('text').text((d: D3Node) => d.name);
+            node.append('text')
+                .text((d: D3Node) => d.name)
+                .attr('x', -65)
+                .attr('y', 3);
             node.append('title').text((d: D3Node) => d.name);
 
             /**
@@ -171,7 +206,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 });
                 link.attr('x1', (d: D3Link) => d.source.x)
                     .attr('y1', (d: D3Link) => d.source.y)
-                    .attr('x2', (d: D3Link) => d.target.x)
+                    .attr('x2', (d: D3Link) => d.target.x - 75)
                     .attr('y2', (d: D3Link) => d.target.y);
             }
 
