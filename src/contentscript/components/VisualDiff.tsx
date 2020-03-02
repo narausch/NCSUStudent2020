@@ -109,14 +109,10 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
         const context: any = d3.select(this.ref);
         if (prevProps.combinedGraph == null && this.props.combinedGraph != null) {
             const roots = this.props.combinedGraph.stratify();
-            let rootedTree: RootedTree;
-            if (roots.length == 0) {
-                return; // null graph
-            } else {
-                // add a dummy node to ensure there is only one rooted tree
-                rootedTree = new RootedTree(new GraphNode('dummy', {}), roots);
-            }
+            if (roots.length == 0) return; // null graph
 
+            // add a dummy node to ensure there is only one rooted tree
+            const rootedTree = new RootedTree(new GraphNode('dummy', {}), roots);
             const root = d3.hierarchy(rootedTree);
             const tree = d3.tree<RootedTree>().size([this.props.height, this.props.width]);
             const treeData = tree(root);
