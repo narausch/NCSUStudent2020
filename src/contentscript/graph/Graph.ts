@@ -145,6 +145,7 @@ export class Graph {
                         stack.push(subTree);
                     }
                 }
+                u.children.reverse(); // reverse the order of the children
             }
 
             ret.push(root); // add the tree to the result

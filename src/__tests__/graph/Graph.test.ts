@@ -63,6 +63,48 @@ describe('Graph#stratify', () => {
         ]);
     });
 
+    test('with cycles', async () => {
+        const g = new Graph(
+            [
+                new GraphNode('a', {}),
+                new GraphNode('b', {}),
+                new GraphNode('c', {}),
+                new GraphNode('d', {}),
+                new GraphNode('e', {}),
+                new GraphNode('f', {}),
+                new GraphNode('g', {}),
+                new GraphNode('h', {}),
+                new GraphNode('i', {}),
+            ],
+            [
+                new GraphConnection('a', 'd'),
+                new GraphConnection('f', 'd'),
+                new GraphConnection('h', 'd'),
+                new GraphConnection('e', 'a'),
+                new GraphConnection('d', 'g'),
+                new GraphConnection('a', 'g'),
+                new GraphConnection('g', 'f'),
+                new GraphConnection('i', 'd'),
+                new GraphConnection('h', 'i'),
+                new GraphConnection('c', 'a'),
+                new GraphConnection('a', 'b'),
+                new GraphConnection('b', 'f'),
+            ],
+        );
+
+        expect(g.stratify()).toStrictEqual([
+            new RootedTree(g.nodes[2], [
+                new RootedTree(g.nodes[0], [
+                    new RootedTree(g.nodes[1], [new RootedTree(g.nodes[5], [])]),
+                    new RootedTree(g.nodes[3], []),
+                    new RootedTree(g.nodes[6], []),
+                ]),
+            ]),
+            new RootedTree(g.nodes[4], []),
+            new RootedTree(g.nodes[7], [new RootedTree(g.nodes[8], [])]),
+        ]);
+    });
+
     test('multiple components', async () => {
         const twoTriangles = new Graph(
             [
