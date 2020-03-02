@@ -118,7 +118,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             }
 
             const root = d3.hierarchy(rootedTree);
-            const tree = d3.tree<RootedTree>().size([this.props.height, this.props.width]); // TODO: avoid magic numbers
+            const tree = d3.tree<RootedTree>().size([this.props.height, this.props.width]);
             const treeData = tree(root);
 
             // construct D3Node and D3Link

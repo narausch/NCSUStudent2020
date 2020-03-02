@@ -2,7 +2,6 @@
 import { GraphConnection } from './GraphConnection';
 import { GraphNode } from './GraphNode';
 import RootedTree from './RootedTree';
-import { keys } from 'd3';
 
 export class Graph {
     public nodes: Array<GraphNode>;
