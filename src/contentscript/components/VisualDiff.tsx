@@ -9,9 +9,9 @@ import { GraphNode } from '../graph/GraphNode';
 /**
  * id: the id of the node
  * name: name of the node
- * x: the x coordiate of the node
+ * x: the x coordinate of the node
  * y: the y coordinate of the node
- * className: status of the node
+ * className: class name of the node
  */
 class D3Node implements d3.SimulationNodeDatum {
     constructor(
@@ -25,7 +25,7 @@ class D3Node implements d3.SimulationNodeDatum {
 
 /**
  * source and target are the source port and target port of the connection
- * className: status of the connection
+ * className: class name of the connection
  */
 class D3Link implements d3.SimulationLinkDatum<D3Node> {
     constructor(public source: D3Node, public target: D3Node, public className: string) {}
