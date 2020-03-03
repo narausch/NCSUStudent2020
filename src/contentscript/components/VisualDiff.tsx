@@ -192,8 +192,8 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 .data(links)
                 .enter()
                 .append('line')
-                .attr('class', d => d.className)
-                .attr('marker-end', 'url(#arrowheadg)'); // Change arrow color
+                .attr('class', d => d.className);
+            //.attr('marker-end', d => d.className); // Change arrow color
 
             // define nodes
             const node = context
