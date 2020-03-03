@@ -38,7 +38,7 @@ svg .fdv-removed-link {
 svg rect {
     fill: white;
     stroke: black;
-    stroke-width: 0.5rem;
+    stroke-width: 0.1rem;
 }
 
 svg .fdv-added {
