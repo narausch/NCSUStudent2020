@@ -6,6 +6,13 @@ import './VisualDiff.css';
 import RootedTree from '../graph/RootedTree';
 import { GraphNode } from '../graph/GraphNode';
 
+/**
+ * id: the id of the node
+ * name: name of the node
+ * x: the x coordiate of the node
+ * y: the y coordinate of the node
+ * className: status of the node
+ */
 class D3Node implements d3.SimulationNodeDatum {
     constructor(
         public id: string,
@@ -14,12 +21,14 @@ class D3Node implements d3.SimulationNodeDatum {
         public y: number,
         public className: string,
     ) {}
-    // TODO: add color index
 }
 
+/**
+ * source and target are the source port and target port of the connection
+ * className: status of the connection
+ */
 class D3Link implements d3.SimulationLinkDatum<D3Node> {
     constructor(public source: D3Node, public target: D3Node, public className: string) {}
-    // TODO: add color index
 }
 
 /**
@@ -184,7 +193,6 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             }
 
             // define links
-            //TODO update to change based off of link types
             const link = context
                 .append('g')
                 .classed('fdv-links', true)
@@ -193,7 +201,6 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 .enter()
                 .append('line')
                 .attr('class', d => d.className);
-            //.attr('marker-end', d => d.className); // Change arrow color
 
             // define nodes
             const node = context
@@ -211,7 +218,6 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                         .on('end', dragended),
                 );
 
-            //TODO change class based off node
             node.append('rect')
                 .attr('x', -75)
                 .attr('y', -25)
