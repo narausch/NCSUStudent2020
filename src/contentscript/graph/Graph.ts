@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { GraphNode } from './GraphNode';
 import { GraphConnection } from './GraphConnection';
+import { GraphNode } from './GraphNode';
+import RootedTree from './RootedTree';
 
 export class Graph {
     public nodes: Array<GraphNode>;
@@ -17,7 +18,7 @@ export class Graph {
         else this.listsConstructor(jsonStringOrNodes, connections);
     }
 
-    stringConstructor(jsonString: string): void {
+    private stringConstructor(jsonString: string): void {
         // Error case when the file is not a json string
         let json: any;
         try {
@@ -74,8 +75,81 @@ export class Graph {
         });
     }
 
-    listsConstructor(nodes: GraphNode[], connections: GraphConnection[]): void {
+    private listsConstructor(nodes: GraphNode[], connections: GraphConnection[]): void {
         this.nodes = nodes;
         this.connections = connections;
+    }
+
+    public getNodes(): Array<GraphNode> {
+        return this.nodes;
+    }
+
+    public getConnections(): Array<GraphConnection> {
+        return this.connections;
+    }
+
+    /**
+     * Converts this graph into a set of rooted trees.
+     *
+     * @return array of RootedTrees
+     */
+    public stratify(): Array<RootedTree> {
+        const nodeTable: { [id: string]: GraphNode } = {}; // lookup table for nodes
+        const inDegrees: { [id: string]: number } = {};
+        const children: { [id: string]: string[] } = {};
+
+        // (1) Create a lookup table for all nodes.
+        for (const node of this.nodes) {
+            nodeTable[node.id] = node;
+            // initialize other information
+            inDegrees[node.id] = 0;
+            children[node.id] = [];
+        }
+
+        // (2) Count the number of incoming edges and collect children information.
+        for (const conn of this.connections) {
+            ++inDegrees[conn.targetPort];
+            children[conn.sourcePort].push(conn.targetPort);
+        }
+
+        // (3) Sort the children for each node.
+        for (const id in children) children[id].sort();
+
+        // (4) Sort all vertices by in-degree (increasing) and ID (lexicographically increasing).
+        const vertices: Array<[number, string]> = [];
+        for (const id in inDegrees) vertices.push([inDegrees[id], id]);
+        vertices.sort();
+
+        // (5) Traverse the sorted list and perform DFS.
+        const ret: Array<RootedTree> = [];
+        const visited = new Set<string>();
+        for (const v of vertices) {
+            const id: string = v[1];
+            if (visited.has(id)) continue; // already visited
+
+            const root = new RootedTree(nodeTable[id], []); // set a new root
+            const stack: Array<RootedTree> = [root]; // stack for DFS
+            visited.add(id);
+
+            while (stack.length > 0) {
+                const u = stack.pop();
+                // traverse all children in reverse order
+                for (let i = children[u.data.id].length - 1; i >= 0; --i) {
+                    const w = children[u.data.id][i];
+
+                    if (!visited.has(w)) {
+                        visited.add(w);
+                        const subTree = new RootedTree(nodeTable[w], []);
+                        u.children.push(subTree);
+                        stack.push(subTree);
+                    }
+                }
+                u.children.reverse(); // reverse the order of the children
+            }
+
+            ret.push(root); // add the tree to the result
+        }
+
+        return ret;
     }
 }
