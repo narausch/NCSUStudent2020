@@ -56,9 +56,9 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
      */
     componentDidMount(): void {
         // define an arrowhead
-        d3.select(this.ref)
-            .append('defs')
-            .append('marker')
+        const defs = d3.select(this.ref).append('defs');
+
+        defs.append('marker')
             .attr('id', 'arrowhead')
             .attr('refX', 7)
             .attr('refY', 2)
@@ -68,9 +68,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             .append('path')
             .attr('d', 'M 0,0 V 4 L6,2 Z');
 
-        d3.select(this.ref)
-            .append('defs')
-            .append('marker')
+        defs.append('marker')
             .attr('id', 'arrowheadg')
             .attr('refX', 7)
             .attr('refY', 2)
@@ -81,9 +79,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             .attr('d', 'M 0,0 V 4 L6,2 Z')
             .attr('fill', 'rgb(1, 245, 1)');
 
-        d3.select(this.ref)
-            .append('defs')
-            .append('marker')
+        defs.append('marker')
             .attr('id', 'arrowheadr')
             .attr('refX', 7)
             .attr('refY', 2)
@@ -178,18 +174,18 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             //TODO update to change based off of link types
             const link = context
                 .append('g')
-                .attr('class', 'fdv-links')
+                .classed('fdv-links', true)
                 .selectAll('line')
                 .data(links)
                 .enter()
                 .append('line')
-                .attr('class', 'fdv-added-link')
+                .classed('fdv-added-link', true)
                 .attr('marker-end', 'url(#arrowheadg)');
 
             // define nodes
             const node = context
                 .append('g')
-                .attr('class', 'fdv-nodes')
+                .classed('fdv-nodes', true)
                 .selectAll('g')
                 .data(nodes)
                 .enter()
@@ -210,7 +206,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 .attr('ry', 20)
                 .attr('width', 150)
                 .attr('height', 50)
-                .attr('class', 'fdv-added');
+                .classed('fdv-added', true);
 
             node.append('text')
                 .text((d: D3Node) => d.name)
