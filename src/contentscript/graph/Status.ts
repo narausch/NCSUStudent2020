@@ -1,7 +1,7 @@
 // The stauts enum class used for both node and connection class
 export enum Status {
-    Added = 1,
-    Removed = 2,
-    Modified = 3,
-    Unmodified = 4,
+    Added = 'added',
+    Removed = 'removed',
+    Modified = 'modified',
+    Unmodified = 'unmodified',
 }

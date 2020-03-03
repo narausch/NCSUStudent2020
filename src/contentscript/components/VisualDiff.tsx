@@ -6,14 +6,29 @@ import './VisualDiff.css';
 import RootedTree from '../graph/RootedTree';
 import { GraphNode } from '../graph/GraphNode';
 
+/**
+ * id: the id of the node
+ * name: name of the node
+ * x: the x coordinate of the node
+ * y: the y coordinate of the node
+ * className: class name of the node
+ */
 class D3Node implements d3.SimulationNodeDatum {
-    constructor(public id: string, public name: string, public x: number, public y: number) {}
-    // TODO: add color index
+    constructor(
+        public id: string,
+        public name: string,
+        public x: number,
+        public y: number,
+        public className: string,
+    ) {}
 }
 
+/**
+ * source and target are the source port and target port of the connection
+ * className: class name of the connection
+ */
 class D3Link implements d3.SimulationLinkDatum<D3Node> {
-    constructor(public source: D3Node, public target: D3Node) {}
-    // TODO: add color index
+    constructor(public source: D3Node, public target: D3Node, public className: string) {}
 }
 
 /**
@@ -124,6 +139,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                         node.data.data.data['name'],
                         node.y, // swap x and y
                         node.x,
+                        `fdv-${node.data.data.status}`,
                     );
                     nodeMap[node.data.data.id] = n;
                     nodes.push(n);
@@ -144,7 +160,13 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
 
             const links = [];
             for (const c of this.props.combinedGraph.connections) {
-                links.push(new D3Link(nodeMap[c.sourcePort], nodeMap[c.targetPort]));
+                links.push(
+                    new D3Link(
+                        nodeMap[c.sourcePort],
+                        nodeMap[c.targetPort],
+                        `fdv-${c.status}-link`,
+                    ),
+                );
             }
 
             // set viewbox size for the SVG element
@@ -171,7 +193,6 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             }
 
             // define links
-            //TODO update to change based off of link types
             const link = context
                 .append('g')
                 .classed('fdv-links', true)
@@ -179,8 +200,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 .data(links)
                 .enter()
                 .append('line')
-                .classed('fdv-added-link', true)
-                .attr('marker-end', 'url(#arrowheadg)');
+                .attr('class', d => d.className);
 
             // define nodes
             const node = context
@@ -198,7 +218,6 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                         .on('end', dragended),
                 );
 
-            //TODO change class based off node
             node.append('rect')
                 .attr('x', -75)
                 .attr('y', -25)
@@ -206,7 +225,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 .attr('ry', 20)
                 .attr('width', 150)
                 .attr('height', 50)
-                .classed('fdv-added', true);
+                .attr('class', d => d.className);
 
             node.append('text')
                 .text((d: D3Node) => d.name)

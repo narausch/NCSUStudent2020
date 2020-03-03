@@ -19,23 +19,26 @@ svg text {
 svg .fdv-unmodified-link {
     stroke: black;
     stroke-width: 2;
+    marker-end: url(#arrowhead);
 }
 
 svg .fdv-added-link {
     stroke: rgb(1, 245, 1);
     fill: rgb(1, 245, 1);
     stroke-width: 2;
+    marker-end: url(#arrowheadg);
 }
 
 svg .fdv-removed-link {
     stroke: rgb(255, 43, 43);
     stroke-width: 2;
+    marker-end: url(#arrowheadr);
 }
 
 svg rect {
     fill: white;
     stroke: black;
-    stroke-width: 0.5rem;
+    stroke-width: 0.1rem;
 }
 
 svg .fdv-added {
@@ -48,4 +51,8 @@ svg .fdv-removed {
 
 svg .fdv-modified {
     stroke: rgb(40, 194, 255);
+}
+
+svg .fdv-unmodified {
+    stroke: rgb(0, 0, 0);
 }
