@@ -3,11 +3,11 @@ import * as d3 from 'd3';
 import { Graph } from '../graph/Graph';
 
 import './VisualDiff.css';
+import RootedTree from '../graph/RootedTree';
+import { GraphNode } from '../graph/GraphNode';
 
 class D3Node implements d3.SimulationNodeDatum {
-    public x: number;
-    public y: number;
-    constructor(public id: string, public name: string) {}
+    constructor(public id: string, public name: string, public x: number, public y: number) {}
     // TODO: add color index
 }
 
@@ -56,9 +56,9 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
      */
     componentDidMount(): void {
         // define an arrowhead
-        d3.select(this.ref)
-            .append('defs')
-            .append('marker')
+        const defs = d3.select(this.ref).append('defs');
+
+        defs.append('marker')
             .attr('id', 'arrowhead')
             .attr('refX', 7)
             .attr('refY', 2)
@@ -67,6 +67,28 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             .attr('orient', 'auto')
             .append('path')
             .attr('d', 'M 0,0 V 4 L6,2 Z');
+
+        defs.append('marker')
+            .attr('id', 'arrowheadg')
+            .attr('refX', 7)
+            .attr('refY', 2)
+            .attr('markerWidth', 6)
+            .attr('markerHeight', 4)
+            .attr('orient', 'auto')
+            .append('path')
+            .attr('d', 'M 0,0 V 4 L6,2 Z')
+            .attr('fill', 'rgb(1, 245, 1)');
+
+        defs.append('marker')
+            .attr('id', 'arrowheadr')
+            .attr('refX', 7)
+            .attr('refY', 2)
+            .attr('markerWidth', 6)
+            .attr('markerHeight', 4)
+            .attr('orient', 'auto')
+            .append('path')
+            .attr('d', 'M 0,0 V 4 L6,2 Z')
+            .attr('fill', 'rgb(255, 43, 43)');
     }
 
     /**
@@ -82,63 +104,88 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const context: any = d3.select(this.ref);
         if (prevProps.combinedGraph == null && this.props.combinedGraph != null) {
+            const roots = this.props.combinedGraph.stratify();
+            if (roots.length == 0) return; // null graph
+
+            // add a dummy node to ensure there is only one rooted tree
+            const rootedTree = new RootedTree(new GraphNode('dummy', {}), roots);
+            const root = d3.hierarchy(rootedTree);
+            const tree = d3.tree<RootedTree>().size([this.props.height, this.props.width]);
+            const treeData = tree(root);
+
             // construct D3Node and D3Link
             const nodes = [];
             const nodeMap = {}; // for looking up a node from the id
-            for (const node of this.props.combinedGraph.nodes) {
-                const n = new D3Node(node.id, node.data['name']);
-                nodeMap[node.id] = n;
-                nodes.push(n);
+            for (const node of treeData.descendants()) {
+                // ignore the dummy node
+                if (node.parent != null) {
+                    const n = new D3Node(
+                        node.data.data.id,
+                        node.data.data.data['name'],
+                        node.y, // swap x and y
+                        node.x,
+                    );
+                    nodeMap[node.data.data.id] = n;
+                    nodes.push(n);
+                }
             }
+
+            // center all nodes
+            // TODO: create a utility function
+            const minX = Math.min(...nodes.map((node: D3Node) => node.x));
+            const maxX = Math.max(...nodes.map((node: D3Node) => node.x));
+            const minY = Math.min(...nodes.map((node: D3Node) => node.y));
+            const maxY = Math.max(...nodes.map((node: D3Node) => node.y));
+
+            for (const node of nodes) {
+                node.x -= minX - (this.props.width - (maxX - minX)) / 2;
+                node.y -= minY - (this.props.height - (maxY - minY)) / 2;
+            }
+
             const links = [];
             for (const c of this.props.combinedGraph.connections) {
                 links.push(new D3Link(nodeMap[c.sourcePort], nodeMap[c.targetPort]));
             }
 
-            // start simulation
-            // TODO: use a diffrent layout suitable for DAG
-            const simulation: any = d3
-                .forceSimulation()
-                .force(
-                    'link',
-                    d3.forceLink().id((d: D3Node) => d.id),
-                )
-                .force('charge', d3.forceManyBody().strength(-300))
-                .force('center', d3.forceCenter(this.props.width / 2, this.props.height / 2));
+            // set viewbox size for the SVG element
+            context.attr('viewBox', `0 0 ${this.props.width} ${this.props.height}`);
 
             function dragstarted(d): void {
-                if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+                // if (!d3.event.active) simulation.alphaTarget(0.3).restart();
                 d.fx = d.x;
                 d.fy = d.y;
             }
 
             function dragged(d): void {
-                d.fx = d3.event.x;
-                d.fy = d3.event.y;
+                // immediately update the position
+                d.x = d3.event.x;
+                d.y = d3.event.y;
+                // eslint-disable-next-line @typescript-eslint/no-use-before-define
+                ticked();
             }
 
             function dragended(d): void {
-                if (!d3.event.active) simulation.alphaTarget(0);
+                // if (!d3.event.active) simulation.alphaTarget(0);
                 d.fx = null;
                 d.fy = null;
             }
 
             // define links
+            //TODO update to change based off of link types
             const link = context
                 .append('g')
-                .attr('class', 'fdv-links')
-                .attr('marker-end', 'url(#arrowhead)')
+                .classed('fdv-links', true)
                 .selectAll('line')
                 .data(links)
                 .enter()
                 .append('line')
-                .attr('stroke', 'black')
-                .attr('stroke-width', 2);
+                .classed('fdv-added-link', true)
+                .attr('marker-end', 'url(#arrowheadg)');
 
             // define nodes
             const node = context
                 .append('g')
-                .attr('class', 'fdv-nodes')
+                .classed('fdv-nodes', true)
                 .selectAll('g')
                 .data(nodes)
                 .enter()
@@ -151,11 +198,20 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                         .on('end', dragended),
                 );
 
-            node.append('circle')
-                .attr('r', 5)
-                .attr('fill', (d: D3Node) => '#333333');
+            //TODO change class based off node
+            node.append('rect')
+                .attr('x', -75)
+                .attr('y', -25)
+                .attr('rx', 20)
+                .attr('ry', 20)
+                .attr('width', 150)
+                .attr('height', 50)
+                .classed('fdv-added', true);
 
-            node.append('text').text((d: D3Node) => d.name);
+            node.append('text')
+                .text((d: D3Node) => d.name)
+                .attr('x', -65)
+                .attr('y', 3);
             node.append('title').text((d: D3Node) => d.name);
 
             /**
@@ -167,16 +223,15 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                     d.x = Math.max(10, Math.min(svgWidth - 10, d.x));
                     d.y = Math.max(10, Math.min(svgHeight - 10, d.y));
 
-                    return 'translate(' + d.x + ',' + d.y + ')';
+                    return `translate(${d.x},${d.y})`;
                 });
                 link.attr('x1', (d: D3Link) => d.source.x)
                     .attr('y1', (d: D3Link) => d.source.y)
-                    .attr('x2', (d: D3Link) => d.target.x)
+                    .attr('x2', (d: D3Link) => d.target.x - 75)
                     .attr('y2', (d: D3Link) => d.target.y);
             }
 
-            simulation.nodes(nodes).on('tick', ticked);
-            simulation.force('link').links(links);
+            ticked();
         } else if (prevProps.combinedGraph != null && this.props.combinedGraph == null) {
             // reset nodes and links
             context.selectAll('.fdv-nodes').remove();

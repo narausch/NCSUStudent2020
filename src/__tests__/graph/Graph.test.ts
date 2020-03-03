@@ -1,6 +1,9 @@
 import { Graph } from '../../contentscript/graph/Graph';
 import fs from 'fs';
 import { Status } from '../../contentscript/graph/Status';
+import { GraphNode } from '../../contentscript/graph/GraphNode';
+import { GraphConnection } from '../../contentscript/graph/GraphConnection';
+import RootedTree from '../../contentscript/graph/RootedTree';
 
 describe('Graph tests', () => {
     test('Constructor', async () => {
@@ -26,5 +29,109 @@ describe('Graph tests', () => {
         const nonJsonString = '"notConnections": "test"';
         expect(() => new Graph(badJsonString)).toThrowError('JSON file is not formatted correctly');
         expect(() => new Graph(nonJsonString)).toThrowError('Not a valid JSON string');
+    });
+});
+
+describe('Graph#stratify', () => {
+    test('trivial graphs', async () => {
+        const nullGraph = new Graph([], []);
+        expect(nullGraph.stratify()).toStrictEqual([]);
+
+        const k1 = new Graph([new GraphNode('a', {})], []);
+        expect(k1.stratify()).toStrictEqual([new RootedTree(k1.nodes[0], [])]);
+    });
+
+    test('paths', async () => {
+        const p2 = new Graph(
+            [new GraphNode('a', {}), new GraphNode('b', {})],
+            [new GraphConnection('a', 'b')],
+        );
+
+        expect(p2.stratify()).toStrictEqual([
+            new RootedTree(p2.nodes[0], [new RootedTree(p2.nodes[1], [])]),
+        ]);
+
+        const p3 = new Graph(
+            [new GraphNode('c', {}), new GraphNode('b', {}), new GraphNode('a', {})],
+            [new GraphConnection('a', 'b'), new GraphConnection('b', 'c')],
+        );
+
+        expect(p3.stratify()).toStrictEqual([
+            new RootedTree(p3.nodes[2], [
+                new RootedTree(p3.nodes[1], [new RootedTree(p3.nodes[0], [])]),
+            ]),
+        ]);
+    });
+
+    test('with cycles', async () => {
+        const g = new Graph(
+            [
+                new GraphNode('a', {}),
+                new GraphNode('b', {}),
+                new GraphNode('c', {}),
+                new GraphNode('d', {}),
+                new GraphNode('e', {}),
+                new GraphNode('f', {}),
+                new GraphNode('g', {}),
+                new GraphNode('h', {}),
+                new GraphNode('i', {}),
+            ],
+            [
+                new GraphConnection('a', 'd'),
+                new GraphConnection('f', 'd'),
+                new GraphConnection('h', 'd'),
+                new GraphConnection('e', 'a'),
+                new GraphConnection('d', 'g'),
+                new GraphConnection('a', 'g'),
+                new GraphConnection('g', 'f'),
+                new GraphConnection('i', 'd'),
+                new GraphConnection('h', 'i'),
+                new GraphConnection('c', 'a'),
+                new GraphConnection('a', 'b'),
+                new GraphConnection('b', 'f'),
+            ],
+        );
+
+        expect(g.stratify()).toStrictEqual([
+            new RootedTree(g.nodes[2], [
+                new RootedTree(g.nodes[0], [
+                    new RootedTree(g.nodes[1], [new RootedTree(g.nodes[5], [])]),
+                    new RootedTree(g.nodes[3], []),
+                    new RootedTree(g.nodes[6], []),
+                ]),
+            ]),
+            new RootedTree(g.nodes[4], []),
+            new RootedTree(g.nodes[7], [new RootedTree(g.nodes[8], [])]),
+        ]);
+    });
+
+    test('multiple components', async () => {
+        const twoTriangles = new Graph(
+            [
+                new GraphNode('a', {}),
+                new GraphNode('b', {}),
+                new GraphNode('c', {}),
+                new GraphNode('d', {}),
+                new GraphNode('e', {}),
+                new GraphNode('f', {}),
+            ],
+            [
+                new GraphConnection('a', 'b'),
+                new GraphConnection('b', 'c'),
+                new GraphConnection('c', 'a'),
+                new GraphConnection('d', 'e'),
+                new GraphConnection('e', 'f'),
+                new GraphConnection('f', 'd'),
+            ],
+        );
+
+        expect(twoTriangles.stratify()).toStrictEqual([
+            new RootedTree(twoTriangles.nodes[0], [
+                new RootedTree(twoTriangles.nodes[1], [new RootedTree(twoTriangles.nodes[2], [])]),
+            ]),
+            new RootedTree(twoTriangles.nodes[3], [
+                new RootedTree(twoTriangles.nodes[4], [new RootedTree(twoTriangles.nodes[5], [])]),
+            ]),
+        ]);
     });
 });
