@@ -94,9 +94,9 @@ describe('Differencer#nullGraphs', () => {
 
     test('no graphs to compare', async () => {
         try {
-            const diff: Differencer = new Differencer(null, null);
+            new Differencer(null, null);
             fail();
-        } catch(e) {
+        } catch (e) {
             expect(e.message).toBe('No graphs to compare');
         }
     });
@@ -384,7 +384,6 @@ describe('Differencer#mediumInputChanges', () => {
         expect(diff.getAddedConns()).toStrictEqual([]);
         expect(diff.getRemovedConns()).toStrictEqual([]);
         expect(diff.getUnmodifiedConns()).toStrictEqual(unmodifiedConns);
-
     });
 
     test('added, removed, and modified nodes and connections', async () => {
