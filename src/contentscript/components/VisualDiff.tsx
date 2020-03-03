@@ -7,12 +7,18 @@ import RootedTree from '../graph/RootedTree';
 import { GraphNode } from '../graph/GraphNode';
 
 class D3Node implements d3.SimulationNodeDatum {
-    constructor(public id: string, public name: string, public x: number, public y: number) {}
+    constructor(
+        public id: string,
+        public name: string,
+        public x: number,
+        public y: number,
+        public className: string,
+    ) {}
     // TODO: add color index
 }
 
 class D3Link implements d3.SimulationLinkDatum<D3Node> {
-    constructor(public source: D3Node, public target: D3Node) {}
+    constructor(public source: D3Node, public target: D3Node, public className: string) {}
     // TODO: add color index
 }
 
@@ -124,6 +130,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                         node.data.data.data['name'],
                         node.y, // swap x and y
                         node.x,
+                        `fdv-${node.data.data.status}`,
                     );
                     nodeMap[node.data.data.id] = n;
                     nodes.push(n);
@@ -144,7 +151,13 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
 
             const links = [];
             for (const c of this.props.combinedGraph.connections) {
-                links.push(new D3Link(nodeMap[c.sourcePort], nodeMap[c.targetPort]));
+                links.push(
+                    new D3Link(
+                        nodeMap[c.sourcePort],
+                        nodeMap[c.targetPort],
+                        `fdv-${c.status}-link`,
+                    ),
+                );
             }
 
             // set viewbox size for the SVG element
@@ -179,8 +192,8 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 .data(links)
                 .enter()
                 .append('line')
-                .classed('fdv-added-link', true)
-                .attr('marker-end', 'url(#arrowheadg)');
+                .attr('class', d => d.className)
+                .attr('marker-end', 'url(#arrowheadg)'); // Change arrow color
 
             // define nodes
             const node = context
@@ -206,7 +219,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 .attr('ry', 20)
                 .attr('width', 150)
                 .attr('height', 50)
-                .classed('fdv-added', true);
+                .attr('class', d => d.className);
 
             node.append('text')
                 .text((d: D3Node) => d.name)

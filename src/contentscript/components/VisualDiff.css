@@ -49,3 +49,7 @@ svg .fdv-removed {
 svg .fdv-modified {
     stroke: rgb(40, 194, 255);
 }
+
+svg .fdv-unmodified {
+    stroke: rgb(0, 0, 0);
+}
