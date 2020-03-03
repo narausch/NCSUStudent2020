@@ -93,12 +93,7 @@ describe('Differencer#nullGraphs', () => {
     });
 
     test('no graphs to compare', async () => {
-        try {
-            new Differencer(null, null);
-            fail();
-        } catch (e) {
-            expect(e.message).toBe('No graphs to compare');
-        }
+        expect(() => new Differencer(null, null)).toThrowError('No graphs to compare');
     });
 });
 
