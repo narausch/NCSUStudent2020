@@ -179,12 +179,12 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             const link = context
                 .append('g')
                 .attr('class', 'fdv-links')
-                .attr('class', 'added-link')
-                .attr('marker-end', 'url(#arrowheadg)')
                 .selectAll('line')
                 .data(links)
                 .enter()
-                .append('line');
+                .append('line')
+                .attr('class', 'fdv-added-link')
+                .attr('marker-end', 'url(#arrowheadg)');
 
             // define nodes
             const node = context
@@ -210,7 +210,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 .attr('ry', 20)
                 .attr('width', 150)
                 .attr('height', 50)
-                .attr('class', 'added');
+                .attr('class', 'fdv-added');
 
             node.append('text')
                 .text((d: D3Node) => d.name)
