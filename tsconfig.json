@@ -16,6 +16,9 @@
         "sourceMap": true,
 
         //Work with Jest
-        "esModuleInterop": true
+        "esModuleInterop": true,
+
+        // Necessary for GoJS
+        "moduleResolution": "node"
     }
 }
