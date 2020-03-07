@@ -21,6 +21,17 @@
                 "parameterId": "id-1580757613615-1182"
             }
         },
+        "id-1580757613615-1282": {
+            "nodeType": "table",
+            "version": 1,
+            "id": "id-1580757613615-1182",
+            "name": "BASKETBALL",
+            "description": null,
+            "tableReference": {
+                "referenceType": "parameter",
+                "parameterId": "id-1580757613615-1182"
+            }
+        },
         "id-1580757613615-1183": {
             "nodeType": "table",
             "version": 1,
