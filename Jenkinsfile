@@ -28,7 +28,7 @@ pipeline {
       steps {
         sh 'npm run build'
         sh 'env'     
-        sh 'cd dist; SHORTREV=`git rev-parse --short HEAD`;VERSION=$(npm run version --silent);zip FlowDiff_${VERSION}_${SHORTREV}.zip *'
+        sh 'cd dist; SHORTREV=`git rev-parse --short HEAD`;VERSION=$(npm run version --silent);zip -r FlowDiff_${VERSION}_${SHORTREV}.zip *'
 
         archiveArtifacts artifacts: 'dist/*.zip', fingerprint: true
       }
