@@ -33,7 +33,7 @@ pipeline {
         """
         sh 'VERSION=$(npm run version --silent)'
         sh 'cd dist; zip FlowDiff_${VERSION}_${SHORTREV}.zip *; cd ../'
-        archiveArtifacts artifacts: 'dist/FlowDiff_${VERSION}_${SHORTREV}.zip', fingerprint: true
+        archiveArtifacts artifacts: 'dist/*.zip', fingerprint: true
       }
     }
   }
