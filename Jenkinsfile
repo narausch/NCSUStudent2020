@@ -19,5 +19,24 @@ pipeline {
       }
     }
 
+    stage('deploy') {
+      when {
+        expression {
+          currentBuild.result == null || currentBuild.result == 'SUCCESS'
+        }
+      }
+      steps {
+        sh 'env'     
+        sh """
+          SHORTREV=`git rev-parse --short HEAD`
+        """
+        script {
+          sh 'VERSION=$(npm run version --silent)'
+          sh 'cd dist; zip FlowDiff_${VERSION}_${SHORTREV}.zip; cd ../'
+          archiveArtifacts artifacts: 'dist/FlowDiff_${VERSION}_${SHORTREV}.zip', fingerprint: true
+        }
+      }
+    }
+
   }
 }
