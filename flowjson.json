@@ -25,18 +25,7 @@
             "nodeType": "table",
             "version": 1,
             "id": "id-1580757613615-1182",
-            "name": "BASKETBALL",
-            "description": null,
-            "tableReference": {
-                "referenceType": "parameter",
-                "parameterId": "id-1580757613615-1182"
-            }
-        },
-        "id-1580757613615-1183": {
-            "nodeType": "table",
-            "version": 1,
-            "id": "id-1580757613615-1182",
-            "name": "BASKETBALL",
+            "name": "BASEBALL",
             "description": null,
             "tableReference": {
                 "referenceType": "parameter",
@@ -1645,6 +1634,30 @@
             "targetPort": {
                 "node": "id-1580758194667-2877",
                 "portName": "inTable",
+                "index": 0
+            }
+        },
+        {
+            "sourcePort": {
+                "node": "id-1580757613615-1282",
+                "portName": "",
+                "index": 0
+            },
+            "targetPort": {
+                "node": "id-1580757630994-1285",
+                "portName": "",
+                "index": 0
+            }
+        },
+        {
+            "sourcePort": {
+                "node": "id-1580757661618-1461",
+                "portName": "",
+                "index": 0
+            },
+            "targetPort": {
+                "node": "id-1580757653150-1412",
+                "portName": "",
                 "index": 0
             }
         },
