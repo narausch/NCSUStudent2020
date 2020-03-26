@@ -28,7 +28,7 @@ pipeline {
       steps {
         sh 'npm run build'
         sh 'env'     
-        sh """
+        sh """ 
           cd dist
           SHORTREV=`git rev-parse --short HEAD`
           VERSION=$(npm run version --silent)
