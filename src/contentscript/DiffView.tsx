@@ -8,6 +8,7 @@ import VisualDiff from './components/VisualDiff';
 import { GraphNode } from './graph/GraphNode';
 import { GraphConnection } from './graph/GraphConnection';
 import Changelog from './components/Changelog';
+import Octicon, { getIconByName } from '@primer/octicons-react';
 
 /**
  * Defines the props for the DiffView.
@@ -21,7 +22,6 @@ interface DiffViewProps {
  * Defines the state for the DiffView.
  */
 interface DiffViewState {
-
     /** for progress bar */
     progress: number; // real number [0, 1]
     progressFailed: boolean;
@@ -98,7 +98,6 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
         const bs = this.state.baseFileTotal ? this.state.baseFileTotal.toLocaleString() : '-';
         const cs = this.state.compareFileTotal ? this.state.compareFileTotal.toLocaleString() : '-';
 
-        // TODO: use icon for the Refresh button
         // TODO: avoid magic numbers for VisualDiff
         return (
             <div className="fdv-view">
@@ -117,8 +116,14 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
                             className="btn-sm"
                             onClick={this.handleRefresh}
                             disabled={!this.state.refreshEnabled}
+                            title="Refresh"
                         >
-                            Refresh
+                            <Octicon
+                                icon={getIconByName('sync')}
+                                ariaLabel="Refresh"
+                                size="small"
+                                verticalAlign="middle"
+                            />
                         </button>
                     </span>
                 </div>

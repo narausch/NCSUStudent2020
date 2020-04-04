@@ -54,6 +54,7 @@
         "webpack-cli": "^3.3.10"
     },
     "dependencies": {
+        "@primer/octicons-react": "^9.6.0",
         "@types/d3": "^5.7.2",
         "d3": "^5.15.0",
         "react": "^16.12.0",
