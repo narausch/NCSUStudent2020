@@ -21,8 +21,6 @@ interface DiffViewProps {
  * Defines the state for the DiffView.
  */
 interface DiffViewState {
-    /** Debug information. */
-    debugMessages: string[];
 
     /** for progress bar */
     progress: number; // real number [0, 1]
@@ -79,10 +77,8 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
             modifiedNodes: [],
             addedConnections: [],
             removedConnections: [],
-            debugMessages: [],
         };
 
-        this.logDebugMessage = this.logDebugMessage.bind(this);
         this.computeDiff = this.computeDiff.bind(this);
         this.setStatusMessage = this.setStatusMessage.bind(this);
         this.handleUpdateProgress = this.handleUpdateProgress.bind(this);
@@ -99,9 +95,6 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
      * Renders the React component.
      */
     render(): React.ReactNode {
-        const listMessages = this.state.debugMessages.map((line, index) => (
-            <p key={index}>{line}</p>
-        ));
         const bs = this.state.baseFileTotal ? this.state.baseFileTotal.toLocaleString() : '-';
         const cs = this.state.compareFileTotal ? this.state.compareFileTotal.toLocaleString() : '-';
 
@@ -148,20 +141,8 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
                         Compare [{cs} bytes]: {this.state.compareStatus}
                     </p>
                 </div>
-                <div className="fdv-debug-msg">{listMessages}</div>
             </div>
         );
-    }
-
-    /**
-     * Logs a debug message.
-     *
-     * @param message message
-     */
-    logDebugMessage(message: string): void {
-        const arr = this.state.debugMessages;
-        arr.push(message);
-        this.setState({ debugMessages: arr });
     }
 
     /**
@@ -216,8 +197,6 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
             addedConnections: [],
             removedConnections: [],
         }); // reset progress bar
-        this.setState({ debugMessages: [] }); // reset debug messages
-
         setTimeout(this.computeDiff, 200); // prevent from repeated refresh requests
     }
 
@@ -294,7 +273,6 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
                 // TODO: handle errors
                 console.log(err);
                 this.setState({ progress: 1, progressFailed: true }); // update progress bar
-                this.logDebugMessage('Failed to compare graphs.');
             });
     }
 }
