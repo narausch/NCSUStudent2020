@@ -1,20 +1,21 @@
 import React from 'react';
-import { GraphNode } from '../graph/GraphNode';
-import { GraphConnection } from '../graph/GraphConnection';
 
 import '../main.css';
 import './Changelog.css';
+import { Graph } from '../graph/Graph';
+import { Status } from '../graph/Status';
 
 /**
  * Defines the props for the Changelog.
  */
 interface ChangelogProps {
-    addedNodes: GraphNode[];
-    removedNodes: GraphNode[];
-    modifiedNodes: GraphNode[];
-    addedConnections: GraphConnection[];
-    removedConnections: GraphConnection[];
+    /** needs the whole graph to look up node names */
+    combinedGraph: Graph | null;
+
+    /** propagate changes to DiffView */
     handleCloseChangelog: () => void;
+
+    /** true if the modal panel is open */
     isShown: boolean;
 }
 
@@ -28,6 +29,12 @@ interface ChangelogState {}
  * Defines the component Changelog.
  */
 export default class Changelog extends React.Component<ChangelogProps, ChangelogState> {
+    private addedNodes: string[] = [];
+    private removedNodes: string[] = [];
+    private modifiedNodes: string[] = [];
+    private addedConns: string[] = [];
+    private removedConns: string[] = [];
+
     /**
      * Constructs the Changelog.
      *
@@ -39,6 +46,67 @@ export default class Changelog extends React.Component<ChangelogProps, Changelog
         this.state = { isShown: false };
     }
 
+    /**
+     * Performs tasks after updating the component.
+     *
+     * @param prevProps previous props
+     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    componentDidUpdate(prevProps: ChangelogProps): void {
+        if (prevProps.combinedGraph === this.props.combinedGraph) {
+            // no change
+            return;
+        }
+
+        this.addedNodes = [];
+        this.removedNodes = [];
+        this.modifiedNodes = [];
+        this.addedConns = [];
+        this.removedConns = [];
+        if (this.props.combinedGraph != null) {
+            // create a look-up table: node id => node name
+            const dict = {};
+            this.props.combinedGraph.nodes.forEach(node => {
+                dict[node.id] = node.data['name'] || '(No name)';
+            });
+
+            // find updated nodes
+            this.props.combinedGraph.nodes.forEach(node => {
+                switch (node.status) {
+                    case Status.Added:
+                        this.addedNodes.push(dict[node.id]);
+                        break;
+                    case Status.Removed:
+                        this.removedNodes.push(dict[node.id]);
+                        break;
+                    case Status.Modified:
+                        this.modifiedNodes.push(dict[node.id]);
+                        break;
+                    default:
+                        break;
+                }
+            });
+
+            // find updated connections
+            this.props.combinedGraph.connections.forEach(conn => {
+                switch (conn.status) {
+                    case Status.Added:
+                        this.addedConns.push(dict[conn.sourcePort] + ' → ' + dict[conn.targetPort]);
+                        break;
+                    case Status.Removed:
+                        this.removedConns.push(
+                            dict[conn.sourcePort] + ' → ' + dict[conn.targetPort],
+                        );
+                        break;
+                    default:
+                        break;
+                }
+            });
+        }
+    }
+    /**
+     * Handles the modal close.
+     */
     handleCloseChangelog(): void {
         this.props.handleCloseChangelog();
     }
@@ -47,8 +115,6 @@ export default class Changelog extends React.Component<ChangelogProps, Changelog
      * Renders the Changelog component.
      */
     render(): React.ReactNode {
-        // TODO: consider the case when the node name is undefined.
-        // TODO: (refactor) create private functions to create table elements.
         return (
             <div
                 className={'fdv-modal' + (this.props.isShown ? ' fdv-display' : ' fdv-hidden')}
@@ -68,45 +134,39 @@ export default class Changelog extends React.Component<ChangelogProps, Changelog
                     <div className="fdv-modal-body">
                         <table>
                             <tbody>
-                                {this.props.addedNodes.map(node => (
-                                    <tr key={node.id} className="fdv-changelog-added">
+                                {this.addedNodes.map((element, index) => (
+                                    <tr key={index} className="fdv-changelog-added">
                                         <td>Added</td>
                                         <td>Node</td>
-                                        <td>{node.data['name']}</td>
+                                        <td>{element}</td>
                                     </tr>
                                 ))}
-                                {this.props.removedNodes.map(node => (
-                                    <tr key={node.id} className="fdv-changelog-removed">
+                                {this.removedNodes.map((element, index) => (
+                                    <tr key={index} className="fdv-changelog-removed">
                                         <td>Removed</td>
                                         <td>Node</td>
-                                        <td>{node.data['name']}</td>
+                                        <td>{element}</td>
                                     </tr>
                                 ))}
-                                {this.props.modifiedNodes.map(node => (
-                                    <tr key={node.id}>
+                                {this.modifiedNodes.map((element, index) => (
+                                    <tr key={index}>
                                         <td>Modified</td>
                                         <td>Node</td>
-                                        <td>{node.data['name']}</td>
+                                        <td>{element}</td>
                                     </tr>
                                 ))}
-                                {this.props.addedConnections.map(conn => (
-                                    <tr
-                                        key={conn.sourcePort + ',' + conn.targetPort}
-                                        className="fdv-changelog-added"
-                                    >
+                                {this.addedConns.map((element, index) => (
+                                    <tr key={index} className="fdv-changelog-added">
                                         <td>Added</td>
                                         <td>Connection</td>
-                                        <td>{conn.sourcePort + ' → ' + conn.targetPort}</td>
+                                        <td>{element}</td>
                                     </tr>
                                 ))}
-                                {this.props.removedConnections.map(conn => (
-                                    <tr
-                                        key={conn.sourcePort + ',' + conn.targetPort}
-                                        className="fdv-changelog-removed"
-                                    >
+                                {this.removedConns.map((element, index) => (
+                                    <tr key={index} className="fdv-changelog-removed">
                                         <td>Removed</td>
                                         <td>Connection</td>
-                                        <td>{conn.sourcePort + ' → ' + conn.targetPort}</td>
+                                        <td>{element}</td>
                                     </tr>
                                 ))}
                             </tbody>

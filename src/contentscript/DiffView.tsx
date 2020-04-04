@@ -136,11 +136,7 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
 
                 <Changelog
                     isShown={this.state.isChangelogShown}
-                    addedNodes={this.state.addedNodes}
-                    removedNodes={this.state.removedNodes}
-                    modifiedNodes={this.state.modifiedNodes}
-                    addedConnections={this.state.addedConnections}
-                    removedConnections={this.state.removedConnections}
+                    combinedGraph={this.state.combinedGraph}
                     handleCloseChangelog={this.handleCloseChangelog}
                 />
 
@@ -290,11 +286,6 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
                 this.setState({
                     combinedGraph: differencer.getDifferencerGraph(),
                     isChangelogShown: false, // now the button is enabled
-                    addedNodes: differencer.getAddedNodes(),
-                    removedNodes: differencer.getRemovedNodes(),
-                    modifiedNodes: differencer.getModifiedNodes(),
-                    addedConnections: differencer.getAddedConns(),
-                    removedConnections: differencer.getRemovedConns(),
                 });
 
                 this.setState({ progress: this.PROGRESS_COMPLETE }); // update progress bar
