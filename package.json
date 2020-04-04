@@ -4,6 +4,7 @@
     "description": "Visualizes the difference between two flow graphs on GitHub.",
     "main": "index.js",
     "scripts": {
+        "version": "echo $npm_package_version",
         "clean": "rm -rf dist && mkdir dist && mkdir dist/assets && cp public/manifest.json dist && cp public/assets/* dist/assets",
         "prebuild": "npm run clean",
         "build": "NODE_ENV=production webpack --config webpack.config.js",
