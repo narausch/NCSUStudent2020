@@ -5,6 +5,9 @@ import { Graph } from './graph/Graph';
 import ProgressBar from './ProgressBar';
 import Differencer from './differencer/Differencer';
 import VisualDiff from './components/VisualDiff';
+import { GraphNode } from './graph/GraphNode';
+import PropertiesPanel from './components/PropertiesPanel';
+import './DiffView.css';
 
 /**
  * Defines the props for the DiffView.
@@ -38,6 +41,9 @@ interface DiffViewState {
     baseFileTotal?: number;
     compareFileLoaded?: number;
     compareFileTotal?: number;
+
+    // for properties panel
+    currentNode: GraphNode;
 }
 
 /**
@@ -63,6 +69,7 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
             refreshEnabled: false,
             combinedGraph: null,
             debugMessages: [],
+            currentNode: null,
         };
 
         this.logDebugMessage = this.logDebugMessage.bind(this);
@@ -71,6 +78,7 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
         this.handleUpdateProgress = this.handleUpdateProgress.bind(this);
         this.handleRefresh = this.handleRefresh.bind(this);
         this.computeDiff = this.computeDiff.bind(this);
+        this.visualCallback = this.visualCallback.bind(this);
 
         // schedule the main logic
         setTimeout(this.handleRefresh, 0);
@@ -105,17 +113,14 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
 
                 <ProgressBar progress={this.state.progress} failed={this.state.progressFailed} />
 
-                <VisualDiff combinedGraph={this.state.combinedGraph} width={938} height={300} />
+                <PropertiesPanel node={this.state.currentNode} />
 
-                <div className="fdv-debug-msg">
-                    <p>
-                        Base [{bs} bytes]: {this.state.baseStatus}
-                    </p>
-                    <p>
-                        Compare [{cs} bytes]: {this.state.compareStatus}
-                    </p>
-                </div>
-                <div className="fdv-debug-msg">{listMessages}</div>
+                <VisualDiff
+                    combinedGraph={this.state.combinedGraph}
+                    width={938}
+                    height={300}
+                    callback={this.visualCallback}
+                />
             </div>
         );
     }
@@ -267,6 +272,10 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
                 this.setState({ progress: 1, progressFailed: true }); // update progress bar
                 this.logDebugMessage('Failed to compare graphs.');
             });
+    }
+
+    visualCallback(node: GraphNode): void {
+        this.setState({ currentNode: node });
     }
 }
 
