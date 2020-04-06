@@ -34,7 +34,7 @@ describe('Differencer#smallInputChanges', () => {
         expect(diff.getAddedNodes()).toStrictEqual([new GraphNode('e', 'EMU', Status.Added)]);
         expect(diff.getRemovedNodes()).toStrictEqual([new GraphNode('b', 'BOY', Status.Removed)]);
         expect(diff.getModifiedNodes()).toStrictEqual([
-            new GraphNode('a', 'FOREST', Status.Modified),
+            new GraphNode('a', 'FOREST', Status.Modified, 'FARM'),
         ]);
         expect(diff.getUnmodifiedNodes()).toStrictEqual([
             new GraphNode('c', 'CAT', Status.Unmodified),
@@ -342,11 +342,11 @@ describe('Differencer#mediumInputChanges', () => {
         ];
 
         const modified = [
-            new GraphNode('a', 'DeltaAdam', Status.Modified),
-            new GraphNode('c', 'DeltaCarl', Status.Modified),
-            new GraphNode('e', 'DeltaEarl', Status.Modified),
-            new GraphNode('f', 'DeltaFaith', Status.Modified),
-            new GraphNode('j', 'DeltaJess', Status.Modified),
+            new GraphNode('a', 'DeltaAdam', Status.Modified, 'Adam'),
+            new GraphNode('c', 'DeltaCarl', Status.Modified, 'Carl'),
+            new GraphNode('e', 'DeltaEarl', Status.Modified, 'Earl'),
+            new GraphNode('f', 'DeltaFaith', Status.Modified, 'Faith'),
+            new GraphNode('j', 'DeltaJess', Status.Modified, 'Jess'),
         ];
 
         const unmodified = [
@@ -440,9 +440,9 @@ describe('Differencer#mediumInputChanges', () => {
             new GraphNode('j', 'Jess', Status.Removed),
         ];
         const modified = [
-            new GraphNode('c', 'DeltaCarl', Status.Modified),
-            new GraphNode('e', 'DeltaEarl', Status.Modified),
-            new GraphNode('f', 'DeltaFaith', Status.Modified),
+            new GraphNode('c', 'DeltaCarl', Status.Modified, 'Carl'),
+            new GraphNode('e', 'DeltaEarl', Status.Modified, 'Earl'),
+            new GraphNode('f', 'DeltaFaith', Status.Modified, 'Faith'),
         ];
         const unmodified = [
             new GraphNode('b', 'Bailey', Status.Unmodified),
@@ -480,9 +480,9 @@ describe('Differencer#mediumInputChanges', () => {
             new GraphNode('a', 'Adam', Status.Removed),
             new GraphNode('g', 'George', Status.Removed),
             new GraphNode('j', 'Jess', Status.Removed),
-            new GraphNode('c', 'DeltaCarl', Status.Modified),
-            new GraphNode('e', 'DeltaEarl', Status.Modified),
-            new GraphNode('f', 'DeltaFaith', Status.Modified),
+            new GraphNode('c', 'DeltaCarl', Status.Modified, 'Carl'),
+            new GraphNode('e', 'DeltaEarl', Status.Modified, 'Earl'),
+            new GraphNode('f', 'DeltaFaith', Status.Modified, 'Faith'),
             new GraphNode('b', 'Bailey', Status.Unmodified),
             new GraphNode('d', 'Destiny', Status.Unmodified),
             new GraphNode('h', 'Hillary', Status.Unmodified),
