@@ -196,7 +196,6 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             }
 
             function clicked(node: D3Node, props: VisualDiffProps): void {
-                console.log(node);
                 props.callback(node.graphNode);
             }
 

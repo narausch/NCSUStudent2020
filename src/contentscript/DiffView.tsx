@@ -131,12 +131,12 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
 
                 <ProgressBar progress={this.state.progress} failed={this.state.progressFailed} />
 
-                <PropertiesPanel node={this.state.currentNode} />
+                <PropertiesPanel node={this.state.currentNode} callback={this.visualCallback} />
 
                 <VisualDiff
                     combinedGraph={this.state.combinedGraph}
                     width={938}
-                    height={300}
+                    height={500}
                     callback={this.visualCallback}
                 />
 

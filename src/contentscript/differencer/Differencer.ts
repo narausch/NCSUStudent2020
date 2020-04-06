@@ -94,7 +94,10 @@ export default class Differencer {
         const sameIdNodes = this.n2.filter(item => this.n1.some(v => item.id === v.id));
         for (const entry of sameIdNodes) {
             const itemx = this.n1.find(v => v.id == entry.id);
-            if (JSON.stringify(entry) != JSON.stringify(itemx)) this.modifiedNodes.push(entry);
+            if (JSON.stringify(entry.data) != JSON.stringify(itemx.data)) {
+                entry.oldData = itemx.data;
+                this.modifiedNodes.push(entry);
+            }
         }
         //unmodified nodes are those that have the same id and are not modified
         this.unmodifiedNodes = sameIdNodes.filter(
