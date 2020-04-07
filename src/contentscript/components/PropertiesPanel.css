@@ -1,0 +1,230 @@
+.fdv-panel {
+    position: absolute;
+    height: 74.2%;
+    width: 50%;
+    background-color: white;
+    border: 2px solid #e5e5e5;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    -webkit-animation-name: animateleft;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animateleft;
+    animation-duration: 0.4s;
+    overflow: hidden;
+}
+
+/* Add Animation */
+@-webkit-keyframes animateleft {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 50%;
+    }
+}
+
+@keyframes animateleft {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 50%;
+    }
+}
+
+.fdv-panel-header {
+    padding: 15px 15px 15px 40px;
+    height: 56px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #24292e;
+    border-bottom: 2px solid #e5e5e5;
+}
+
+.fdv-header-title {
+    margin-right: 150px;
+    margin-bottom: 0;
+    font-weight: 400;
+    line-height: 1.125;
+    white-space: nowrap;
+}
+
+/* The Close Button */
+.fdv-close {
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: 0.2;
+    float: right;
+    font-size: 21px;
+    font-weight: 700;
+    margin-top: -10px;
+}
+
+.fdv-close:hover,
+.fdv-close:focus {
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.fdv-diff-switcher {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem;
+}
+
+#fdv-visual {
+    height: 100%;
+    overflow: scroll;
+}
+
+/*JSON Diff CSS*/
+.jsondiffpatch-delta {
+    font-family: 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', Monaco, Courier, monospace;
+    font-size: 12px;
+    margin: 0;
+    padding: 0 0 0 12px;
+    display: inline-block;
+}
+.jsondiffpatch-delta pre {
+    font-family: 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', Monaco, Courier, monospace;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+ul.jsondiffpatch-delta {
+    list-style-type: none;
+    padding: 0 0 0 20px;
+    margin: 0;
+}
+.jsondiffpatch-delta ul {
+    list-style-type: none;
+    padding: 0 0 0 20px;
+    margin: 0;
+}
+.jsondiffpatch-added .jsondiffpatch-property-name,
+.jsondiffpatch-added .jsondiffpatch-value pre,
+.jsondiffpatch-modified .jsondiffpatch-right-value pre,
+.jsondiffpatch-textdiff-added {
+    background: #bbffbb;
+}
+.jsondiffpatch-deleted .jsondiffpatch-property-name,
+.jsondiffpatch-deleted pre,
+.jsondiffpatch-modified .jsondiffpatch-left-value pre,
+.jsondiffpatch-textdiff-deleted {
+    background: #ffbbbb;
+    text-decoration: line-through;
+}
+.jsondiffpatch-unchanged,
+.jsondiffpatch-movedestination {
+    color: gray;
+}
+.jsondiffpatch-unchanged,
+.jsondiffpatch-movedestination > .jsondiffpatch-value {
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    overflow-y: hidden;
+}
+.jsondiffpatch-unchanged-showing .jsondiffpatch-unchanged,
+.jsondiffpatch-unchanged-showing .jsondiffpatch-movedestination > .jsondiffpatch-value {
+    max-height: 100px;
+}
+.jsondiffpatch-unchanged-hidden .jsondiffpatch-unchanged,
+.jsondiffpatch-unchanged-hidden .jsondiffpatch-movedestination > .jsondiffpatch-value {
+    max-height: 0;
+}
+.jsondiffpatch-unchanged-hiding .jsondiffpatch-movedestination > .jsondiffpatch-value,
+.jsondiffpatch-unchanged-hidden .jsondiffpatch-movedestination > .jsondiffpatch-value {
+    display: block;
+}
+.jsondiffpatch-unchanged-visible .jsondiffpatch-unchanged,
+.jsondiffpatch-unchanged-visible .jsondiffpatch-movedestination > .jsondiffpatch-value {
+    max-height: 100px;
+}
+.jsondiffpatch-unchanged-hiding .jsondiffpatch-unchanged,
+.jsondiffpatch-unchanged-hiding .jsondiffpatch-movedestination > .jsondiffpatch-value {
+    max-height: 0;
+}
+.jsondiffpatch-unchanged-showing .jsondiffpatch-arrow,
+.jsondiffpatch-unchanged-hiding .jsondiffpatch-arrow {
+    display: none;
+}
+.jsondiffpatch-value {
+    display: inline-block;
+}
+.jsondiffpatch-property-name {
+    display: inline-block;
+    padding-right: 5px;
+    vertical-align: top;
+}
+.jsondiffpatch-property-name:after {
+    content: ': ';
+}
+.jsondiffpatch-child-node-type-array > .jsondiffpatch-property-name:after {
+    content: ': [';
+}
+.jsondiffpatch-child-node-type-array:after {
+    content: '],';
+}
+div.jsondiffpatch-child-node-type-array:before {
+    content: '[';
+}
+div.jsondiffpatch-child-node-type-array:after {
+    content: ']';
+}
+.jsondiffpatch-child-node-type-object > .jsondiffpatch-property-name:after {
+    content: ': {';
+}
+.jsondiffpatch-child-node-type-object:after {
+    content: '},';
+}
+div.jsondiffpatch-child-node-type-object:before {
+    content: '{';
+}
+div.jsondiffpatch-child-node-type-object:after {
+    content: '}';
+}
+.jsondiffpatch-value pre:after {
+    content: ',';
+}
+li:last-child > .jsondiffpatch-value pre:after,
+.jsondiffpatch-modified > .jsondiffpatch-left-value pre:after {
+    content: '';
+}
+.jsondiffpatch-modified .jsondiffpatch-value {
+    display: inline-block;
+}
+.jsondiffpatch-modified .jsondiffpatch-right-value {
+    margin-left: 5px;
+}
+.jsondiffpatch-moved .jsondiffpatch-value {
+    display: none;
+}
+.jsondiffpatch-moved .jsondiffpatch-moved-destination {
+    display: inline-block;
+    background: #ffffbb;
+    color: #888;
+}
+.jsondiffpatch-moved .jsondiffpatch-moved-destination:before {
+    content: ' => ';
+}
+ul.jsondiffpatch-textdiff {
+    padding: 0;
+}
+.jsondiffpatch-textdiff-location {
+    color: #bbb;
+    display: inline-block;
+    min-width: 60px;
+}
+.jsondiffpatch-textdiff-line {
+    display: inline-block;
+}
+.jsondiffpatch-textdiff-line-number:after {
+    content: ',';
+}
+.jsondiffpatch-error {
+    background: red;
+    color: white;
+    font-weight: bold;
+}

@@ -5,6 +5,12 @@ import { Graph } from './graph/Graph';
 import ProgressBar from './ProgressBar';
 import Differencer from './differencer/Differencer';
 import VisualDiff from './components/VisualDiff';
+import { GraphNode } from './graph/GraphNode';
+import PropertiesPanel from './components/PropertiesPanel';
+import './DiffView.css';
+import { GraphConnection } from './graph/GraphConnection';
+import Changelog from './components/Changelog';
+import Octicon, { getIconByName } from '@primer/octicons-react';
 
 /**
  * Defines the props for the DiffView.
@@ -18,9 +24,6 @@ interface DiffViewProps {
  * Defines the state for the DiffView.
  */
 interface DiffViewState {
-    /** Debug information. */
-    debugMessages: string[];
-
     /** for progress bar */
     progress: number; // real number [0, 1]
     progressFailed: boolean;
@@ -31,6 +34,14 @@ interface DiffViewState {
     /** for visual diff */
     combinedGraph: Graph | null;
 
+    /** for changelog */
+    isChangelogShown: boolean | null; // null: not ready
+    addedNodes: GraphNode[];
+    removedNodes: GraphNode[];
+    modifiedNodes: GraphNode[];
+    addedConnections: GraphConnection[];
+    removedConnections: GraphConnection[];
+
     // for debugging
     baseStatus?: string;
     compareStatus?: string;
@@ -38,6 +49,9 @@ interface DiffViewState {
     baseFileTotal?: number;
     compareFileLoaded?: number;
     compareFileTotal?: number;
+
+    // for properties panel
+    currentNode: GraphNode;
 }
 
 /**
@@ -62,15 +76,23 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
             progressFailed: false,
             refreshEnabled: false,
             combinedGraph: null,
-            debugMessages: [],
+            currentNode: null,
+            isChangelogShown: null,
+            addedNodes: [],
+            removedNodes: [],
+            modifiedNodes: [],
+            addedConnections: [],
+            removedConnections: [],
         };
 
-        this.logDebugMessage = this.logDebugMessage.bind(this);
         this.computeDiff = this.computeDiff.bind(this);
         this.setStatusMessage = this.setStatusMessage.bind(this);
         this.handleUpdateProgress = this.handleUpdateProgress.bind(this);
         this.handleRefresh = this.handleRefresh.bind(this);
         this.computeDiff = this.computeDiff.bind(this);
+        this.visualCallback = this.visualCallback.bind(this);
+        this.handleOpenChangelog = this.handleOpenChangelog.bind(this);
+        this.handleCloseChangelog = this.handleCloseChangelog.bind(this);
 
         // schedule the main logic
         setTimeout(this.handleRefresh, 0);
@@ -80,13 +102,9 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
      * Renders the React component.
      */
     render(): React.ReactNode {
-        const listMessages = this.state.debugMessages.map((line, index) => (
-            <p key={index}>{line}</p>
-        ));
         const bs = this.state.baseFileTotal ? this.state.baseFileTotal.toLocaleString() : '-';
         const cs = this.state.compareFileTotal ? this.state.compareFileTotal.toLocaleString() : '-';
 
-        // TODO: use icon for the Refresh button
         // TODO: avoid magic numbers for VisualDiff
         return (
             <div className="fdv-view">
@@ -95,17 +113,44 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
                     <span className="fdv-push">
                         <button
                             className="btn-sm"
+                            onClick={this.handleOpenChangelog}
+                            disabled={this.state.isChangelogShown !== false}
+                            style={{ marginRight: 20 }}
+                        >
+                            View Changelog
+                        </button>
+                        <button
+                            className="btn-sm"
                             onClick={this.handleRefresh}
                             disabled={!this.state.refreshEnabled}
+                            title="Refresh"
                         >
-                            Refresh
-                        </button>{' '}
+                            <Octicon
+                                icon={getIconByName('sync')}
+                                ariaLabel="Refresh"
+                                size="small"
+                                verticalAlign="middle"
+                            />
+                        </button>
                     </span>
                 </div>
 
                 <ProgressBar progress={this.state.progress} failed={this.state.progressFailed} />
 
-                <VisualDiff combinedGraph={this.state.combinedGraph} width={938} height={300} />
+                <PropertiesPanel node={this.state.currentNode} callback={this.visualCallback} />
+
+                <VisualDiff
+                    combinedGraph={this.state.combinedGraph}
+                    width={938}
+                    height={500}
+                    callback={this.visualCallback}
+                />
+
+                <Changelog
+                    isShown={this.state.isChangelogShown}
+                    combinedGraph={this.state.combinedGraph}
+                    handleCloseChangelog={this.handleCloseChangelog}
+                />
 
                 <div className="fdv-debug-msg">
                     <p>
@@ -115,20 +160,8 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
                         Compare [{cs} bytes]: {this.state.compareStatus}
                     </p>
                 </div>
-                <div className="fdv-debug-msg">{listMessages}</div>
             </div>
         );
-    }
-
-    /**
-     * Logs a debug message.
-     *
-     * @param message message
-     */
-    logDebugMessage(message: string): void {
-        const arr = this.state.debugMessages;
-        arr.push(message);
-        this.setState({ debugMessages: arr });
     }
 
     /**
@@ -176,10 +209,22 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
             baseFileTotal: null,
             compareFileLoaded: null,
             compareFileTotal: null,
+            isChangelogShown: null,
+            addedNodes: [],
+            removedNodes: [],
+            modifiedNodes: [],
+            addedConnections: [],
+            removedConnections: [],
         }); // reset progress bar
-        this.setState({ debugMessages: [] }); // reset debug messages
-
         setTimeout(this.computeDiff, 200); // prevent from repeated refresh requests
+    }
+
+    handleOpenChangelog(): void {
+        this.setState({ isChangelogShown: true });
+    }
+
+    handleCloseChangelog(): void {
+        this.setState({ isChangelogShown: false });
     }
 
     /**
@@ -235,38 +280,23 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
         this.setState({ refreshEnabled: true });
         Promise.all([this.downloadAndParse(true), this.downloadAndParse(false)])
             .then(([graphBase, graphCompare]) => {
-                this.logDebugMessage('Comparing...');
-
                 const differencer = new Differencer(graphBase, graphCompare);
-
-                this.logDebugMessage('Added nodes:\n');
-                differencer.getAddedNodes().forEach(node => {
-                    this.logDebugMessage(`--Added node id: ${node.id} (${node.data['name']})`);
-                    this.logDebugMessage('--Added node info: ');
-                    this.logDebugMessage(JSON.stringify(node.data));
-                });
-                this.logDebugMessage('Removed nodes:\n');
-                differencer.getRemovedNodes().forEach(node => {
-                    this.logDebugMessage(`--Removed node id: ${node.id} (${node.data['name']})`);
-                    this.logDebugMessage('--Removed node info: ');
-                    this.logDebugMessage(JSON.stringify(node.data));
-                });
-                this.logDebugMessage('Modified nodes:\n');
-                differencer.getModifiedNodes().forEach(node => {
-                    this.logDebugMessage(`--Modified node id: ${node.id} (${node.data['name']})`);
-                    this.logDebugMessage('--Modified node info: ');
-                    this.logDebugMessage(JSON.stringify(node.data));
+                this.setState({
+                    combinedGraph: differencer.getDifferencerGraph(),
+                    isChangelogShown: false, // now the button is enabled
                 });
 
-                this.setState({ combinedGraph: differencer.getDifferencerGraph() });
                 this.setState({ progress: this.PROGRESS_COMPLETE }); // update progress bar
             })
             .catch(err => {
                 // TODO: handle errors
                 console.log(err);
                 this.setState({ progress: 1, progressFailed: true }); // update progress bar
-                this.logDebugMessage('Failed to compare graphs.');
             });
+    }
+
+    visualCallback(node: GraphNode): void {
+        this.setState({ currentNode: node });
     }
 }
 
