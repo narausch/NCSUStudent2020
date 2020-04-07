@@ -56,3 +56,19 @@ svg .fdv-modified {
 svg .fdv-unmodified {
     stroke: rgb(0, 0, 0);
 }
+
+svg .fdv-cue-added {
+    stroke: rgb(1, 245, 1);
+}
+
+svg .fdv-cue-removed {
+    stroke: rgb(255, 43, 43);
+}
+
+svg .fdv-cue-modified {
+    stroke: rgb(40, 194, 255);
+}
+
+svg .fdv-cue-unmodified {
+    stroke: rgb(255, 255, 255);
+}
