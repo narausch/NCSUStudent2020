@@ -266,7 +266,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                     if (d.className == 'fdv-added') {
                         return 17;
                     } else if (d.className == 'fdv-removed') {
-                        return 7;
+                        return 30;
                     } else if (d.className == 'fdv-modified') {
                         return 3;
                     } else {
@@ -278,7 +278,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                     if (d.className == 'fdv-added') {
                         return 35;
                     } else if (d.className == 'fdv-removed') {
-                        return 15;
+                        return 5;
                     } else if (d.className == 'fdv-modified') {
                         return 5;
                     } else {
