@@ -243,6 +243,9 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 .attr('y', 3);
             node.append('title').text((d: D3Node) => d.name);
 
+            const mycolor = d3.rgb('#ffffff');
+            d3.select('fdv-added').style('background-color', 'green');
+
             /**
              * Defines tick actions.
              */
