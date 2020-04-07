@@ -20,6 +20,7 @@ class D3Node implements d3.SimulationNodeDatum {
         public x: number,
         public y: number,
         public className: string,
+        public graphNode: GraphNode,
     ) {}
 }
 
@@ -39,6 +40,7 @@ interface VisualDiffProps {
     combinedGraph: Graph | null;
     width: number;
     height: number;
+    callback: (node: GraphNode) => void;
 }
 
 /**
@@ -140,6 +142,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                         node.y, // swap x and y
                         node.x,
                         `fdv-${node.data.data.status}`,
+                        node.data.data,
                     );
                     nodeMap[node.data.data.id] = n;
                     nodes.push(n);
@@ -192,6 +195,10 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 d.fy = null;
             }
 
+            function clicked(node: D3Node, props: VisualDiffProps): void {
+                props.callback(node.graphNode);
+            }
+
             // define links
             const link = context
                 .append('g')
@@ -216,7 +223,10 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                         .on('start', dragstarted)
                         .on('drag', dragged)
                         .on('end', dragended),
-                );
+                )
+                .on('click', (node: D3Node) => {
+                    clicked(node, this.props);
+                });
 
             node.append('rect')
                 .attr('x', -75)
