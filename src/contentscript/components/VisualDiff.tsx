@@ -94,7 +94,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             .attr('orient', 'auto')
             .append('path')
             .attr('d', 'M 0,0 V 4 L6,2 Z')
-            .attr('fill', 'rgb(1, 245, 1)');
+            .attr('fill', 'rgb(44, 190, 78)');
 
         defs.append('marker')
             .attr('id', 'arrowheadr')
@@ -105,7 +105,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             .attr('orient', 'auto')
             .append('path')
             .attr('d', 'M 0,0 V 4 L6,2 Z')
-            .attr('fill', 'rgb(255, 43, 43)');
+            .attr('fill', 'rgb(203, 36, 49)');
     }
 
     /**
