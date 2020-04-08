@@ -215,6 +215,7 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
             modifiedNodes: [],
             addedConnections: [],
             removedConnections: [],
+            currentNode: null,
         }); // reset progress bar
         setTimeout(this.computeDiff, 200); // prevent from repeated refresh requests
     }
