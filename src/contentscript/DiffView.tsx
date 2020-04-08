@@ -265,7 +265,9 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
                 const g = content ? new Graph(content) : null;
                 this.setStatusMessage(isBase, g ? 'OK' : 'None');
 
-                this.setState({ progress: this.PROGRESS_PARSE }); // Parse complete
+                if (!this.state.progressFailed) {
+                    this.setState({ progress: this.PROGRESS_PARSE }); // Parse complete
+                }
                 return g;
             })
             .catch(err => {

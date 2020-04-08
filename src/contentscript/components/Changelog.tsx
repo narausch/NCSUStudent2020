@@ -115,6 +115,7 @@ export default class Changelog extends React.Component<ChangelogProps, Changelog
      * Renders the Changelog component.
      */
     render(): React.ReactNode {
+        // TODO: add "No change." if there is no change
         return (
             <div
                 className={'fdv-modal' + (this.props.isShown ? ' fdv-display' : ' fdv-hidden')}
@@ -132,45 +133,52 @@ export default class Changelog extends React.Component<ChangelogProps, Changelog
                         <h2 className="gh-header-title">Changelog</h2>
                     </div>
                     <div className="fdv-modal-body">
-                        <table>
-                            <tbody>
-                                {this.addedNodes.map((element, index) => (
-                                    <tr key={index} className="fdv-changelog-added">
-                                        <td>Added</td>
-                                        <td>Node</td>
-                                        <td>{element}</td>
-                                    </tr>
-                                ))}
-                                {this.removedNodes.map((element, index) => (
-                                    <tr key={index} className="fdv-changelog-removed">
-                                        <td>Removed</td>
-                                        <td>Node</td>
-                                        <td>{element}</td>
-                                    </tr>
-                                ))}
-                                {this.modifiedNodes.map((element, index) => (
-                                    <tr key={index}>
-                                        <td>Modified</td>
-                                        <td>Node</td>
-                                        <td>{element}</td>
-                                    </tr>
-                                ))}
-                                {this.addedConns.map((element, index) => (
-                                    <tr key={index} className="fdv-changelog-added">
-                                        <td>Added</td>
-                                        <td>Connection</td>
-                                        <td>{element}</td>
-                                    </tr>
-                                ))}
-                                {this.removedConns.map((element, index) => (
-                                    <tr key={index} className="fdv-changelog-removed">
-                                        <td>Removed</td>
-                                        <td>Connection</td>
-                                        <td>{element}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                        <div className="fdv-changelog-container">
+                            <div className="fdv-changelog-column">
+                                <h4>Nodes</h4>
+                                <table>
+                                    <tbody>
+                                        {this.addedNodes.map((element, index) => (
+                                            <tr key={index} className="fdv-changelog-added">
+                                                <td>Added</td>
+                                                <td>{element}</td>
+                                            </tr>
+                                        ))}
+                                        {this.removedNodes.map((element, index) => (
+                                            <tr key={index} className="fdv-changelog-removed">
+                                                <td>Removed</td>
+                                                <td>{element}</td>
+                                            </tr>
+                                        ))}
+                                        {this.modifiedNodes.map((element, index) => (
+                                            <tr key={index} className="fdv-changelog-modified">
+                                                <td>Modified</td>
+                                                <td>{element}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div className="fdv-changelog-column">
+                                <h4>Connections</h4>
+                                <table>
+                                    <tbody>
+                                        {this.addedConns.map((element, index) => (
+                                            <tr key={index} className="fdv-changelog-added">
+                                                <td>Added</td>
+                                                <td>{element}</td>
+                                            </tr>
+                                        ))}
+                                        {this.removedConns.map((element, index) => (
+                                            <tr key={index} className="fdv-changelog-removed">
+                                                <td>Removed</td>
+                                                <td>{element}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
