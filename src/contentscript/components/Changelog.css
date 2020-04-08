@@ -21,7 +21,7 @@
     padding: 0;
     border: 1px solid #888;
     border-radius: 6px;
-    width: 600px;
+    width: 780px;
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
     animation-name: animatetop;
@@ -91,16 +91,47 @@
 
 .fdv-modal-body td {
     border: 1px solid black;
-    padding: 2px 20px;
-    max-width: 300px;
+    padding: 2px 10px;
+    max-width: 280px;
+}
+
+.fdv-changelog-container {
+    display: flex;
+}
+
+.fdv-changelog-column {
+    width: 100%;
+    text-align: center;
 }
 
 .fdv-changelog-added {
-    background-color: #e6ffed;
+    background-color: #cdffd8;
+}
+
+.fdv-changelog-added:hover,
+.fdv-changelog-added:focus {
+    color: #fff;
+    background-color: 
+    #2cbe4e;
 }
 
 .fdv-changelog-removed {
-    background-color: #ffeef0;
+    background-color: #ffdce0;
+}
+
+.fdv-changelog-removed:hover,
+.fdv-changelog-removed:focus {
+    color: #fff;
+    background-color: #cb2431;
+}
+.fdv-changelog-modified {
+    background-color: #dbedff;
+}
+
+.fdv-changelog-modified:hover,
+.fdv-changelog-modified:focus {
+    color: #fff;
+    background-color: #0366d6;
 }
 
 .fdv-display {
