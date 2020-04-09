@@ -23,14 +23,14 @@ svg .fdv-unmodified-link {
 }
 
 svg .fdv-added-link {
-    stroke: rgb(1, 245, 1);
-    fill: rgb(1, 245, 1);
+    stroke: rgb(44, 190, 78);
+    fill: rgb(44, 190, 78);
     stroke-width: 2;
     marker-end: url(#arrowheadg);
 }
 
 svg .fdv-removed-link {
-    stroke: rgb(255, 43, 43);
+    stroke: rgb(203, 36, 49);
     stroke-width: 2;
     marker-end: url(#arrowheadr);
 }
@@ -42,17 +42,33 @@ svg rect {
 }
 
 svg .fdv-added {
-    stroke: rgb(1, 245, 1);
+    stroke: rgb(44, 190, 78);
 }
 
 svg .fdv-removed {
-    stroke: rgb(255, 43, 43);
+    stroke: rgb(203, 36, 49);
 }
 
 svg .fdv-modified {
-    stroke: rgb(40, 194, 255);
+    stroke: rgb(39, 162, 211);
 }
 
 svg .fdv-unmodified {
     stroke: rgb(0, 0, 0);
+}
+
+svg .fdv-cue-added {
+    stroke: rgb(44, 190, 78);
+}
+
+svg .fdv-cue-removed {
+    stroke: rgb(203, 36, 49);
+}
+
+svg .fdv-cue-modified {
+    stroke: rgb(39, 162, 211);
+}
+
+svg .fdv-cue-unmodified {
+    stroke: rgb(255, 255, 255);
 }

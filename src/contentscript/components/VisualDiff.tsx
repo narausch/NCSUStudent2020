@@ -94,7 +94,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             .attr('orient', 'auto')
             .append('path')
             .attr('d', 'M 0,0 V 4 L6,2 Z')
-            .attr('fill', 'rgb(1, 245, 1)');
+            .attr('fill', 'rgb(44, 190, 78)');
 
         defs.append('marker')
             .attr('id', 'arrowheadr')
@@ -105,7 +105,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             .attr('orient', 'auto')
             .append('path')
             .attr('d', 'M 0,0 V 4 L6,2 Z')
-            .attr('fill', 'rgb(255, 43, 43)');
+            .attr('fill', 'rgb(203, 36, 49)');
     }
 
     /**
@@ -235,6 +235,8 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 .attr('ry', 20)
                 .attr('width', 150)
                 .attr('height', 50)
+                //.style('stoke', 'black')
+                //.style('stroke-dasharray', 20)
                 .attr('class', d => d.className);
 
             node.append('text')
@@ -243,8 +245,47 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 .attr('y', 3);
             node.append('title').text((d: D3Node) => d.name);
 
-            /**
-             * Defines tick actions.
+            // Define visual cues
+            node.append('rect')
+                .attr('class', function(d) {
+                    if (d.className == 'fdv-added') {
+                        return 'fdv-cue-added';
+                    } else if (d.className == 'fdv-removed') {
+                        return 'fdv-cue-removed';
+                    } else if (d.className == 'fdv-modified') {
+                        return 'fdv-cue-modified';
+                    } else {
+                        return 'fdv-cue-unmodified';
+                    }
+                })
+                .attr('x', -77)
+                .attr('y', -27)
+                .attr('height', 55)
+                .attr('width', 155)
+                .style('stroke-width', function(d) {
+                    if (d.className == 'fdv-added') {
+                        return 9;
+                    } else if (d.className == 'fdv-removed') {
+                        return 17;
+                    } else if (d.className == 'fdv-modified') {
+                        return 3;
+                    } else {
+                        return 'fdv-cue-unmodified';
+                    }
+                })
+                .style('fill', 'none')
+                .style('stroke-dasharray', function(d) {
+                    if (d.className == 'fdv-added') {
+                        return 15;
+                    } else if (d.className == 'fdv-removed') {
+                        return 5;
+                    } else if (d.className == 'fdv-modified') {
+                        return 5;
+                    } else {
+                        return 1; //unmodified case
+                    }
+                });
+            /* Defines tick actions.
              */
             function ticked(): void {
                 node.attr('transform', (d: D3Node) => {
