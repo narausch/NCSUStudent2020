@@ -104,7 +104,7 @@ export default class PropertiesPanel extends React.Component<
                 <div className="fdv-diff-switcher">
                     <div>Display unmodified fields:</div>
                     <button onClick={this.handleShowButton}>
-                        {this.state.showUnmodified ? 'Hide' : 'Show'}
+                        {this.state.showUnmodified ? 'Hide' : 'Show'} Fields
                     </button>
                 </div>
                 <div id="fdv-visual" dangerouslySetInnerHTML={this.createJsonDiff()}></div>
