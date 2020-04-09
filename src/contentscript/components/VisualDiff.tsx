@@ -5,6 +5,22 @@ import { Graph } from '../graph/Graph';
 import './VisualDiff.css';
 import RootedTree from '../graph/RootedTree';
 import { GraphNode } from '../graph/GraphNode';
+import { zoomIdentity } from 'd3';
+import { render } from '@testing-library/react';
+
+var zoomScale = 1;
+
+
+function zoomIn() {
+    zoomScale += 0.1;
+}
+
+function zoomOut() {
+    zoomScale -= 0.1;
+}
+
+export {zoomIn};
+export {zoomOut};
 
 /**
  * id: the id of the node
@@ -233,14 +249,15 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 .attr('y', -25)
                 .attr('rx', 20)
                 .attr('ry', 20)
-                .attr('width', 150)
-                .attr('height', 50)
+                .attr('width', 150 * zoomScale)
+                .attr('height', 50 * zoomScale)
                 .attr('class', d => d.className);
 
             node.append('text')
                 .text((d: D3Node) => d.name)
                 .attr('x', -65)
-                .attr('y', 3);
+                .attr('y', 5)
+                .attr('font-size', 12 * zoomScale)
             node.append('title').text((d: D3Node) => d.name);
 
             /**
@@ -283,4 +300,5 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             </div>
         );
     }
+
 }

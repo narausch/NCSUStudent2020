@@ -11,6 +11,9 @@ import './DiffView.css';
 import { GraphConnection } from './graph/GraphConnection';
 import Changelog from './components/Changelog';
 import Octicon, { getIconByName } from '@primer/octicons-react';
+import { zoomIn } from './components/VisualDiff';
+import { zoomOut } from './components/VisualDiff';
+import { render } from '@testing-library/react';
 
 /**
  * Defines the props for the DiffView.
@@ -93,6 +96,8 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
         this.visualCallback = this.visualCallback.bind(this);
         this.handleOpenChangelog = this.handleOpenChangelog.bind(this);
         this.handleCloseChangelog = this.handleCloseChangelog.bind(this);
+        this.handleZoomIn = this.handleZoomIn.bind(this);
+        this.handleZoomOut=this.handleZoomOut.bind(this);
 
         // schedule the main logic
         setTimeout(this.handleRefresh, 0);
@@ -111,6 +116,20 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
                 <div className="fdv-view-header">
                     <h4>Flow Diff</h4>
                     <span className="fdv-push">
+                        <button
+                            className="btn-sm"
+                            onClick={this.handleZoomOut}
+                            style={{ marginRight: 5 }}
+                        >
+                            -
+                        </button>
+                        <button
+                            className="btn-sm"
+                            onClick={this.handleZoomIn}
+                            style={{ marginRight: 20 }}
+                        >
+                            +
+                        </button>
                         <button
                             className="btn-sm"
                             onClick={this.handleOpenChangelog}
@@ -226,6 +245,16 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
 
     handleCloseChangelog(): void {
         this.setState({ isChangelogShown: false });
+    }
+
+    handleZoomIn(): void {
+        zoomIn();
+        this.setState({});
+    }
+
+    handleZoomOut(): void {
+        zoomOut();
+        this.setState({});
     }
 
     /**
