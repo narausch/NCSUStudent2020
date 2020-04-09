@@ -215,6 +215,7 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
             modifiedNodes: [],
             addedConnections: [],
             removedConnections: [],
+            currentNode: null,
         }); // reset progress bar
         setTimeout(this.computeDiff, 200); // prevent from repeated refresh requests
     }
@@ -264,7 +265,9 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
                 const g = content ? new Graph(content) : null;
                 this.setStatusMessage(isBase, g ? 'OK' : 'None');
 
-                this.setState({ progress: this.PROGRESS_PARSE }); // Parse complete
+                if (!this.state.progressFailed) {
+                    this.setState({ progress: this.PROGRESS_PARSE }); // Parse complete
+                }
                 return g;
             })
             .catch(err => {
