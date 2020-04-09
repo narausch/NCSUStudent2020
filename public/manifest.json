@@ -14,5 +14,9 @@
             "run_at": "document_idle"
         }
     ],
+    "icons": {
+      "16": "assets/flowDiffIcon16.png",
+      "128": "assets/flowDiffIcon128.png"
+    },
     "manifest_version": 2
 }
