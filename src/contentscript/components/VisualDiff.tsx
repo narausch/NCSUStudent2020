@@ -264,9 +264,9 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 .attr('width', 155)
                 .style('stroke-width', function(d) {
                     if (d.className == 'fdv-added') {
-                        return 9;
+                        return 7;
                     } else if (d.className == 'fdv-removed') {
-                        return 17;
+                        return 10;
                     } else if (d.className == 'fdv-modified') {
                         return 3;
                     } else {
@@ -276,7 +276,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 .style('fill', 'none')
                 .style('stroke-dasharray', function(d) {
                     if (d.className == 'fdv-added') {
-                        return 15;
+                        return 10;
                     } else if (d.className == 'fdv-removed') {
                         return 5;
                     } else if (d.className == 'fdv-modified') {
