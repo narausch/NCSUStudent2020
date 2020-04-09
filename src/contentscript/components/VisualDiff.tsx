@@ -285,18 +285,6 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                         return 1; //unmodified case
                     }
                 });
-
-            /*function(d) {
-                    if (d.className == 'added') {
-                        return 'fdv-cue-added';
-                    } else if (d.className == 'removed') {
-                        return 'fdv-cue-removed';
-                    } else if (d.className == 'modified') {
-                        return 'fdv-cue-modified';
-                    } else {
-                        return 'fdv-cue-unmodified';
-                    }
-                }*/
             /* Defines tick actions.
              */
             function ticked(): void {
