@@ -5,6 +5,7 @@ import { Graph } from '../graph/Graph';
 import './VisualDiff.css';
 import RootedTree from '../graph/RootedTree';
 import { GraphNode } from '../graph/GraphNode';
+import Octicon, { getIconByName } from '@primer/octicons-react';
 
 /**
  * id: the id of the node
@@ -309,6 +310,14 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
         }
     }
 
+    handleZoomIn(): void {
+        // TODO
+    }
+
+    handleZoomOut(): void {
+        // TODO
+    }
+
     /**
      * Renders the VisualDiff component.
      */
@@ -316,11 +325,41 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
         return (
             <div className="fdv-visual-diff">
                 <svg
-                    className=""
+                    className="fdv-visual-svg"
                     ref={(ref: SVGSVGElement): SVGSVGElement => (this.ref = ref)}
                     width={this.props.width}
                     height={this.props.height}
                 />
+                <span className="fdv-visual-zoom-container">
+                    <button
+                        className="btn-sm fdv-visual-zoom-btn"
+                        onClick={this.handleZoomOut}
+                        title="Zoom Out"
+                    >
+                        <Octicon
+                            className="fdv-visual-zoom-search"
+                            icon={getIconByName('search')}
+                            ariaLabel="Zoom Out"
+                            size="small"
+                            verticalAlign="middle"
+                        />
+                        -
+                    </button>
+                    <button
+                        className="btn-sm fdv-visual-zoom-btn"
+                        onClick={this.handleZoomIn}
+                        title="Zoom In"
+                    >
+                        <Octicon
+                            className="fdv-visual-zoom-search"
+                            icon={getIconByName('search')}
+                            ariaLabel="Refresh"
+                            size="small"
+                            verticalAlign="middle"
+                        />
+                        +
+                    </button>
+                </span>
             </div>
         );
     }
