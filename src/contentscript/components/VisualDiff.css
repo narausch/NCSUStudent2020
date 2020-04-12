@@ -21,7 +21,16 @@
 
 .fdv-visual-zoom-search {
     position: absolute;
-    margin: 4px 0px 0px -4px;
+    width: 24px;
+    margin: -5px 0px 0px -5px;
+}
+
+.fdv-visual-zoom-out {
+    margin: -5px 0px 0px 2px;
+}
+
+.fdv-visual-zoom-in {
+    margin: -5px 0px 0px 0px;
 }
 
 .fdv-nodes {

@@ -370,10 +370,16 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                             className="fdv-visual-zoom-search"
                             icon={getIconByName('search')}
                             ariaLabel="Zoom Out"
+                            size="medium"
+                            verticalAlign="middle"
+                        />
+                        <Octicon
+                            className="fdv-visual-zoom-out"
+                            icon={getIconByName('dash')}
+                            ariaLabel="Zoom Out"
                             size="small"
                             verticalAlign="middle"
                         />
-                        -
                     </button>
                     <button
                         className="btn-sm fdv-visual-zoom-btn"
@@ -384,11 +390,17 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                         <Octicon
                             className="fdv-visual-zoom-search"
                             icon={getIconByName('search')}
-                            ariaLabel="Refresh"
+                            ariaLabel="Zoom In"
+                            size="medium"
+                            verticalAlign="middle"
+                        />
+                        <Octicon
+                            className="fdv-visual-zoom-in"
+                            icon={getIconByName('plus')}
+                            ariaLabel="Zoom In"
                             size="small"
                             verticalAlign="middle"
                         />
-                        +
                     </button>
                 </span>
             </div>
