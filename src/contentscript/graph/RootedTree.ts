@@ -4,10 +4,10 @@ export default class RootedTree {
     constructor(public data: GraphNode, public children: RootedTree[]) {}
 
     /**
-     * Performs DFS and returns the tree height and the maximum level-width
+     * Performs DFS and returns the tree height plus one and the maximum level-width
      * (total number of nodes in a specific level).
      *
-     * @return [tree height, max level-width]
+     * @return [tree height+1, max level-width]
      */
     getLayoutSize(): [number, number] {
         const ws: number[] = [1]; // add root: level 0 -> 1
