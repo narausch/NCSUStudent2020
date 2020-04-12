@@ -52,16 +52,15 @@ interface VisualDiffState {
     viewCenterY: number;
     viewWidth: number;
     viewHeight: number;
-    viewScale: number; // in percent
+    viewScales: number[]; // options for the scale
+    viewScaleIndex: number;
 }
 
 /**
  * Defines the component VisualDiff.
  */
 export default class VisualDiff extends React.Component<VisualDiffProps, VisualDiffState> {
-    SCALE_MAX = 100;
-    SCALE_MIN = 25;
-    SCALE_UNIT = 25;
+    DEFAULT_VIEW_SCALES = [0.1, 0.25, 0.5, 1.0, 1.5, 2.0];
 
     /** Ref to the D3 container. */
     private ref: SVGSVGElement;
@@ -78,7 +77,8 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             viewCenterY: props.height / 2.0,
             viewWidth: props.width,
             viewHeight: props.height,
-            viewScale: this.SCALE_MAX,
+            viewScales: this.DEFAULT_VIEW_SCALES,
+            viewScaleIndex: 3,
         };
         this.handleZoomIn = this.handleZoomIn.bind(this);
         this.handleZoomOut = this.handleZoomOut.bind(this);
@@ -132,9 +132,6 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
      * @param prevProps previous props
      */
     componentDidUpdate(prevProps: VisualDiffProps): void {
-        const svgWidth = this.props.width;
-        const svgHeight = this.props.height;
-
         // TODO: consider moving this logic to a controller
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const context: any = d3.select(this.ref);
@@ -145,7 +142,23 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             // add a dummy node to ensure there is only one rooted tree
             const rootedTree = new RootedTree(new GraphNode('dummy', {}), roots);
             const root = d3.hierarchy(rootedTree);
-            const tree = d3.tree<RootedTree>().size([this.props.height, this.props.width]);
+
+            // compute the layout size
+            // TODO: avoid magic numbers
+            const [treeDepth, treeLevelWidth] = rootedTree.getLayoutSize();
+            const viewWidth = Math.max(this.props.width, (treeDepth - 1) * 180);
+            const viewHeight = Math.max(this.props.height, treeLevelWidth * 100);
+
+            // fit to the SVG element's aspect ratio
+            const viewWidthAdjusted = Math.max(
+                viewWidth,
+                (viewHeight * this.props.width) / this.props.height,
+            );
+            const viewHeightAdjusted = Math.max(
+                viewHeight,
+                (viewWidth * this.props.height) / this.props.width,
+            );
+            const tree = d3.tree<RootedTree>().size([viewHeightAdjusted, viewWidthAdjusted]);
             const treeData = tree(root);
 
             // construct D3Node and D3Link
@@ -175,8 +188,8 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             const maxY = Math.max(...nodes.map((node: D3Node) => node.y));
 
             for (const node of nodes) {
-                node.x -= minX - (this.props.width - (maxX - minX)) / 2;
-                node.y -= minY - (this.props.height - (maxY - minY)) / 2;
+                node.x -= minX - (viewWidthAdjusted - (maxX - minX)) / 2;
+                node.y -= minY - (viewHeightAdjusted - (maxY - minY)) / 2;
             }
 
             const links = [];
@@ -305,8 +318,8 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             function ticked(): void {
                 node.attr('transform', (d: D3Node) => {
                     // constraint the nodes to be within a box
-                    d.x = Math.max(10, Math.min(svgWidth - 10, d.x));
-                    d.y = Math.max(10, Math.min(svgHeight - 10, d.y));
+                    d.x = Math.max(10, Math.min(viewWidthAdjusted - 10, d.x));
+                    d.y = Math.max(10, Math.min(viewHeightAdjusted - 10, d.y));
 
                     return `translate(${d.x},${d.y})`;
                 });
@@ -315,6 +328,21 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                     .attr('x2', (d: D3Link) => d.target.x - 75)
                     .attr('y2', (d: D3Link) => d.target.y);
             }
+
+            // compute view scales
+
+            const minScale = this.props.width / viewWidthAdjusted;
+            const scales = this.DEFAULT_VIEW_SCALES.filter(x => x > minScale);
+            scales.unshift(minScale);
+
+            this.setState({
+                viewCenterX: viewWidthAdjusted / 2.0,
+                viewCenterY: viewHeightAdjusted / 2.0,
+                viewWidth: viewWidthAdjusted,
+                viewHeight: viewHeightAdjusted,
+                viewScales: scales,
+                viewScaleIndex: 0,
+            });
 
             ticked();
         } else if (prevProps.combinedGraph != null && this.props.combinedGraph == null) {
@@ -326,27 +354,34 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 viewCenterY: this.props.height / 2.0,
                 viewWidth: this.props.width,
                 viewHeight: this.props.height,
-                viewScale: this.SCALE_MAX,
+                viewScales: this.DEFAULT_VIEW_SCALES,
+                viewScaleIndex: 3,
             });
         }
     }
 
     handleZoomIn(): void {
-        const nextScale = Math.max(this.SCALE_MIN, this.state.viewScale - this.SCALE_UNIT);
-        this.setState({ viewScale: nextScale });
+        this.setState({
+            viewScaleIndex: Math.min(
+                this.state.viewScales.length - 1,
+                this.state.viewScaleIndex + 1,
+            ),
+        });
     }
 
     handleZoomOut(): void {
-        const nextScale = Math.min(this.SCALE_MAX, this.state.viewScale + this.SCALE_UNIT);
-        this.setState({ viewScale: nextScale });
+        this.setState({
+            viewScaleIndex: Math.max(0, this.state.viewScaleIndex - 1),
+        });
     }
 
     /**
      * Renders the VisualDiff component.
      */
     render(): React.ReactNode {
-        const viewBoxWidth = (this.state.viewWidth * this.state.viewScale) / 100.0;
-        const viewBoxHeight = (this.state.viewHeight * this.state.viewScale) / 100.0;
+        const scale = this.state.viewScales[this.state.viewScaleIndex];
+        const viewBoxWidth = this.props.width / scale;
+        const viewBoxHeight = this.props.height / scale;
         const viewBoxLeft = this.state.viewCenterX - viewBoxWidth / 2.0;
         const viewBoxTop = this.state.viewCenterY - viewBoxHeight / 2.0;
 
@@ -363,7 +398,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                     <button
                         className="btn-sm fdv-visual-zoom-btn"
                         onClick={this.handleZoomOut}
-                        disabled={this.state.viewScale >= this.SCALE_MAX}
+                        disabled={this.state.viewScaleIndex == 0}
                         title="Zoom Out"
                     >
                         <Octicon
@@ -381,10 +416,11 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                             verticalAlign="middle"
                         />
                     </button>
+                    <span className="fdv-visual-zoom-label">{Math.round(scale * 100)}%</span>
                     <button
                         className="btn-sm fdv-visual-zoom-btn"
                         onClick={this.handleZoomIn}
-                        disabled={this.state.viewScale <= this.SCALE_MIN}
+                        disabled={this.state.viewScaleIndex == this.state.viewScales.length - 1}
                         title="Zoom In"
                     >
                         <Octicon
