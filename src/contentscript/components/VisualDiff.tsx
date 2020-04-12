@@ -47,13 +47,22 @@ interface VisualDiffProps {
 /**
  * Defines the state for the VisualDiff.
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface VisualDiffState {}
+interface VisualDiffState {
+    viewCenterX: number;
+    viewCenterY: number;
+    viewWidth: number;
+    viewHeight: number;
+    viewScale: number; // in percent
+}
 
 /**
  * Defines the component VisualDiff.
  */
 export default class VisualDiff extends React.Component<VisualDiffProps, VisualDiffState> {
+    SCALE_MAX = 100;
+    SCALE_MIN = 25;
+    SCALE_UNIT = 25;
+
     /** Ref to the D3 container. */
     private ref: SVGSVGElement;
 
@@ -64,7 +73,15 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
      */
     constructor(props: VisualDiffProps) {
         super(props);
-        this.state = {};
+        this.state = {
+            viewCenterX: props.width / 2.0,
+            viewCenterY: props.height / 2.0,
+            viewWidth: props.width,
+            viewHeight: props.height,
+            viewScale: this.SCALE_MAX,
+        };
+        this.handleZoomIn = this.handleZoomIn.bind(this);
+        this.handleZoomOut = this.handleZoomOut.bind(this);
     }
 
     /**
@@ -172,9 +189,6 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                     ),
                 );
             }
-
-            // set viewbox size for the SVG element
-            context.attr('viewBox', `0 0 ${this.props.width} ${this.props.height}`);
 
             function dragstarted(d): void {
                 // if (!d3.event.active) simulation.alphaTarget(0.3).restart();
@@ -307,21 +321,35 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             // reset nodes and links
             context.selectAll('.fdv-nodes').remove();
             context.selectAll('.fdv-links').remove();
+            this.setState({
+                viewCenterX: this.props.width / 2.0,
+                viewCenterY: this.props.height / 2.0,
+                viewWidth: this.props.width,
+                viewHeight: this.props.height,
+                viewScale: this.SCALE_MAX,
+            });
         }
     }
 
     handleZoomIn(): void {
-        // TODO
+        const nextScale = Math.max(this.SCALE_MIN, this.state.viewScale - this.SCALE_UNIT);
+        this.setState({ viewScale: nextScale });
     }
 
     handleZoomOut(): void {
-        // TODO
+        const nextScale = Math.min(this.SCALE_MAX, this.state.viewScale + this.SCALE_UNIT);
+        this.setState({ viewScale: nextScale });
     }
 
     /**
      * Renders the VisualDiff component.
      */
     render(): React.ReactNode {
+        const viewBoxWidth = (this.state.viewWidth * this.state.viewScale) / 100.0;
+        const viewBoxHeight = (this.state.viewHeight * this.state.viewScale) / 100.0;
+        const viewBoxLeft = this.state.viewCenterX - viewBoxWidth / 2.0;
+        const viewBoxTop = this.state.viewCenterY - viewBoxHeight / 2.0;
+
         return (
             <div className="fdv-visual-diff">
                 <svg
@@ -329,11 +357,13 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                     ref={(ref: SVGSVGElement): SVGSVGElement => (this.ref = ref)}
                     width={this.props.width}
                     height={this.props.height}
+                    viewBox={`${viewBoxLeft} ${viewBoxTop} ${viewBoxWidth} ${viewBoxHeight}`}
                 />
                 <span className="fdv-visual-zoom-container">
                     <button
                         className="btn-sm fdv-visual-zoom-btn"
                         onClick={this.handleZoomOut}
+                        disabled={this.state.viewScale >= this.SCALE_MAX}
                         title="Zoom Out"
                     >
                         <Octicon
@@ -348,6 +378,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                     <button
                         className="btn-sm fdv-visual-zoom-btn"
                         onClick={this.handleZoomIn}
+                        disabled={this.state.viewScale <= this.SCALE_MIN}
                         title="Zoom In"
                     >
                         <Octicon
