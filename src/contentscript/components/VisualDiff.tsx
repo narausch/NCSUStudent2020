@@ -227,8 +227,17 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 props.callback(node.graphNode);
             }
 
+            // Add panning/zoom behavior
+            const mainGroup = context
+                .call(
+                    d3.zoom().on('zoom', function() {
+                        mainGroup.attr('transform', d3.event.transform);
+                    }),
+                )
+                .append('g');
+
             // define links
-            const link = context
+            const link = mainGroup
                 .append('g')
                 .classed('fdv-links', true)
                 .selectAll('line')
@@ -238,7 +247,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 .attr('class', d => d.className);
 
             // define nodes
-            const node = context
+            const node = mainGroup
                 .append('g')
                 .classed('fdv-nodes', true)
                 .selectAll('g')
@@ -317,10 +326,6 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
              */
             function ticked(): void {
                 node.attr('transform', (d: D3Node) => {
-                    // constraint the nodes to be within a box
-                    d.x = Math.max(10, Math.min(viewWidthAdjusted - 10, d.x));
-                    d.y = Math.max(10, Math.min(viewHeightAdjusted - 10, d.y));
-
                     return `translate(${d.x},${d.y})`;
                 });
                 link.attr('x1', (d: D3Link) => d.source.x)
@@ -347,8 +352,9 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             ticked();
         } else if (prevProps.combinedGraph != null && this.props.combinedGraph == null) {
             // reset nodes and links
-            context.selectAll('.fdv-nodes').remove();
-            context.selectAll('.fdv-links').remove();
+            context.call(d3.zoom().transform, d3.zoomIdentity.scale(1));
+            context.selectAll('g').remove();
+
             this.setState({
                 viewCenterX: this.props.width / 2.0,
                 viewCenterY: this.props.height / 2.0,
