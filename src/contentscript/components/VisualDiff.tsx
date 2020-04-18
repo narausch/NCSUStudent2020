@@ -48,12 +48,10 @@ interface VisualDiffProps {
  * Defines the state for the VisualDiff.
  */
 interface VisualDiffState {
-    viewCenterX: number;
-    viewCenterY: number;
+    zoomScale: number;
     viewWidth: number;
     viewHeight: number;
     viewScales: number[]; // options for the scale
-    viewScaleIndex: number;
 }
 
 /**
@@ -61,9 +59,13 @@ interface VisualDiffState {
  */
 export default class VisualDiff extends React.Component<VisualDiffProps, VisualDiffState> {
     DEFAULT_VIEW_SCALES = [0.1, 0.25, 0.5, 1.0, 1.5, 2.0];
+    EPSILON = 1e-8; // small number to resolve floating point errors
 
     /** Ref to the D3 container. */
     private ref: SVGSVGElement;
+
+    /** Ref to the D3 zoom object. */
+    private zoomObj: d3.ZoomBehavior<Element, unknown>;
 
     /**
      * Constructs the VisualDiff.
@@ -73,12 +75,10 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
     constructor(props: VisualDiffProps) {
         super(props);
         this.state = {
-            viewCenterX: props.width / 2.0,
-            viewCenterY: props.height / 2.0,
+            zoomScale: 1,
             viewWidth: props.width,
             viewHeight: props.height,
             viewScales: this.DEFAULT_VIEW_SCALES,
-            viewScaleIndex: 3,
         };
         this.handleZoomIn = this.handleZoomIn.bind(this);
         this.handleZoomOut = this.handleZoomOut.bind(this);
@@ -152,11 +152,11 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             // fit to the SVG element's aspect ratio
             const viewWidthAdjusted = Math.max(
                 viewWidth,
-                (viewHeight * this.props.width) / this.props.height,
+                Math.round((viewHeight * this.props.width) / this.props.height),
             );
             const viewHeightAdjusted = Math.max(
                 viewHeight,
-                (viewWidth * this.props.height) / this.props.width,
+                Math.round((viewWidth * this.props.height) / this.props.width),
             );
             const tree = d3.tree<RootedTree>().size([viewHeightAdjusted, viewWidthAdjusted]);
             const treeData = tree(root);
@@ -227,14 +227,18 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 props.callback(node.graphNode);
             }
 
+            // eslint-disable-next-line @typescript-eslint/no-this-alias
+            const that = this;
+
             // Add panning/zoom behavior
-            const mainGroup = context
-                .call(
-                    d3.zoom().on('zoom', function() {
-                        mainGroup.attr('transform', d3.event.transform);
-                    }),
-                )
-                .append('g');
+            const mainGroup = context.append('g');
+
+            const zoomObj = d3.zoom().on('zoom', function() {
+                mainGroup.attr('transform', d3.event.transform);
+                that.setState({ zoomScale: d3.event.transform['k'] });
+            });
+            context.call(zoomObj);
+            this.zoomObj = zoomObj;
 
             // define links
             const link = mainGroup
@@ -335,18 +339,14 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             }
 
             // compute view scales
-
             const minScale = this.props.width / viewWidthAdjusted;
             const scales = this.DEFAULT_VIEW_SCALES.filter(x => x > minScale);
             scales.unshift(minScale);
 
             this.setState({
-                viewCenterX: viewWidthAdjusted / 2.0,
-                viewCenterY: viewHeightAdjusted / 2.0,
                 viewWidth: viewWidthAdjusted,
                 viewHeight: viewHeightAdjusted,
                 viewScales: scales,
-                viewScaleIndex: 0,
             });
 
             ticked();
@@ -356,40 +356,60 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             context.selectAll('g').remove();
 
             this.setState({
-                viewCenterX: this.props.width / 2.0,
-                viewCenterY: this.props.height / 2.0,
                 viewWidth: this.props.width,
                 viewHeight: this.props.height,
                 viewScales: this.DEFAULT_VIEW_SCALES,
-                viewScaleIndex: 3,
             });
         }
     }
 
     handleZoomIn(): void {
-        this.setState({
-            viewScaleIndex: Math.min(
-                this.state.viewScales.length - 1,
-                this.state.viewScaleIndex + 1,
-            ),
-        });
+        const scale =
+            (this.props.width / this.state.viewWidth) * this.state.zoomScale + this.EPSILON;
+        let index = this.state.viewScales.length - 1;
+        // Note: binary search may improve performance (same for handleZoomOut())
+        while (index >= 0 && scale < this.state.viewScales[index]) {
+            --index;
+        }
+        ++index;
+
+        if (index < this.state.viewScales.length) {
+            this.zoomObj.scaleTo(
+                d3
+                    .select(this.ref)
+                    .transition()
+                    .duration(250),
+                (this.state.viewScales[index] * this.state.viewWidth) / this.props.width,
+            );
+        }
     }
 
     handleZoomOut(): void {
-        this.setState({
-            viewScaleIndex: Math.max(0, this.state.viewScaleIndex - 1),
-        });
+        const scale =
+            (this.props.width / this.state.viewWidth) * this.state.zoomScale - this.EPSILON;
+        let index = 0;
+        while (index < this.state.viewScales.length && scale > this.state.viewScales[index]) {
+            ++index;
+        }
+        --index;
+
+        if (index < this.state.viewScales.length) {
+            this.zoomObj.scaleTo(
+                d3
+                    .select(this.ref)
+                    .transition()
+                    .duration(250),
+                (this.state.viewScales[index] * this.state.viewWidth) / this.props.width,
+            );
+        }
     }
 
     /**
      * Renders the VisualDiff component.
      */
     render(): React.ReactNode {
-        const scale = this.state.viewScales[this.state.viewScaleIndex];
-        const viewBoxWidth = this.props.width / scale;
-        const viewBoxHeight = this.props.height / scale;
-        const viewBoxLeft = this.state.viewCenterX - viewBoxWidth / 2.0;
-        const viewBoxTop = this.state.viewCenterY - viewBoxHeight / 2.0;
+        const scale = (this.props.width / this.state.viewWidth) * this.state.zoomScale;
+        const scalePercent = Math.round(scale * 100);
 
         return (
             <div className="fdv-visual-diff">
@@ -398,13 +418,13 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                     ref={(ref: SVGSVGElement): SVGSVGElement => (this.ref = ref)}
                     width={this.props.width}
                     height={this.props.height}
-                    viewBox={`${viewBoxLeft} ${viewBoxTop} ${viewBoxWidth} ${viewBoxHeight}`}
+                    viewBox={`0 0 ${this.state.viewWidth} ${this.state.viewHeight}`}
                 />
                 <span className="fdv-visual-zoom-container">
                     <button
                         className="btn-sm fdv-visual-zoom-btn"
                         onClick={this.handleZoomOut}
-                        disabled={this.state.viewScaleIndex == 0}
+                        disabled={scale - this.EPSILON <= this.state.viewScales[0]}
                         title="Zoom Out"
                     >
                         <Octicon
@@ -422,11 +442,16 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                             verticalAlign="middle"
                         />
                     </button>
-                    <span className="fdv-visual-zoom-label">{Math.round(scale * 100)}%</span>
+                    <span className="fdv-visual-zoom-label">
+                        {scalePercent > 999 ? '999+' : scalePercent}%
+                    </span>
                     <button
                         className="btn-sm fdv-visual-zoom-btn"
                         onClick={this.handleZoomIn}
-                        disabled={this.state.viewScaleIndex == this.state.viewScales.length - 1}
+                        disabled={
+                            scale + this.EPSILON >=
+                            this.state.viewScales[this.state.viewScales.length - 1]
+                        }
                         title="Zoom In"
                     >
                         <Octicon
