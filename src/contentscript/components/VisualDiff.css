@@ -50,6 +50,12 @@
     cursor: pointer;
 }
 
+.fdv-node-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 svg text {
     -webkit-touch-callout: none;
     -webkit-user-select: none;

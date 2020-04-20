@@ -280,10 +280,15 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 //.style('stroke-dasharray', 20)
                 .attr('class', d => d.className);
 
-            node.append('text')
-                .text((d: D3Node) => d.name)
+            node.append('foreignObject')
                 .attr('x', -65)
-                .attr('y', 3);
+                .attr('y', -10)
+                .attr('height', 20)
+                .attr('width', 130)
+                .append('xhtml:body')
+                .append('div')
+                .classed('fdv-node-text', true)
+                .text((d: D3Node) => d.name);
             node.append('title').text((d: D3Node) => d.name);
 
             // Define visual cues
