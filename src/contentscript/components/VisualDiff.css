@@ -124,3 +124,13 @@ svg .fdv-cue-modified {
 svg .fdv-cue-unmodified {
     stroke: rgb(255, 255, 255);
 }
+
+.fdv-visual-no-nodes {
+    position: absolute;
+    display: inline-grid;
+    align-content: center;
+    text-align: center;
+    font-size: 48px;
+    font-weight: 500;
+    color: #ccc;
+}
