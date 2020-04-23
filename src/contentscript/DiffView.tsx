@@ -235,7 +235,7 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
     }
 
     /**
-     * Sets a status message. Note that this was being displayed below the graph, but is temporarily not displayed
+     * Sets a status message.
      *
      * @param isBase true is the message is for the base file
      * @param message message
