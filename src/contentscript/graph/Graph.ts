@@ -6,10 +6,12 @@ import RootedTree from './RootedTree';
 export class Graph {
     public nodes: Array<GraphNode>;
     public connections: Array<GraphConnection>;
+    public stats: any;
 
     /**
-     * Constructs a graph object from a json string.
-     * @param jsonString The json string for the graph to construct.
+     * Constructs a graph object either from a json string or with a list of Nodes and a list of Connections
+     * @param jsonStringOrNodes The json string for the graph to construct or the list of Nodes
+     * @param connections The list of Connections
      */
     constructor(jsonString: string);
     constructor(nodes: GraphNode[], connections: GraphConnection[]);
@@ -151,5 +153,33 @@ export class Graph {
         }
 
         return ret;
+    }
+
+    public getNodeStatsString(): string {
+        return (
+            'Nodes: Total: ' +
+            this.stats.nodesTotal +
+            ', Added: ' +
+            this.stats.nodesAdded +
+            ', Removed: ' +
+            this.stats.nodesRemoved +
+            ', Modified: ' +
+            this.stats.nodesModified +
+            ', Unmodified: ' +
+            this.stats.nodesUnmodified
+        );
+    }
+
+    public getConnStatsString(): string {
+        return (
+            'Connections: Total: ' +
+            this.stats.connsTotal +
+            ', Added: ' +
+            this.stats.connsAdded +
+            ', Removed: ' +
+            this.stats.connsRemoved +
+            ', Unmodified: ' +
+            this.stats.connsUnmodified
+        );
     }
 }
