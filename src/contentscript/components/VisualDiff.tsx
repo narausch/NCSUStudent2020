@@ -415,6 +415,17 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
     render(): React.ReactNode {
         const scale = (this.props.width / this.state.viewWidth) * this.state.zoomScale;
         const scalePercent = Math.round(scale * 100);
+        const noNodes =
+            this.props.combinedGraph && this.props.combinedGraph.getNodes().length > 0 ? (
+                ''
+            ) : (
+                <div
+                    className="fdv-visual-no-nodes"
+                    style={{ width: this.props.width, height: this.props.height }}
+                >
+                    No nodes to display
+                </div>
+            );
 
         return (
             <div className="fdv-visual-diff">
@@ -425,6 +436,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                     height={this.props.height}
                     viewBox={`0 0 ${this.state.viewWidth} ${this.state.viewHeight}`}
                 />
+                {noNodes}
                 <span className="fdv-visual-zoom-container">
                     <button
                         className="btn-sm fdv-visual-zoom-btn"
