@@ -83,12 +83,14 @@ export default class Differencer {
         this.differencerGraph = new Graph(nodes, conns);
 
         this.differencerGraph.stats = {
-            nodesTotal: this.addedNodes.length,
+            nodesBase: baseGraph.nodes.length,
+            nodesCompare: compareGraph.nodes.length,
             nodesAdded: this.addedNodes.length,
             nodesRemoved: this.removedNodes.length,
             nodesModified: this.modifiedNodes.length,
             nodesUnmodified: this.unmodifiedNodes.length,
-            connsTotal: conns.length,
+            connsBase: baseGraph.nodes.length,
+            connsCompare: compareGraph.nodes.length,
             connsAdded: this.addedConns.length,
             connsRemoved: this.removedConns.length,
             connsUnmodified: this.unmodifiedConns.length,

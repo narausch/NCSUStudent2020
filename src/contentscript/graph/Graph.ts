@@ -157,8 +157,10 @@ export class Graph {
 
     public getNodeStatsString(): string {
         return (
-            'Nodes: Total: ' +
-            this.stats.nodesTotal +
+            'Nodes: Base: ' +
+            this.stats.nodesBase +
+            ', Compare: ' +
+            this.stats.nodesCompare +
             ', Added: ' +
             this.stats.nodesAdded +
             ', Removed: ' +
@@ -172,8 +174,10 @@ export class Graph {
 
     public getConnStatsString(): string {
         return (
-            'Connections: Total: ' +
-            this.stats.connsTotal +
+            'Connections: Base: ' +
+            this.stats.connsBase +
+            ', Compare: ' +
+            this.stats.connsCompare +
             ', Added: ' +
             this.stats.connsAdded +
             ', Removed: ' +
