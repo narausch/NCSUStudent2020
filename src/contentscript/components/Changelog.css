@@ -80,7 +80,7 @@
 /* Table */
 .fdv-modal-body {
     padding: 15px 15px 40px 15px;
-    max-height: 600px;
+    max-height: calc(100vh - 200px);
     overflow: auto;
 }
 
