@@ -102,6 +102,9 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
      * Renders the React component.
      */
     render(): React.ReactNode {
+        const bs = this.state.baseFileTotal ? this.state.baseFileTotal.toLocaleString() : '-';
+        const cs = this.state.compareFileTotal ? this.state.compareFileTotal.toLocaleString() : '-';
+
         // TODO: avoid magic numbers for VisualDiff
         return (
             <div className="fdv-view">
@@ -155,6 +158,12 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
                     </p>
                     <p>
                         {this.state.combinedGraph && this.state.combinedGraph.getConnStatsString()}
+                    </p>
+                    <p>
+                        Base [{bs} bytes]: {this.state.baseStatus}
+                    </p>
+                    <p>
+                        Compare [{cs} bytes]: {this.state.compareStatus}
                     </p>
                 </div>
             </div>
