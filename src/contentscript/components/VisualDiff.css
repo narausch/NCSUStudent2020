@@ -6,7 +6,11 @@
 
 .fdv-visual-svg {
     position: absolute;
-    cursor: all-scroll;
+    cursor: grab;
+}
+
+.fdv-visual-svg:active {
+    cursor: grabbing;
 }
 
 .fdv-visual-zoom-container {
