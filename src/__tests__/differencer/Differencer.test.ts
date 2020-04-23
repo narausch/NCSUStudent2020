@@ -506,6 +506,19 @@ describe('Differencer#mediumInputChanges', () => {
             new GraphConnection('h', 'i', Status.Unmodified),
         ];
         const differencedGraph = new Graph(combinedNodes, combinedConns);
+        differencedGraph.stats = {
+            connsAdded: 6,
+            connsBase: 10,
+            connsCompare: 10,
+            connsRemoved: 6,
+            connsUnmodified: 3,
+            nodesAdded: 3,
+            nodesBase: 10,
+            nodesCompare: 10,
+            nodesModified: 3,
+            nodesRemoved: 3,
+            nodesUnmodified: 4,
+        };
 
         const diff: Differencer = new Differencer(new Graph(n1, c1), new Graph(n2, c2));
 
@@ -517,6 +530,13 @@ describe('Differencer#mediumInputChanges', () => {
         expect(diff.getAddedConns()).toStrictEqual(addedConns);
         expect(diff.getRemovedConns()).toStrictEqual(removedConns);
         expect(diff.getUnmodifiedConns()).toStrictEqual(unmodifiedConns);
+
+        expect(diff.getDifferencerGraph().getNodeStatsString()).toStrictEqual(
+            'Nodes: Base: 10, Compare: 10, Added: 3, Removed: 3, Modified: 3, Unmodified: 4',
+        );
+        expect(diff.getDifferencerGraph().getConnStatsString()).toStrictEqual(
+            'Connections: Base: 10, Compare: 10, Added: 6, Removed: 6, Unmodified: 3',
+        );
 
         expect(diff.getDifferencerGraph()).toStrictEqual(differencedGraph);
     });
