@@ -5,6 +5,7 @@ import { Graph } from '../graph/Graph';
 import './VisualDiff.css';
 import RootedTree from '../graph/RootedTree';
 import { GraphNode } from '../graph/GraphNode';
+import Octicon, { getIconByName } from '@primer/octicons-react';
 
 /**
  * id: the id of the node
@@ -46,15 +47,25 @@ interface VisualDiffProps {
 /**
  * Defines the state for the VisualDiff.
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface VisualDiffState {}
+interface VisualDiffState {
+    zoomScale: number;
+    viewWidth: number;
+    viewHeight: number;
+    viewScales: number[]; // options for the scale
+}
 
 /**
  * Defines the component VisualDiff.
  */
 export default class VisualDiff extends React.Component<VisualDiffProps, VisualDiffState> {
+    DEFAULT_VIEW_SCALES = [0.1, 0.25, 0.5, 1.0, 1.5, 2.0];
+    EPSILON = 1e-8; // small number to resolve floating point errors
+
     /** Ref to the D3 container. */
     private ref: SVGSVGElement;
+
+    /** Ref to the D3 zoom object. */
+    private zoomObj: d3.ZoomBehavior<Element, unknown>;
 
     /**
      * Constructs the VisualDiff.
@@ -63,7 +74,14 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
      */
     constructor(props: VisualDiffProps) {
         super(props);
-        this.state = {};
+        this.state = {
+            zoomScale: 1,
+            viewWidth: props.width,
+            viewHeight: props.height,
+            viewScales: this.DEFAULT_VIEW_SCALES,
+        };
+        this.handleZoomIn = this.handleZoomIn.bind(this);
+        this.handleZoomOut = this.handleZoomOut.bind(this);
     }
 
     /**
@@ -114,9 +132,6 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
      * @param prevProps previous props
      */
     componentDidUpdate(prevProps: VisualDiffProps): void {
-        const svgWidth = this.props.width;
-        const svgHeight = this.props.height;
-
         // TODO: consider moving this logic to a controller
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const context: any = d3.select(this.ref);
@@ -127,7 +142,23 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             // add a dummy node to ensure there is only one rooted tree
             const rootedTree = new RootedTree(new GraphNode('dummy', {}), roots);
             const root = d3.hierarchy(rootedTree);
-            const tree = d3.tree<RootedTree>().size([this.props.height, this.props.width]);
+
+            // compute the layout size
+            // TODO: avoid magic numbers
+            const [treeDepth, treeLevelWidth] = rootedTree.getLayoutSize();
+            const viewWidth = Math.max(this.props.width, (treeDepth - 1) * 180);
+            const viewHeight = Math.max(this.props.height, treeLevelWidth * 100);
+
+            // fit to the SVG element's aspect ratio
+            const viewWidthAdjusted = Math.max(
+                viewWidth,
+                Math.round((viewHeight * this.props.width) / this.props.height),
+            );
+            const viewHeightAdjusted = Math.max(
+                viewHeight,
+                Math.round((viewWidth * this.props.height) / this.props.width),
+            );
+            const tree = d3.tree<RootedTree>().size([viewHeightAdjusted, viewWidthAdjusted]);
             const treeData = tree(root);
 
             // construct D3Node and D3Link
@@ -157,8 +188,8 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
             const maxY = Math.max(...nodes.map((node: D3Node) => node.y));
 
             for (const node of nodes) {
-                node.x -= minX - (this.props.width - (maxX - minX)) / 2;
-                node.y -= minY - (this.props.height - (maxY - minY)) / 2;
+                node.x -= minX - (viewWidthAdjusted - (maxX - minX)) / 2;
+                node.y -= minY - (viewHeightAdjusted - (maxY - minY)) / 2;
             }
 
             const links = [];
@@ -171,9 +202,6 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                     ),
                 );
             }
-
-            // set viewbox size for the SVG element
-            context.attr('viewBox', `0 0 ${this.props.width} ${this.props.height}`);
 
             function dragstarted(d): void {
                 // if (!d3.event.active) simulation.alphaTarget(0.3).restart();
@@ -199,8 +227,21 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 props.callback(node.graphNode);
             }
 
+            // eslint-disable-next-line @typescript-eslint/no-this-alias
+            const that = this;
+
+            // Add panning/zoom behavior
+            const mainGroup = context.append('g');
+
+            const zoomObj = d3.zoom().on('zoom', function() {
+                mainGroup.attr('transform', d3.event.transform);
+                that.setState({ zoomScale: d3.event.transform['k'] });
+            });
+            context.call(zoomObj);
+            this.zoomObj = zoomObj;
+
             // define links
-            const link = context
+            const link = mainGroup
                 .append('g')
                 .classed('fdv-links', true)
                 .selectAll('line')
@@ -210,7 +251,7 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 .attr('class', d => d.className);
 
             // define nodes
-            const node = context
+            const node = mainGroup
                 .append('g')
                 .classed('fdv-nodes', true)
                 .selectAll('g')
@@ -239,10 +280,15 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                 //.style('stroke-dasharray', 20)
                 .attr('class', d => d.className);
 
-            node.append('text')
-                .text((d: D3Node) => d.name)
+            node.append('foreignObject')
                 .attr('x', -65)
-                .attr('y', 3);
+                .attr('y', -10)
+                .attr('height', 20)
+                .attr('width', 130)
+                .append('xhtml:body')
+                .append('div')
+                .classed('fdv-node-text', true)
+                .text((d: D3Node) => d.name);
             node.append('title').text((d: D3Node) => d.name);
 
             // Define visual cues
@@ -289,10 +335,6 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
              */
             function ticked(): void {
                 node.attr('transform', (d: D3Node) => {
-                    // constraint the nodes to be within a box
-                    d.x = Math.max(10, Math.min(svgWidth - 10, d.x));
-                    d.y = Math.max(10, Math.min(svgHeight - 10, d.y));
-
                     return `translate(${d.x},${d.y})`;
                 });
                 link.attr('x1', (d: D3Link) => d.source.x)
@@ -301,11 +343,69 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
                     .attr('y2', (d: D3Link) => d.target.y);
             }
 
+            // compute view scales
+            const minScale = this.props.width / viewWidthAdjusted;
+            const scales = this.DEFAULT_VIEW_SCALES.filter(x => x > minScale);
+            scales.unshift(minScale);
+
+            this.setState({
+                viewWidth: viewWidthAdjusted,
+                viewHeight: viewHeightAdjusted,
+                viewScales: scales,
+            });
+
             ticked();
         } else if (prevProps.combinedGraph != null && this.props.combinedGraph == null) {
             // reset nodes and links
-            context.selectAll('.fdv-nodes').remove();
-            context.selectAll('.fdv-links').remove();
+            context.call(d3.zoom().transform, d3.zoomIdentity.scale(1));
+            context.selectAll('g').remove();
+
+            this.setState({
+                viewWidth: this.props.width,
+                viewHeight: this.props.height,
+                viewScales: this.DEFAULT_VIEW_SCALES,
+            });
+        }
+    }
+
+    handleZoomIn(): void {
+        const scale =
+            (this.props.width / this.state.viewWidth) * this.state.zoomScale + this.EPSILON;
+        let index = this.state.viewScales.length - 1;
+        // Note: binary search may improve performance (same for handleZoomOut())
+        while (index >= 0 && scale < this.state.viewScales[index]) {
+            --index;
+        }
+        ++index;
+
+        if (index < this.state.viewScales.length) {
+            this.zoomObj.scaleTo(
+                d3
+                    .select(this.ref)
+                    .transition()
+                    .duration(250),
+                (this.state.viewScales[index] * this.state.viewWidth) / this.props.width,
+            );
+        }
+    }
+
+    handleZoomOut(): void {
+        const scale =
+            (this.props.width / this.state.viewWidth) * this.state.zoomScale - this.EPSILON;
+        let index = 0;
+        while (index < this.state.viewScales.length && scale > this.state.viewScales[index]) {
+            ++index;
+        }
+        --index;
+
+        if (index < this.state.viewScales.length) {
+            this.zoomObj.scaleTo(
+                d3
+                    .select(this.ref)
+                    .transition()
+                    .duration(250),
+                (this.state.viewScales[index] * this.state.viewWidth) / this.props.width,
+            );
         }
     }
 
@@ -313,14 +413,80 @@ export default class VisualDiff extends React.Component<VisualDiffProps, VisualD
      * Renders the VisualDiff component.
      */
     render(): React.ReactNode {
+        const scale = (this.props.width / this.state.viewWidth) * this.state.zoomScale;
+        const scalePercent = Math.round(scale * 100);
+        const noNodes =
+            this.props.combinedGraph && this.props.combinedGraph.getNodes().length > 0 ? (
+                ''
+            ) : (
+                <div
+                    className="fdv-visual-no-nodes"
+                    style={{ width: this.props.width, height: this.props.height }}
+                >
+                    No nodes to display
+                </div>
+            );
+
         return (
             <div className="fdv-visual-diff">
                 <svg
-                    className=""
+                    className="fdv-visual-svg"
                     ref={(ref: SVGSVGElement): SVGSVGElement => (this.ref = ref)}
                     width={this.props.width}
                     height={this.props.height}
+                    viewBox={`0 0 ${this.state.viewWidth} ${this.state.viewHeight}`}
                 />
+                {noNodes}
+                <span className="fdv-visual-zoom-container">
+                    <button
+                        className="btn-sm fdv-visual-zoom-btn"
+                        onClick={this.handleZoomOut}
+                        disabled={scale - this.EPSILON <= this.state.viewScales[0]}
+                        title="Zoom Out"
+                    >
+                        <Octicon
+                            className="fdv-visual-zoom-search"
+                            icon={getIconByName('search')}
+                            ariaLabel="Zoom Out"
+                            size="medium"
+                            verticalAlign="middle"
+                        />
+                        <Octicon
+                            className="fdv-visual-zoom-out"
+                            icon={getIconByName('dash')}
+                            ariaLabel="Zoom Out"
+                            size="small"
+                            verticalAlign="middle"
+                        />
+                    </button>
+                    <span className="fdv-visual-zoom-label">
+                        {scalePercent > 999 ? '999+' : scalePercent}%
+                    </span>
+                    <button
+                        className="btn-sm fdv-visual-zoom-btn"
+                        onClick={this.handleZoomIn}
+                        disabled={
+                            scale + this.EPSILON >=
+                            this.state.viewScales[this.state.viewScales.length - 1]
+                        }
+                        title="Zoom In"
+                    >
+                        <Octicon
+                            className="fdv-visual-zoom-search"
+                            icon={getIconByName('search')}
+                            ariaLabel="Zoom In"
+                            size="medium"
+                            verticalAlign="middle"
+                        />
+                        <Octicon
+                            className="fdv-visual-zoom-in"
+                            icon={getIconByName('plus')}
+                            ariaLabel="Zoom In"
+                            size="small"
+                            verticalAlign="middle"
+                        />
+                    </button>
+                </span>
             </div>
         );
     }

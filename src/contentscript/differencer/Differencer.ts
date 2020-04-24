@@ -81,6 +81,20 @@ export default class Differencer {
         this.unmodifiedConns = conns.filter(value => value.status == Status.Unmodified);
 
         this.differencerGraph = new Graph(nodes, conns);
+
+        this.differencerGraph.stats = {
+            nodesBase: (baseGraph && baseGraph.nodes.length) || 0,
+            nodesCompare: (compareGraph && compareGraph.nodes.length) || 0,
+            nodesAdded: this.addedNodes.length,
+            nodesRemoved: this.removedNodes.length,
+            nodesModified: this.modifiedNodes.length,
+            nodesUnmodified: this.unmodifiedNodes.length,
+            connsBase: (baseGraph && baseGraph.nodes.length) || 0,
+            connsCompare: (compareGraph && compareGraph.nodes.length) || 0,
+            connsAdded: this.addedConns.length,
+            connsRemoved: this.removedConns.length,
+            connsUnmodified: this.unmodifiedConns.length,
+        };
     }
 
     private computeDifference(): void {

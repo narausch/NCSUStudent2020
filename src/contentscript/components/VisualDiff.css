@@ -4,8 +4,60 @@
     background-color: white;
 }
 
+.fdv-visual-svg {
+    position: absolute;
+    cursor: grab;
+}
+
+.fdv-visual-svg:active {
+    cursor: grabbing;
+}
+
+.fdv-visual-zoom-container {
+    position: relative;
+    float: right;
+    z-index: 1;
+    background-color: #f0f0f0;
+    margin: 5px;
+}
+
+.fdv-visual-zoom-btn {
+    margin: 0px 0px 0px 0px;
+}
+
+.fdv-visual-zoom-search {
+    position: absolute;
+    width: 24px;
+    margin: -5px 0px 0px -5px;
+}
+
+.fdv-visual-zoom-out {
+    margin: -5px 0px 0px 2px;
+}
+
+.fdv-visual-zoom-in {
+    width: 11px;
+    margin: -5px 0px 0px 0px;
+}
+
+.fdv-visual-zoom-label {
+    display: inline-block;
+    color: #333;
+    width: 44px;
+    font-size: 11px;
+    text-align: center;
+    padding: 0px 2px;
+    cursor: default;
+}
+
 .fdv-nodes {
     cursor: pointer;
+}
+
+.fdv-node-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 svg text {
@@ -71,4 +123,14 @@ svg .fdv-cue-modified {
 
 svg .fdv-cue-unmodified {
     stroke: rgb(255, 255, 255);
+}
+
+.fdv-visual-no-nodes {
+    position: absolute;
+    display: inline-grid;
+    align-content: center;
+    text-align: center;
+    font-size: 48px;
+    font-weight: 500;
+    color: #ccc;
 }

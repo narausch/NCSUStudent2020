@@ -154,6 +154,12 @@ class DiffView extends React.Component<DiffViewProps, DiffViewState> {
 
                 <div className="fdv-debug-msg">
                     <p>
+                        {this.state.combinedGraph && this.state.combinedGraph.getNodeStatsString()}
+                    </p>
+                    <p>
+                        {this.state.combinedGraph && this.state.combinedGraph.getConnStatsString()}
+                    </p>
+                    <p>
                         Base [{bs} bytes]: {this.state.baseStatus}
                     </p>
                     <p>
