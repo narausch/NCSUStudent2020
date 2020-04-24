@@ -1,6 +1,6 @@
 {
     "name": "flow-diff-viewer",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Visualizes the difference between two flow graphs on GitHub.",
     "main": "index.js",
     "scripts": {
