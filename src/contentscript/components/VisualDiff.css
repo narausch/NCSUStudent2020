@@ -78,12 +78,14 @@ svg .fdv-added-link {
     stroke: rgb(44, 190, 78);
     fill: rgb(44, 190, 78);
     stroke-width: 2;
+    stroke-dasharray: 2;
     marker-end: url(#arrowheadg);
 }
 
 svg .fdv-removed-link {
     stroke: rgb(203, 36, 49);
     stroke-width: 2;
+    stroke-dasharray: 6;
     marker-end: url(#arrowheadr);
 }
 
